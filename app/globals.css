@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+/* ── Brand tokens (Tailwind v4 CSS-first theme) ──────────────────────────────
+   One accent only (amber). Near-black ink on stark white. Geometric sans in the
+   Linear/Vercel/Stripe register. These generate utilities: bg-ink, text-amber… */
+@theme {
+  --color-ink: #0d0f14;
+  --color-ink-soft: #4b5162;
+  --color-bg: #ffffff;
+  --color-paper: #fafafa;
+  --color-line: #e7e8ec;
+  --color-amber: #e8833a;
+  --color-amber-deep: #c96a26;
+
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: var(--color-amber);
+  color: #fff;
+}
+
+/* Lenis smooth-scroll recommended base rules (only active once Lenis mounts) */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Accessibility: honor reduced-motion. JS also reads this, but kill CSS motion
+   as a hard backstop so nothing animates for these visitors. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
