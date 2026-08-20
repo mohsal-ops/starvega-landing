@@ -71,8 +71,8 @@ export default function Proof() {
             Real restaurant. Real numbers.
           </p>
           <h2 className="max-w-3xl text-[clamp(2rem,6vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.02em]">
-            {proof.clientName} is live, taking its own orders, and you can check
-            the numbers yourself.
+            {proof.clientName} is live and ranking in Google search, and you can
+            check the numbers yourself.
           </h2>
         </Reveal>
 
@@ -88,7 +88,7 @@ export default function Proof() {
           <div className="mt-12 grid gap-5 sm:mt-16 sm:grid-cols-2">
             <BrowserFrame
               label={proof.liveUrl || "southernjerks.com"}
-              alt={`Live ${proof.clientName} website home page with online ordering`}
+              alt={`Live ${proof.clientName} website home page`}
             />
             <BrowserFrame
               label="dashboard · analytics"
@@ -101,10 +101,10 @@ export default function Proof() {
           {(ready
             ? proof.stats
             : [
-                { label: "Impressions (30d)", value: "—" },
+                { label: "Search impressions (30d)", value: "—" },
                 { label: "Visitors (30d)", value: "—" },
-                { label: "Commission paid", value: "$0" },
-                { label: "Owned by", value: "them" },
+                { label: "Keywords ranking", value: "—" },
+                { label: "Avg. Google position", value: "—" },
               ]
           ).map((s, i) => {
             const parsed = ready ? parseStat(s.value) : null;

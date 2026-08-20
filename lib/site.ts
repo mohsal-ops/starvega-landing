@@ -29,6 +29,11 @@ export const SITE = {
   // Every number here MUST be confirmed against the live Southern Jerks admin
   // analytics before launch. Do NOT ship unverified figures. `verified: false`
   // is a launch blocker the page can assert against.
+  //
+  // SCOPE: Southern Jerks has NO active online ordering, so cite it ONLY for
+  // what's true there — SEO / search impressions / visitors / ranking. Never add
+  // an ordering- or commission-related stat here; the zero-commission ordering
+  // claim lives in THE OFFER as a system capability, not as SJ evidence.
   proof: {
     verified: false, // flip to true only after confirming live numbers
     clientName: "Southern Jerks",
