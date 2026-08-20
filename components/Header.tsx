@@ -27,10 +27,10 @@ export default function Header() {
           <Image
             src="/starvega.png"
             alt="Starvega"
-            width={150}
-            height={50}
+            width={210}
+            height={70}
             priority
-            className="h-5 w-auto sm:h-6"
+            className="h-8 w-auto sm:h-10"
           />
         </a>
       </div>
