@@ -5,6 +5,7 @@ import Proof from "@/components/sections/Proof";
 import Offer from "@/components/sections/Offer";
 import Faq from "@/components/sections/Faq";
 import Cta from "@/components/sections/Cta";
+import Footer from "@/components/Footer";
 import FaqSchema from "@/components/FaqSchema";
 import ScrollTracker from "@/components/ScrollTracker";
 
@@ -20,6 +21,7 @@ export default function Home() {
       <Offer />
       <Faq />
       <Cta />
+      <Footer />
 
       <FaqSchema />
       <ScrollTracker />

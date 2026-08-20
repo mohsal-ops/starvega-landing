@@ -2,17 +2,24 @@
 // Placeholders marked TODO must be confirmed before launch.
 
 export const SITE = {
-  name: "Vega Star Digital",
+  name: "Starvega",
   // Public URL of this landing page (used for canonical + OG). TODO: set to the
   // real domain once chosen (currently the Vercel default is fine to start).
-  url: "https://vega-star-landing.vercel.app",
+  url: "https://starvega.vercel.app",
   tagline: "Restaurant websites with your own zero-commission online ordering.",
 
   // Final CTA target: Instagram DM deep link. ig.me/m/<handle> opens the DM
   // thread directly on mobile. TODO: confirm the exact handle.
-  instagramHandle: "vegastardigital", // TODO confirm
+  instagramHandle: "starvega", // TODO confirm
   get instagramDmUrl() {
     return `https://ig.me/m/${this.instagramHandle}`;
+  },
+
+  // Footer (mirrors the client siteConfig.footer.copyright getter pattern).
+  footer: {
+    get copyright() {
+      return `© ${new Date().getFullYear()} Starvega. All rights reserved.`;
+    },
   },
 
   // GA4 measurement id is read from NEXT_PUBLIC_GA_MEASUREMENT_ID at runtime

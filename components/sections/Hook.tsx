@@ -28,14 +28,6 @@ export default function Hook() {
         animate="show"
         className="mx-auto w-full max-w-5xl"
       >
-        <motion.p
-          variants={rise}
-          className="mb-8 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-ink-soft"
-        >
-          <span className="inline-block h-1.5 w-1.5 rounded-full bg-amber" />
-          Vega Star Digital
-        </motion.p>
-
         <h1 className="text-[clamp(2.4rem,8.5vw,5.5rem)] font-semibold leading-[1.03] tracking-[-0.02em]">
           <motion.span variants={rise} className="block">
             Still paying DoorDash
