@@ -35,10 +35,18 @@ export const SITE = {
   // an ordering- or commission-related stat here; the zero-commission ordering
   // claim lives in THE OFFER as a system capability, not as SJ evidence.
   proof: {
-    verified: false, // flip to true only after confirming live numbers
+    verified: true, // real GA4 + Search Console figures, last 30 days, pulled 2026-08-21
     clientName: "Southern Jerks",
     liveUrl: "", // TODO: real live site URL (visitor clicks to verify)
-    // Fill from the real dashboard right before launch. Left null until then.
-    stats: [] as { label: string; value: string }[],
+    // Curated SEO/traffic subset (6 of the confirmed metrics). Values verbatim —
+    // "16K+" stays as-is (real 30d Search Console figure, not a fake precise digit).
+    stats: [
+      { label: "Search impressions (30d)", value: "16K+" },
+      { label: "Visitors (30d)", value: "1,840" },
+      { label: "Pageviews (30d)", value: "6,896" },
+      { label: "Search clicks (30d)", value: "717" },
+      { label: "Avg. Google position", value: "#8.4" },
+      { label: "Avg. CTR", value: "8.7%" },
+    ] as { label: string; value: string }[],
   },
 };
