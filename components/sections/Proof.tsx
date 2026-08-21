@@ -4,58 +4,18 @@ import { CountUp } from "@/components/CountUp";
 import { Reveal } from "@/components/Reveal";
 import { SITE } from "@/lib/site";
 
-// SECTION 4 — PROOF (Southern Jerks). Heaviest visual weight on the page. 100%
-// REAL: live-site + analytics screenshots and current numbers, plus a link so a
-// visitor can verify independently. Nothing here is generated or invented.
+// SECTION 4 — PROOF (Southern Jerks). Real, current SEO/traffic numbers plus a
+// link to the live site so a visitor can verify independently. Nothing here is
+// generated or invented. Stats are gated on SITE.proof.verified.
 //
-// Hard gate: until SITE.proof.verified is flipped true (after confirming live
-// numbers) the section renders an obvious DRAFT placeholder, never fake stats.
+// No screenshots: the admin dashboard is login-gated (not visitor-verifiable),
+// so proof is the real stat callouts + the clickable live-site link.
 
 // Parse "11,240" / "$2,010" / "18+" into pieces so real numbers count up.
 function parseStat(value: string) {
   const m = value.match(/^(\D*)([\d,]+)(\D*)$/);
   if (!m) return null;
   return { prefix: m[1], to: parseInt(m[2].replace(/,/g, ""), 10), suffix: m[3] };
-}
-
-function BrowserFrame({
-  label,
-  src,
-  alt,
-}: {
-  label: string;
-  src?: string;
-  alt: string;
-}) {
-  return (
-    <div className="overflow-hidden rounded-xl border border-line bg-white shadow-[0_20px_60px_-25px_rgba(13,15,20,0.35)]">
-      <div className="flex items-center gap-1.5 border-b border-line px-4 py-3">
-        <span className="h-2.5 w-2.5 rounded-full bg-line" />
-        <span className="h-2.5 w-2.5 rounded-full bg-line" />
-        <span className="h-2.5 w-2.5 rounded-full bg-line" />
-        <span className="ml-3 truncate font-mono text-[11px] text-ink-soft">{label}</span>
-      </div>
-      {/* Reserved aspect ratio prevents layout shift while the image loads. */}
-      <div className="relative aspect-[16/10] w-full bg-paper">
-        {src ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={src}
-            alt={alt}
-            loading="lazy"
-            decoding="async"
-            className="absolute inset-0 h-full w-full object-cover object-top"
-          />
-        ) : (
-          <div className="absolute inset-0 grid place-items-center p-6 text-center">
-            <p className="font-mono text-xs uppercase tracking-[0.15em] text-ink-soft/60">
-              {alt}
-            </p>
-          </div>
-        )}
-      </div>
-    </div>
-  );
 }
 
 export default function Proof() {
@@ -79,25 +39,12 @@ export default function Proof() {
         {!ready && (
           <Reveal>
             <p className="mt-8 inline-block rounded-lg border border-amber/40 bg-amber/10 px-4 py-2 font-mono text-xs uppercase tracking-[0.15em] text-amber-deep">
-              Draft — real {proof.clientName} numbers &amp; screenshots pending before launch
+              Draft — real {proof.clientName} numbers pending before launch
             </p>
           </Reveal>
         )}
 
-        <Reveal delay={0.05}>
-          <div className="mt-12 grid gap-5 sm:mt-16 sm:grid-cols-2">
-            <BrowserFrame
-              label={proof.liveUrl || "southernjerks.com"}
-              alt={`Live ${proof.clientName} website home page`}
-            />
-            <BrowserFrame
-              label="dashboard · analytics"
-              alt={`${proof.clientName} admin analytics dashboard showing real traffic`}
-            />
-          </div>
-        </Reveal>
-
-        <div className="mt-14 grid grid-cols-2 gap-x-8 gap-y-10 sm:mt-20 sm:grid-cols-4">
+        <div className="mt-12 grid grid-cols-2 gap-x-8 gap-y-10 sm:mt-16 sm:grid-cols-3">
           {(ready
             ? proof.stats
             : [

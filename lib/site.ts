@@ -37,7 +37,7 @@ export const SITE = {
   proof: {
     verified: true, // real GA4 + Search Console figures, last 30 days, pulled 2026-08-21
     clientName: "Southern Jerks",
-    liveUrl: "", // TODO: real live site URL (visitor clicks to verify)
+    liveUrl: "https://southernjerkshtx.com", // public site — visitor clicks to verify
     // Curated SEO/traffic subset (6 of the confirmed metrics). Values verbatim —
     // "16K+" stays as-is (real 30d Search Console figure, not a fake precise digit).
     stats: [
