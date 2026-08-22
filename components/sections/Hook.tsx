@@ -20,7 +20,7 @@ export default function Hook() {
   return (
     <section
       id="hook"
-      className="relative flex min-h-[100svh] flex-col justify-center overflow-hidden px-6 sm:px-10"
+      className="relative flex min-h-svh flex-col justify-center overflow-hidden px-6 sm:px-10"
     >
       <motion.div
         variants={container}

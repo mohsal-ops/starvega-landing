@@ -28,9 +28,9 @@ export default function Header() {
             src="/starvega.png"
             alt="Starvega"
             width={210}
-            height={70}
+            height={210}
             priority
-            className="h-8 w-auto sm:h-10"
+            className="h-16 w-auto sm:h-10"
           />
         </a>
       </div>

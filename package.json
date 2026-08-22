@@ -14,12 +14,14 @@
     "lenis": "^1.1.20",
     "motion": "^12.23.22",
     "next": "15.1.11",
+    "nodemailer": "^7.0.13",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.18",
     "@types/node": "^20.19.29",
+    "@types/nodemailer": "^7.0.12",
     "@types/react": "^19.2.8",
     "@types/react-dom": "^19",
     "postcss": "^8.5.6",
