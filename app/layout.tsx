@@ -5,7 +5,6 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import { buildMetadata } from "@/lib/seo";
 import SmoothScroll from "@/components/SmoothScroll";
 import Header from "@/components/Header";
-import VisitTracker from "@/components/VisitTracker";
 import Tracker from "@/components/Tracker";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
@@ -26,7 +25,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to content
         </a>
         <SmoothScroll />
-        <VisitTracker />
         <Tracker />
         <Header />
         {children}
