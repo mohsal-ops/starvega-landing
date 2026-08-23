@@ -6,15 +6,23 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@next/third-parties": "^15.1.11",
+    "@prisma/adapter-pg": "^7.9.1",
+    "@prisma/client": "^7.9.1",
+    "@vercel/blob": "^2.8.0",
+    "@vercel/functions": "^3.9.5",
+    "dotenv": "^17.4.2",
     "gsap": "^3.13.0",
     "lenis": "^1.1.20",
     "motion": "^12.23.22",
     "next": "15.1.11",
     "nodemailer": "^7.0.13",
+    "pg": "^8.23.0",
+    "prisma": "^7.9.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },

@@ -1,0 +1,39 @@
+// Starvega marketing-site analytics DB (separate from client/builder DBs).
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model PageEvent {
+  id          String   @id @default(cuid())
+  sessionId   String
+  eventType   String // "pageview" | "section_view" | "widget_opened" | "widget_submitted" | "preview_generated" | "onboarding_clicked"
+  sectionId   String? // "hook" | "agitate" | "turn" | "proof" | "offer" | "objections" | "cta"
+  path        String
+  referrer    String?
+  country     String?
+  city        String?
+  isReturning Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  @@index([sessionId])
+  @@index([eventType])
+  @@index([createdAt])
+}
+
+model InstantDemoLead {
+  id           String   @id @default(cuid())
+  businessName String
+  businessType String?
+  photoUrls    String[]
+  contact      String?
+  country      String?
+  city         String?
+  status       String   @default("new") // new | reviewed | contacted | converted
+  sessionId    String?
+  createdAt    DateTime @default(now())
+}

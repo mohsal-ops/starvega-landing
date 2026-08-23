@@ -4,7 +4,7 @@ import Turn from "@/components/sections/Turn";
 import Proof from "@/components/sections/Proof";
 import Offer from "@/components/sections/Offer";
 import Faq from "@/components/sections/Faq";
-import Cta from "@/components/sections/Cta";
+import InstantDemo from "@/components/sections/InstantDemo";
 import Footer from "@/components/Footer";
 import FaqSchema from "@/components/FaqSchema";
 import ScrollTracker from "@/components/ScrollTracker";
@@ -20,7 +20,7 @@ export default function Home() {
       <Proof />
       <Offer />
       <Faq />
-      <Cta />
+      <InstantDemo />
       <Footer />
 
       <FaqSchema />

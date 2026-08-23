@@ -9,3 +9,5 @@ next-env.d.ts
 npm-debug.log*
 .vercel
 *.tsbuildinfo
+
+/generated
