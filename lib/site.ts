@@ -2,10 +2,10 @@
 // Placeholders marked TODO must be confirmed before launch.
 
 export const SITE = {
-  name: "Starvega",
+  name: "starvega.digital",
   // Public URL of this landing page (used for canonical + OG). TODO: set to the
   // real domain once chosen (currently the Vercel default is fine to start).
-  url: "https://starvega.vercel.app",
+  url: "https://www.starvega.site/",
   tagline: "Restaurant websites with your own zero-commission online ordering.",
 
   // Final CTA target: Instagram DM deep link. ig.me/m/<handle> opens the DM
