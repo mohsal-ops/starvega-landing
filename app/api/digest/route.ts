@@ -2,10 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import db from "@/lib/db";
 
-// 3-hourly digest (triggered by Vercel Cron — see vercel.json). Summarizes the
-// last 3 hours from the analytics DB and emails it. Sends only when there was
-// activity, so quiet windows don't spam the inbox. Replaces the old per-visit
-// email. Auth: Vercel Cron sends Authorization: Bearer $CRON_SECRET.
+// 3-hourly digest (triggered by a GitHub Actions schedule — see
+// .github/workflows/digest.yml; Vercel Hobby only allows daily crons).
+// Summarizes the last 3 hours from the analytics DB and emails it. Sends only
+// when there was activity, so quiet windows don't spam the inbox. Replaces the
+// old per-visit email. Auth: caller sends Authorization: Bearer $CRON_SECRET.
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
