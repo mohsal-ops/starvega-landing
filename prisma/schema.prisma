@@ -35,5 +35,6 @@ model InstantDemoLead {
   city         String?
   status       String   @default("new") // new | reviewed | contacted | converted
   sessionId    String?
+  config       Json?    // full generated DemoConfig, so the exact preview can be reloaded
   createdAt    DateTime @default(now())
 }
