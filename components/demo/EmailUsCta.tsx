@@ -15,7 +15,12 @@ export function EmailUsCta({ businessName }: { businessName: string }) {
   const email = SITE.contactEmail;
   const subject = `My ${businessName} preview on Starvega`;
   const body = `Hi! I just built my ${businessName} preview on Starvega, send me my link!`;
-  const mailto = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  // Gmail web compose opens a real, prefilled compose window in the browser
+  // (works on desktop even with no default mail app) — the visitor just hits
+  // Send. Falls back to mailto for anyone not on Gmail via the Copy option below.
+  const compose =
+    `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}` +
+    `&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
   const copyEmail = async () => {
     track("text_cta_clicked");
@@ -34,7 +39,9 @@ export function EmailUsCta({ businessName }: { businessName: string }) {
 
       <div className="mt-5">
         <a
-          href={mailto}
+          href={compose}
+          target="_blank"
+          rel="noreferrer"
           onClick={() => track("text_cta_clicked")}
           className="inline-flex min-h-[56px] items-center justify-center rounded-xl bg-amber px-8 py-4 text-base font-semibold text-ink transition-transform hover:bg-[#f0904a] active:scale-[0.99]"
         >
