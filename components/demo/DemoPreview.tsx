@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import { DemoNav, DemoHome, type Tab } from "./DemoHome";
 import type { DemoConfig } from "@/lib/demo/generate";
 import { track } from "@/lib/track-client";
-import { TextUsCta } from "./TextUsCta";
+import { EmailUsCta } from "./EmailUsCta";
 
 // Menu + Catering only load when their tab is first opened (code-split).
 const Spinner = () => <div className="grid place-items-center p-16 text-sm text-stone-400">Loading...</div>;
@@ -42,7 +42,7 @@ export function DemoPreview({ config }: { config: DemoConfig }) {
       </div>
 
       {/* primary conversion: click-to-text (contact asked here, not before) */}
-      <TextUsCta businessName={config.businessName} />
+      <EmailUsCta businessName={config.businessName} />
     </div>
   );
 }

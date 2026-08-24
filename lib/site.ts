@@ -19,10 +19,8 @@ export const SITE = {
     return `https://instagram.com/${this.instagramHandle}`;
   },
 
-  // Primary conversion: click-to-text. E.164 format, digits + leading +.
-  // TODO: set the real number before launch — the SMS CTA + "Copy number"
-  // desktop fallback both use this.
-  textNumber: "+213 562 59 29 18", // TODO set real number
+  // Primary conversion: click-to-email (mailto). Works on desktop AND mobile.
+  contactEmail: "popdeveloper54@gmail.com",
 
   // Footer (mirrors the client siteConfig.footer.copyright getter pattern).
   footer: {
