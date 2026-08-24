@@ -11,6 +11,7 @@ export const runtime = "nodejs";
 const EVENTS = new Set([
   "pageview", "section_view", "widget_opened",
   "widget_submitted", "preview_generated", "onboarding_clicked",
+  "text_cta_clicked",
 ]);
 
 export async function POST(req: NextRequest) {

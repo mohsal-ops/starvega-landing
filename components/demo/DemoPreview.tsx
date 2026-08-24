@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { DemoNav, DemoHome, type Tab } from "./DemoHome";
 import type { DemoConfig } from "@/lib/demo/generate";
-import { SITE } from "@/lib/site";
 import { track } from "@/lib/track-client";
+import { TextUsCta } from "./TextUsCta";
 
 // Menu + Catering only load when their tab is first opened (code-split).
 const Spinner = () => <div className="grid place-items-center p-16 text-sm text-stone-400">Loading...</div>;
@@ -41,23 +41,8 @@ export function DemoPreview({ config }: { config: DemoConfig }) {
         </div>
       </div>
 
-      {/* go-live CTA (contact asked here, not before) */}
-      <div className="mt-8 text-center">
-        <p className="text-xl font-semibold text-bg sm:text-2xl">Want this live with your real menu and photos in 48 hours?</p>
-        <p className="mx-auto mt-2 max-w-md text-sm text-white/60">
-          Message me and I will build it out with your actual items, prices, and photos.
-        </p>
-        <a
-          href={SITE.instagramDmUrl}
-          target="_blank"
-          rel="noreferrer"
-          onClick={() => track("onboarding_clicked")}
-          className="mt-5 inline-flex min-h-[56px] items-center justify-center rounded-xl bg-amber px-8 py-4 text-base font-semibold text-ink transition-transform hover:bg-[#f0904a] active:scale-[0.99]"
-        >
-          Let us build it for you
-        </a>
-        <p className="mt-3 font-mono text-xs uppercase tracking-[0.15em] text-white/40">Opens a message on Instagram</p>
-      </div>
+      {/* primary conversion: click-to-text (contact asked here, not before) */}
+      <TextUsCta businessName={config.businessName} />
     </div>
   );
 }

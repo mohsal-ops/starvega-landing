@@ -10,10 +10,19 @@ export const SITE = {
 
   // Final CTA target: Instagram DM deep link. ig.me/m/<handle> opens the DM
   // thread directly on mobile. TODO: confirm the exact handle.
-  instagramHandle: "starvega", // TODO confirm
+  instagramHandle: "starvega.digital", // TODO confirm
   get instagramDmUrl() {
     return `https://ig.me/m/${this.instagramHandle}`;
   },
+  // Secondary path: the public IG profile (not the DM deep link).
+  get instagramProfileUrl() {
+    return `https://instagram.com/${this.instagramHandle}`;
+  },
+
+  // Primary conversion: click-to-text. E.164 format, digits + leading +.
+  // TODO: set the real number before launch — the SMS CTA + "Copy number"
+  // desktop fallback both use this.
+  textNumber: "+213 562 59 29 18", // TODO set real number
 
   // Footer (mirrors the client siteConfig.footer.copyright getter pattern).
   footer: {

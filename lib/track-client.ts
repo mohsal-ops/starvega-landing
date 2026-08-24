@@ -20,7 +20,8 @@ export function sessionId(): string {
 
 export type TrackEvent =
   | "pageview" | "section_view" | "widget_opened"
-  | "widget_submitted" | "preview_generated" | "onboarding_clicked";
+  | "widget_submitted" | "preview_generated" | "onboarding_clicked"
+  | "text_cta_clicked";
 
 export function track(eventType: TrackEvent, extra?: { sectionId?: string }) {
   try {

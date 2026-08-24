@@ -8,35 +8,68 @@ export type Tab = "home" | "menu" | "catering";
 // Nav: business monogram + name, standard links (Home/Menu/Catering/Rewards/Our
 // Story), Order now, cart icon (visual only). Matches the client-site nav.
 export function DemoNav({ config, active, onNav }: { config: DemoConfig; active: Tab; onNav: (t: Tab) => void }) {
+  const [menuOpen, setMenuOpen] = useState(false);
   const links: [string, Tab | null][] = [
     ["Home", "home"], ["Menu", "menu"], ["Catering", "catering"], ["Rewards", null], ["Our Story", null],
   ];
   const initial = config.businessName.trim()[0]?.toUpperCase() || "R";
+  const go = (tab: Tab | null) => {
+    if (tab) onNav(tab);
+    setMenuOpen(false);
+  };
   return (
-    <div className="sticky top-0 z-20 flex items-center justify-between border-b border-stone-100 bg-white px-4 py-3 sm:px-6">
-      <button onClick={() => onNav("home")} className="flex items-center gap-2">
-        <span className="grid h-9 w-9 place-items-center rounded-full bg-orange-500 text-sm font-bold text-white">{initial}</span>
-        <span className="hidden max-w-[160px] truncate text-sm font-semibold text-stone-900 sm:block">{config.businessName}</span>
-      </button>
-      <nav className="hidden items-center gap-1 md:flex">
-        {links.map(([label, tab]) => (
+    <div className="sticky top-0 z-20 border-b border-stone-100 bg-white">
+      <div className="flex items-center justify-between px-4 py-3 sm:px-6">
+        <button onClick={() => go("home")} className="flex items-center gap-2">
+          <span className="grid h-9 w-9 place-items-center rounded-full bg-orange-500 text-sm font-bold text-white">{initial}</span>
+          <span className="max-w-[160px] truncate text-sm font-semibold text-stone-900">{config.businessName}</span>
+        </button>
+        <nav className="hidden items-center gap-1 md:flex">
+          {links.map(([label, tab]) => (
+            <button
+              key={label}
+              onClick={() => tab && onNav(tab)}
+              className={`rounded-full px-3 py-1.5 text-sm transition-colors ${
+                tab && active === tab ? "bg-stone-100 font-medium text-stone-900" : "text-stone-600 hover:text-stone-900"
+              } ${!tab ? "cursor-default" : ""}`}
+            >
+              {label}
+            </button>
+          ))}
+        </nav>
+        <div className="flex items-center gap-2">
+          <button onClick={() => onNav("menu")} className="hidden rounded-full bg-orange-600 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-700 sm:block">Order now</button>
+          <span className="grid h-9 w-9 place-items-center rounded-full border border-stone-200 text-stone-600" aria-label="Cart">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39A2 2 0 0 0 7.66 16h9.72a2 2 0 0 0 2-1.61L23 6H6" /></svg>
+          </span>
           <button
-            key={label}
-            onClick={() => tab && onNav(tab)}
-            className={`rounded-full px-3 py-1.5 text-sm transition-colors ${
-              tab && active === tab ? "bg-stone-100 font-medium text-stone-900" : "text-stone-600 hover:text-stone-900"
-            } ${!tab ? "cursor-default" : ""}`}
+            onClick={() => setMenuOpen((o) => !o)}
+            aria-label="Menu"
+            aria-expanded={menuOpen}
+            className="grid h-9 w-9 place-items-center rounded-lg border border-stone-200 text-stone-700 md:hidden"
           >
-            {label}
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              {menuOpen ? <path d="M6 6l12 12M6 18L18 6" /> : <><path d="M3 6h18" /><path d="M3 12h18" /><path d="M3 18h18" /></>}
+            </svg>
           </button>
-        ))}
-      </nav>
-      <div className="flex items-center gap-2">
-        <button onClick={() => onNav("menu")} className="rounded-full bg-orange-600 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-700">Order now</button>
-        <span className="grid h-9 w-9 place-items-center rounded-full border border-stone-200 text-stone-600" aria-label="Cart">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39A2 2 0 0 0 7.66 16h9.72a2 2 0 0 0 2-1.61L23 6H6" /></svg>
-        </span>
+        </div>
       </div>
+      {/* mobile menu */}
+      {menuOpen && (
+        <nav className="border-t border-stone-100 px-2 py-2 md:hidden">
+          {links.map(([label, tab]) => (
+            <button
+              key={label}
+              onClick={() => go(tab)}
+              className={`block w-full rounded-lg px-3 py-2.5 text-left text-sm ${
+                tab && active === tab ? "bg-stone-100 font-medium text-stone-900" : "text-stone-700"
+              } ${!tab ? "text-stone-400" : ""}`}
+            >
+              {label}
+            </button>
+          ))}
+        </nav>
+      )}
     </div>
   );
 }

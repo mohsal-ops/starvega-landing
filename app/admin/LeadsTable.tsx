@@ -40,6 +40,17 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
     }
   };
 
+  const del = async (id: string) => {
+    if (!confirm("Delete this lead? This can't be undone.")) return;
+    setBusy(id);
+    setRows((r) => r.filter((x) => x.id !== id));
+    try {
+      await fetch(`/api/admin/leads/${id}`, { method: "DELETE" });
+    } finally {
+      setBusy(null);
+    }
+  };
+
   if (rows.length === 0) return <p className="text-sm text-ink-soft">No leads yet.</p>;
 
   return (
@@ -53,7 +64,8 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
             <th className="py-2 pr-3 font-medium">Location</th>
             <th className="py-2 pr-3 font-medium">Photos</th>
             <th className="py-2 pr-3 font-medium">When</th>
-            <th className="py-2 font-medium">Status</th>
+            <th className="py-2 pr-3 font-medium">Status</th>
+            <th className="py-2 font-medium sr-only">Delete</th>
           </tr>
         </thead>
         <tbody>
@@ -83,6 +95,17 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
                     <option key={s} value={s}>{s}</option>
                   ))}
                 </select>
+              </td>
+              <td className="py-3 pl-1">
+                <button
+                  onClick={() => del(l.id)}
+                  disabled={busy === l.id}
+                  aria-label="Delete lead"
+                  title="Delete lead"
+                  className="grid h-7 w-7 place-items-center rounded-md text-ink-soft transition-colors hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18" /><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" /></svg>
+                </button>
               </td>
             </tr>
           ))}
