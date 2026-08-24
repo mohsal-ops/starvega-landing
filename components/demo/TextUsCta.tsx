@@ -15,10 +15,12 @@ type Plat = "ios" | "android" | "desktop";
 
 function detectPlatform(): Plat {
   const ua = navigator.userAgent || "";
-  if (/iphone|ipad|ipod/i.test(ua)) return "ios";
-  if (/android/i.test(ua)) return "android";
-  // touch + narrow viewport that isn't iOS/Android → treat as mobile (Android-style body param)
-  if ("ontouchstart" in window && window.matchMedia("(max-width: 767px)").matches) return "android";
+  // Detect by user agent ONLY. Touch/width heuristics misfire on touchscreen
+  // laptops (they'd wrongly get the dead sms: button on desktop).
+  // iPadOS 13+ reports "Macintosh" but is a real touch device → treat as iOS.
+  if (/iPad|iPhone|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1)) return "ios";
+  if (/Android/.test(ua)) return "android";
+  if (/Mobi|Mobile|BlackBerry|Windows Phone|IEMobile|Opera Mini/.test(ua)) return "android";
   return "desktop";
 }
 
