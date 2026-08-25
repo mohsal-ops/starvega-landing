@@ -23,12 +23,14 @@ export type TrackEvent =
   | "widget_submitted" | "preview_generated" | "onboarding_clicked"
   | "text_cta_clicked";
 
-export function track(eventType: TrackEvent, extra?: { sectionId?: string }) {
+export function track(eventType: TrackEvent, extra?: { sectionId?: string; entryPoint?: string }) {
   try {
     const body = JSON.stringify({
       sessionId: sessionId(),
       eventType,
       sectionId: extra?.sectionId,
+      // Which door into the widget was used (only set on widget_opened).
+      entryPoint: extra?.entryPoint,
       path: location.pathname,
       referrer: document.referrer || undefined,
     });

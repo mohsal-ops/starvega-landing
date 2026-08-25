@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { upload } from "@vercel/blob/client";
 import { track, sessionId } from "@/lib/track-client";
+import { getEntryPoint } from "@/lib/widget-cta";
 import { CUISINE_OPTIONS } from "@/lib/demo/cuisines";
 import type { DemoConfig } from "@/lib/demo/generate";
 import { DemoPreview } from "@/components/demo/DemoPreview";
@@ -25,7 +26,7 @@ export default function InstantDemo() {
   const photoUrls = photos.filter((p) => p.url).map((p) => p.url!) as string[];
 
   const markOpened = () => {
-    if (!opened) { setOpened(true); track("widget_opened"); }
+    if (!opened) { setOpened(true); track("widget_opened", { entryPoint: getEntryPoint() }); }
   };
 
   const addFiles = async (files: FileList | null) => {
@@ -88,7 +89,7 @@ export default function InstantDemo() {
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
-                <input value={name} onFocus={markOpened} onChange={(e) => setName(e.target.value.slice(0, 60))} maxLength={60} required placeholder="Business name" className={field} />
+                <input id="instant-demo-name" value={name} onFocus={markOpened} onChange={(e) => setName(e.target.value.slice(0, 60))} maxLength={60} required placeholder="Business name" className={field} />
                 <select value={cuisine} onFocus={markOpened} onChange={(e) => setCuisine(e.target.value)} className={field}>
                   <option value="" className="bg-ink">Cuisine / type (optional)</option>
                   {CUISINE_OPTIONS.map((o) => <option key={o.value} value={o.value} className="bg-ink">{o.label}</option>)}

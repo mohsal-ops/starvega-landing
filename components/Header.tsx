@@ -3,8 +3,10 @@
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { WidgetCtaButton } from "@/components/WidgetCta";
 
-// Minimal fixed header — logo only, no nav (single-CTA funnel stays intact).
+// Minimal fixed header — logo + one small CTA that opens the instant-preview
+// widget (entry point "sticky_nav"), for visitors ready to act immediately.
 // Banner behavior: hides when scrolling down, reappears when scrolling up.
 // Transparent at the top; gains a white blurred bar once scrolled. Not rendered
 // on /admin (that route has its own dashboard header).
@@ -36,7 +38,7 @@ export default function Header() {
         hidden ? "-translate-y-full" : "translate-y-0"
       } ${scrolled ? "border-b border-line bg-white/80 backdrop-blur-md" : "border-b border-transparent"}`}
     >
-      <div className="mx-auto flex max-w-6xl items-center px-6 py-3 sm:px-10">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3 sm:px-10">
         <a href="#hook" aria-label="Starvega — home">
           <Image
             src="/starvega.png"
@@ -47,6 +49,9 @@ export default function Header() {
             className="h-8 w-auto sm:h-10"
           />
         </a>
+        <WidgetCtaButton entryPoint="sticky_nav" small>
+          See your site
+        </WidgetCtaButton>
       </div>
     </header>
   );

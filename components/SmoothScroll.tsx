@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import Lenis from "lenis";
 import { gsap } from "gsap";
+import { registerLenis } from "@/lib/widget-cta";
 
 // Site-wide inertia scroll (Lenis), driven by GSAP's ticker — the standard
 // pairing for a single rAF loop. Renders nothing; just installs the scroll loop.
@@ -16,6 +17,8 @@ export default function SmoothScroll() {
     if (reduce) return;
 
     const lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
+    // Expose it so the widget entry points can smooth-scroll to #cta.
+    registerLenis(lenis);
 
     const raf = (time: number) => lenis.raf(time * 1000);
     gsap.ticker.add(raf);
@@ -24,6 +27,7 @@ export default function SmoothScroll() {
     return () => {
       gsap.ticker.remove(raf);
       lenis.destroy();
+      registerLenis(null);
     };
   }, []);
 

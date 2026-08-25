@@ -14,6 +14,10 @@ const EVENTS = new Set([
   "text_cta_clicked",
 ]);
 
+// Which entry point sent the visitor to the widget (only meaningful on
+// widget_opened). Validated so a bad value never lands in the column.
+const ENTRY_POINTS = new Set(["sticky_nav", "post_hook", "post_proof", "final_cta"]);
+
 export async function POST(req: NextRequest) {
   try {
     const b = (await req.json()) as Record<string, unknown>;
@@ -29,6 +33,7 @@ export async function POST(req: NextRequest) {
         sessionId,
         eventType,
         sectionId: typeof b.sectionId === "string" ? b.sectionId : null,
+        entryPoint: typeof b.entryPoint === "string" && ENTRY_POINTS.has(b.entryPoint) ? b.entryPoint : null,
         path: typeof b.path === "string" ? b.path : "/",
         referrer: typeof b.referrer === "string" && b.referrer ? b.referrer : null,
         country: geo.country || null,

@@ -13,6 +13,8 @@ model PageEvent {
   sessionId   String
   eventType   String // "pageview" | "section_view" | "widget_opened" | "widget_submitted" | "preview_generated" | "onboarding_clicked"
   sectionId   String? // "hook" | "agitate" | "turn" | "proof" | "offer" | "objections" | "cta"
+  // Which door opened the widget (set on widget_opened): "sticky_nav" | "post_hook" | "post_proof" | "final_cta"
+  entryPoint  String?
   path        String
   referrer    String?
   country     String?
