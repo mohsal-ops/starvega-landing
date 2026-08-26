@@ -1,18 +1,30 @@
 @import "tailwindcss";
 
 /* ── Brand tokens (Tailwind v4 CSS-first theme) ──────────────────────────────
-   One accent only (amber). Near-black ink on stark white. Geometric sans in the
-   Linear/Vercel/Stripe register. These generate utilities: bg-ink, text-amber… */
+   Design system: OFF+BRAND-adapted (styles.refero.design) on a WHITE canvas —
+   typographic architecture, editorial restraint, shadowless flatness, hairline
+   dividers, 0px cards / 10px interactive radius. Strict monochrome (ink on white,
+   ash hairlines) with TWO deliberate color events: the iridescent hero sphere
+   (the signature chromatic moment) and Starvega amber, reserved for primary CTAs
+   only. Single voice: Inter, monumental all-caps at display sizes (line-height
+   0.8). Utilities: bg-ink, text-amber, bg-paper, border-ash, font-display… */
 @theme {
-  --color-ink: #0d0f14;
-  --color-ink-soft: #4b5162;
-  --color-bg: #ffffff;
-  --color-paper: #fafafa;
-  --color-line: #e7e8ec;
-  --color-amber: #e8833a;
+  --color-ink: #1d1d1d;        /* near-black, zero blue cast — text, strokes, borders */
+  --color-ink-soft: #6b6b6b;   /* neutral gray — secondary text only */
+  --color-bg: #ffffff;         /* white canvas */
+  --color-paper: #f6f6f5;      /* subtle panel / nested card surface */
+  --color-surface: #ffffff;    /* elevated white surface (separated by hairlines, not shadow) */
+  --color-line: #d8d7d4;       /* soft hairline divider */
+  --color-ash: #bfbebe;        /* stronger structural hairline */
+  --color-stone: #cdcdc9;      /* mid-tone secondary panel */
+  --color-amber: #e8833a;      /* reserved for primary CTAs only */
   --color-amber-deep: #c96a26;
 
-  --font-sans: var(--font-geist), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* The one iridescent moment — hero sphere only, never a UI accent. */
+  --gradient-sphere: linear-gradient(255deg, rgb(250, 203, 14), rgb(240, 107, 168) 30%, rgb(120, 186, 230) 65%, rgb(255, 255, 255));
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
 }
 
@@ -51,6 +63,113 @@ html.lenis body {
 }
 .lenis.lenis-stopped {
   overflow: hidden;
+}
+
+/* ── OFF+BRAND motion layer ──────────────────────────────────────────────────
+   FOUC guards + hover/cursor/texture primitives for the GSAP layer (see
+   MotionLayer + SmoothScroll). Reveal targets are pre-hidden and animated to
+   visible by JS (via fromTo, so these resting values don't fight the tween). If
+   JS is absent or the visitor prefers reduced motion, everything shows. */
+[data-reveal],
+[data-reveal-words],
+[data-price-old],
+[data-price-new] { opacity: 0; }
+[data-reveal-chars] { visibility: hidden; }
+
+/* Reduced-motion (class set by MotionLayer) — show everything, no animation. */
+html.reduce [data-reveal],
+html.reduce [data-reveal-words],
+html.reduce [data-price-old],
+html.reduce [data-price-new] { opacity: 1 !important; }
+html.reduce [data-reveal-chars] { visibility: visible !important; }
+
+/* SplitText line mask — characters rise out from behind this. The negative
+   margin cancels the padding so line-height/stacking is visually unchanged
+   (padding only exists to stop descenders like g/y clipping mid-animation). */
+.line { overflow: hidden; padding-bottom: 0.12em; margin-bottom: -0.12em; }
+
+/* Ghost link: trailing arrow slides + a scaleX fill wipes in from the left,
+   inverting the label as it passes (OFF+BRAND's one interactive state). On a
+   white surface the fill is ink; add .link--on-ink on dark sections to flip it. */
+.link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  overflow: hidden;
+  border-radius: 10px;
+  padding: 5px 8px 5px 2px;
+}
+.link-fill {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--color-ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s cubic-bezier(0.6, 0, 0.2, 1);
+}
+.link-label,
+.link-arrow {
+  position: relative;
+  z-index: 1;
+  transition: color 0.4s, transform 0.4s cubic-bezier(0.6, 0, 0.2, 1);
+}
+.link:hover .link-fill,
+.link:focus-visible .link-fill { transform: scaleX(1); }
+.link:hover .link-label,
+.link:hover .link-arrow,
+.link:focus-visible .link-label,
+.link:focus-visible .link-arrow { color: var(--color-bg); }
+.link:hover .link-arrow,
+.link:focus-visible .link-arrow { transform: translateX(6px); }
+.link--on-ink .link-fill { background: var(--color-bg); }
+.link--on-ink:hover .link-label,
+.link--on-ink:hover .link-arrow,
+.link--on-ink:focus-visible .link-label,
+.link--on-ink:focus-visible .link-arrow { color: var(--color-ink); }
+
+/* Custom cursor: one dot, mix-blend-difference so it stays legible on both the
+   white canvas and the ink sections. Desktop/fine-pointer only (set by JS). */
+html.custom-cursor,
+html.custom-cursor a,
+html.custom-cursor button,
+html.custom-cursor .link { cursor: none; }
+html.custom-cursor input,
+html.custom-cursor textarea,
+html.custom-cursor select { cursor: auto; }
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px;
+  border-radius: 9999px;
+  background: #fff;
+  mix-blend-mode: difference;
+  pointer-events: none;
+  will-change: transform;
+  transition: width 0.22s ease, height 0.22s ease, margin 0.22s ease;
+}
+.cursor-dot.is-hover { width: 44px; height: 44px; margin: -22px 0 0 -22px; }
+
+/* Faint animated grain behind the hero — texture only, never competes with copy. */
+.grain {
+  position: absolute;
+  inset: -40%;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain-shift 8s steps(6) infinite;
+}
+@keyframes grain-shift {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-4%, 3%); }
+  50% { transform: translate(3%, -2%); }
+  75% { transform: translate(-2%, -3%); }
+  100% { transform: translate(0, 0); }
 }
 
 /* Accessibility: honor reduced-motion. JS also reads this, but kill CSS motion

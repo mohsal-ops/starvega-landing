@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { SITE } from "@/lib/site";
+import { ArrowLink } from "@/components/ArrowLink";
 
 // Minimal footer: logo, the same Instagram contact the CTA routes to (kept
 // consistent), and the copyright line. No link wall, no showcase — matches the
@@ -10,14 +11,15 @@ export default function Footer() {
       <div className="mx-auto flex max-w-6xl flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
         <Image src="/starvega.png" alt="Starvega" width={150} height={50} className="h-6 w-auto" />
 
-        <a
+        <ArrowLink
           href={SITE.instagramDmUrl}
           target="_blank"
           rel="noreferrer"
-          className="text-sm font-medium text-ink transition-colors hover:text-amber-deep"
+          arrow="→"
+          className="text-sm font-medium text-ink"
         >
-          Message me on Instagram &#8594;
-        </a>
+          Message me on Instagram
+        </ArrowLink>
 
         <p className="text-xs text-ink-soft">{SITE.footer.copyright}</p>
       </div>

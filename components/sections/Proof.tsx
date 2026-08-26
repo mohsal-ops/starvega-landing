@@ -2,6 +2,9 @@
 
 import { CountUp } from "@/components/CountUp";
 import { Reveal } from "@/components/Reveal";
+import { ArrowLink } from "@/components/ArrowLink";
+import { RevenueGraph } from "@/components/RevenueGraph";
+import { Figure } from "@/components/Figure";
 import { SITE } from "@/lib/site";
 
 // SECTION 4 — PROOF (Southern Jerks). Real, current SEO/traffic numbers plus a
@@ -25,16 +28,39 @@ export default function Proof() {
   return (
     <section id="proof" className="border-t border-line bg-paper px-6 py-24 sm:px-10 sm:py-32">
       <div className="mx-auto w-full max-w-6xl">
-        <Reveal>
-          <p className="mb-5 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-ink-soft">
+        <div>
+          <p
+            data-reveal
+            className="mb-5 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-ink-soft"
+          >
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-amber" />
             Real restaurant. Real numbers.
           </p>
-          <h2 className="max-w-3xl text-[clamp(2rem,6vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.02em]">
+          <h2
+            data-reveal-chars
+            className="max-w-3xl text-[clamp(2rem,6vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.02em]"
+          >
             {proof.clientName} is live and ranking in Google search, and you can
             check the numbers yourself.
           </h2>
-        </Reveal>
+        </div>
+
+        <div className="mt-12 grid items-stretch gap-6 sm:mt-16 sm:grid-cols-2">
+          <Reveal className="flex flex-col justify-between border border-ash bg-bg p-5">
+            <RevenueGraph className="w-full" />
+            <p className="mt-4 text-sm text-ink-soft">
+              Real customers finding {proof.clientName} on Google — traffic that used to go to a delivery app’s
+              listing instead of the restaurant’s own site.
+            </p>
+          </Reveal>
+          <Figure
+            src="/owner.jpg"
+            alt="A real restaurant owner"
+            ratio="4 / 3"
+            objectPosition="center top"
+            caption="A real owner. A real site they own."
+          />
+        </div>
 
         {!ready && (
           <Reveal>
@@ -75,15 +101,15 @@ export default function Proof() {
         <Reveal delay={0.1}>
           <div className="mt-14 sm:mt-20">
             {proof.liveUrl ? (
-              <a
+              <ArrowLink
                 href={proof.liveUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 border-b-2 border-amber pb-1 text-lg font-semibold text-ink transition-colors hover:text-amber-deep"
+                arrow="↗"
+                className="text-lg font-semibold text-ink"
               >
                 See {proof.clientName} live and check it yourself
-                <span aria-hidden>↗</span>
-              </a>
+              </ArrowLink>
             ) : (
               <span className="font-mono text-xs uppercase tracking-[0.15em] text-ink-soft/60">
                 Live link added before launch

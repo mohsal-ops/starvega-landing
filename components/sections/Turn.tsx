@@ -1,6 +1,8 @@
 "use client";
 
 import { Reveal } from "@/components/Reveal";
+import { ArrowLink } from "@/components/ArrowLink";
+import { SiteMockup } from "@/components/SiteMockup";
 
 // SECTION 3 — THE TURN. Job: signal there's a way out, briefly. Just enough to
 // create relief after AGITATE. No price, no hard sell — the full case is PROOF
@@ -15,15 +17,25 @@ export default function Turn() {
   return (
     <section id="turn" className="border-t border-line bg-bg px-6 py-24 sm:px-10 sm:py-32">
       <div className="mx-auto w-full max-w-5xl">
-        <Reveal>
-          <p className="mb-5 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-ink-soft">
+        <div>
+          <p
+            data-reveal
+            className="mb-5 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-ink-soft"
+          >
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-amber" />
             There is a way off it
           </p>
-          <h2 className="max-w-3xl text-[clamp(2rem,6vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.02em]">
+          <h2
+            data-reveal-chars
+            className="max-w-3xl text-[clamp(2rem,6vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.02em]"
+          >
             A real website with your own online ordering, and a dashboard that
             shows you <span className="text-amber">every order and every dollar</span>.
           </h2>
+        </div>
+
+        <Reveal className="mt-14 sm:mt-20">
+          <SiteMockup className="mx-auto max-w-xl shadow-[0_1px_0_var(--color-line)]" />
         </Reveal>
 
         <div className="mt-14 grid gap-8 sm:mt-20 sm:grid-cols-3">
@@ -37,15 +49,15 @@ export default function Turn() {
           ))}
         </div>
 
-        <Reveal delay={0.1}>
-          <a
+        <div data-reveal className="mt-16 sm:mt-20">
+          <ArrowLink
             href="#proof"
-            className="mt-16 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] text-ink-soft transition-colors hover:text-ink sm:mt-20"
+            arrow="↓"
+            className="font-mono text-xs uppercase tracking-[0.18em] text-ink-soft"
           >
             Here is one already doing it
-            <span aria-hidden>↓</span>
-          </a>
-        </Reveal>
+          </ArrowLink>
+        </div>
       </div>
     </section>
   );

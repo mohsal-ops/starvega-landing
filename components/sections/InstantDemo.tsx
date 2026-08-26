@@ -7,6 +7,7 @@ import { getEntryPoint } from "@/lib/widget-cta";
 import { CUISINE_OPTIONS } from "@/lib/demo/cuisines";
 import type { DemoConfig } from "@/lib/demo/generate";
 import { DemoPreview } from "@/components/demo/DemoPreview";
+import { Figure } from "@/components/Figure";
 
 type Photo = { key: string; name: string; url?: string; uploading: boolean; error?: string };
 
@@ -72,11 +73,25 @@ export default function InstantDemo() {
       <div className={`mx-auto w-full ${phase === "preview" ? "max-w-5xl" : "max-w-3xl"}`}>
         {phase !== "preview" ? (
           <>
-            <p className="mb-4 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-amber">
+            <Figure
+              src="/diners.jpg"
+              alt="Happy customers sharing a meal"
+              ratio="16 / 6"
+              onInk
+              objectPosition="center 40%"
+              className="mb-10"
+            />
+            <p
+              data-reveal
+              className="mb-4 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-amber"
+            >
               <span className="inline-block h-1.5 w-1.5 rounded-full bg-amber" />
               See it before you decide
             </p>
-            <h2 className="text-[clamp(2.25rem,7vw,3.75rem)] font-semibold leading-[1.05] tracking-[-0.02em]">
+            <h2
+              data-reveal-chars
+              className="text-[clamp(2.25rem,7vw,3.75rem)] font-semibold leading-[1.05] tracking-[-0.02em]"
+            >
               Build a real preview of your site, right now.
             </h2>
             <p className="mt-4 max-w-xl text-lg leading-relaxed text-white/70">

@@ -1,6 +1,7 @@
 "use client";
 
 import { Reveal } from "@/components/Reveal";
+import { Figure } from "@/components/Figure";
 import { PRICING, formatUsd } from "@/lib/pricing";
 
 // SECTION 5 — THE OFFER. Job: state it plainly. Free preview, real dashboard to
@@ -19,15 +20,31 @@ export default function Offer() {
   return (
     <section id="offer" className="bg-ink px-6 py-24 text-bg sm:px-10 sm:py-32">
       <div className="mx-auto w-full max-w-5xl">
-        <Reveal>
-          <p className="mb-5 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-amber">
+        <div>
+          <p
+            data-reveal
+            className="mb-5 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-amber"
+          >
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-amber" />
             The offer
           </p>
-          <h2 className="max-w-3xl text-[clamp(2rem,6vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.02em]">
+          <h2
+            data-reveal-chars
+            className="max-w-3xl text-[clamp(2rem,6vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.02em]"
+          >
             See it first, for free. Pay once to go live.
           </h2>
-        </Reveal>
+        </div>
+
+        <Figure
+          src="/chef.jpg"
+          alt="A chef plating a dish"
+          ratio="16 / 7"
+          onInk
+          objectPosition="center 35%"
+          caption="Built for people who cook — not people who code."
+          className="mt-12 sm:mt-16"
+        />
 
         <div className="mt-14 grid gap-12 sm:mt-20 sm:grid-cols-[1.1fr_0.9fr] sm:gap-16">
           <Reveal>
@@ -48,11 +65,14 @@ export default function Offer() {
               <p className="font-mono text-xs uppercase tracking-[0.18em] text-white/50">
                 One-time, to go live
               </p>
-              <div className="mt-3 flex items-baseline gap-3">
-                <span className="text-lg text-white/40 line-through">
+              <div data-price-anchor className="mt-3 flex items-baseline gap-3">
+                <span data-price-old className="text-lg text-white/40 line-through">
                   {formatUsd(PRICING.fullPrice)}
                 </span>
-                <span className="text-[clamp(2.75rem,10vw,4rem)] font-semibold leading-none tracking-[-0.03em] text-amber">
+                <span
+                  data-price-new
+                  className="text-[clamp(2.75rem,10vw,4rem)] font-semibold leading-none tracking-[-0.03em] text-amber"
+                >
                   {formatUsd(PRICING.discountedPrice)}
                 </span>
               </div>

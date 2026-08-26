@@ -45,16 +45,22 @@ export default function Agitate() {
   return (
     <section id="agitate" className="bg-ink px-6 py-24 text-bg sm:px-10 sm:py-32">
       <div className="mx-auto w-full max-w-5xl">
-        <Reveal>
-          <p className="mb-5 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-amber">
+        <div>
+          <p
+            data-reveal
+            className="mb-5 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-amber"
+          >
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-amber" />
             The math nobody shows you
           </p>
-          <h2 className="max-w-3xl text-[clamp(1.9rem,5.5vw,3.25rem)] font-semibold leading-[1.08] tracking-[-0.02em]">
+          <h2
+            data-reveal-chars
+            className="max-w-3xl text-[clamp(1.9rem,5.5vw,3.25rem)] font-semibold leading-[1.08] tracking-[-0.02em]"
+          >
             Say you do $5,000-6,000 a month in delivery orders. Here is where it
             actually goes.
           </h2>
-        </Reveal>
+        </div>
 
         <div className="mt-14 grid gap-x-10 gap-y-12 sm:mt-20 sm:grid-cols-2">
           {STATS.map((s, i) => (
