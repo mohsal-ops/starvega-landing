@@ -36,15 +36,19 @@ export default function Offer() {
           </h2>
         </div>
 
-        <Figure
-          src="/chef.jpg"
-          alt="A chef plating a dish"
-          ratio="16 / 7"
-          onInk
-          objectPosition="center 35%"
-          caption="Built for people who cook — not people who code."
-          className="mt-12 sm:mt-16"
-        />
+        <div className="mt-12 grid gap-6 sm:mt-16 sm:grid-cols-[240px_1fr] sm:items-center sm:gap-10">
+          <Figure
+            src="/chef.jpg"
+            alt="The person who builds and runs your site"
+            ratio="4 / 5"
+            onInk
+            objectPosition="center 25%"
+          />
+          <p className="text-[clamp(1.1rem,3vw,1.6rem)] font-medium leading-snug text-white/85">
+            Built for people who cook — not people who code. I design, build, and run each site
+            personally, so it actually fits your restaurant.
+          </p>
+        </div>
 
         <div className="mt-14 grid gap-12 sm:mt-20 sm:grid-cols-[1.1fr_0.9fr] sm:gap-16">
           <Reveal>

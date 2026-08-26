@@ -4,7 +4,6 @@ import { CountUp } from "@/components/CountUp";
 import { Reveal } from "@/components/Reveal";
 import { ArrowLink } from "@/components/ArrowLink";
 import { RevenueGraph } from "@/components/RevenueGraph";
-import { Figure } from "@/components/Figure";
 import { SITE } from "@/lib/site";
 
 // SECTION 4 — PROOF (Southern Jerks). Real, current SEO/traffic numbers plus a
@@ -45,22 +44,13 @@ export default function Proof() {
           </h2>
         </div>
 
-        <div className="mt-12 grid items-stretch gap-6 sm:mt-16 sm:grid-cols-2">
-          <Reveal className="flex flex-col justify-between border border-ash bg-bg p-5">
-            <RevenueGraph className="w-full" />
-            <p className="mt-4 text-sm text-ink-soft">
-              Real customers finding {proof.clientName} on Google — traffic that used to go to a delivery app’s
-              listing instead of the restaurant’s own site.
-            </p>
-          </Reveal>
-          <Figure
-            src="/owner.jpg"
-            alt="A real restaurant owner"
-            ratio="4 / 3"
-            objectPosition="center top"
-            caption="A real owner. A real site they own."
-          />
-        </div>
+        <Reveal className="mt-12 border border-ash bg-bg p-5 sm:mt-16 sm:p-8">
+          <RevenueGraph className="mx-auto w-full max-w-2xl" />
+          <p className="mx-auto mt-5 max-w-2xl text-sm text-ink-soft">
+            Real customers finding {proof.clientName} on Google — traffic that used to go to a delivery
+            app’s listing instead of the restaurant’s own site.
+          </p>
+        </Reveal>
 
         {!ready && (
           <Reveal>

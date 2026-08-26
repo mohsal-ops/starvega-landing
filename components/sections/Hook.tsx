@@ -24,7 +24,7 @@ export default function Hook() {
         <p
           data-reveal
           data-reveal-now
-          className="mb-8 text-[11px] font-normal uppercase tracking-[0.22em] text-ink"
+          className="mb-6 text-[11px] font-normal uppercase tracking-[0.22em] text-ink-soft"
         >
           For restaurant owners
         </p>
@@ -32,17 +32,17 @@ export default function Hook() {
         <h1
           data-reveal-chars
           data-reveal-now
-          className="font-display text-[clamp(2.9rem,10.5vw,7.5rem)] font-normal uppercase leading-[0.82] tracking-[0.005em] text-ink"
+          className="max-w-[16ch] font-display text-[clamp(2.5rem,8vw,5.75rem)] font-semibold uppercase leading-[0.92] tracking-[-0.015em] text-ink"
         >
           <span className="block">Still paying</span>
-          <span className="block">DoorDash 15–30%</span>
+          <span className="block">DoorDash <span className="text-amber-deep">15–30%</span></span>
           <span className="block">on every order?</span>
         </h1>
 
         <p
           data-reveal-words
           data-reveal-now
-          className="mt-8 max-w-[46ch] text-[18px] font-normal leading-[1.4] text-ink-soft"
+          className="mt-7 max-w-[42ch] text-[18px] font-normal leading-[1.5] text-ink-soft"
         >
           On every single order. Month after month. It is quietly the most
           expensive line item you never signed off on.
@@ -82,12 +82,12 @@ export default function Hook() {
 function HeroBackdrop({ reduce }: { reduce: boolean }) {
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-      {/* concentric rings, anchored to the sphere's focal point (right-of-center) */}
-      <div data-parallax className="absolute right-[12%] top-1/2 -translate-y-1/2">
-        {[560, 820, 1120].map((d) => (
+      {/* concentric rings, anchored to the sphere's focal point (far right) */}
+      <div data-parallax className="absolute right-[-4%] top-[42%] -translate-y-1/2 sm:right-[4%]">
+        {[440, 680, 940].map((d) => (
           <div
             key={d}
-            className="absolute rounded-full border border-ash/60"
+            className="absolute rounded-full border border-ash/50"
             style={{ width: d, height: d, left: -d / 2, top: -d / 2 }}
           />
         ))}
@@ -95,15 +95,16 @@ function HeroBackdrop({ reduce }: { reduce: boolean }) {
 
       {/* soft glow behind the sphere */}
       <motion.div
-        className="absolute right-[6%] top-1/2 h-[52vh] w-[52vh] rounded-full blur-3xl"
-        style={{ backgroundImage: "var(--gradient-sphere)", opacity: 0.35 }}
+        className="absolute right-[-14%] top-[44%] h-[34vh] w-[34vh] rounded-full blur-3xl sm:right-[2%]"
+        style={{ backgroundImage: "var(--gradient-sphere)", opacity: 0.22 }}
         initial={{ y: "-50%" }}
         animate={reduce ? { y: "-50%" } : { y: "-50%", scale: [1, 1.06, 1] }}
         transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
       />
-      {/* the sphere itself — slow float + slow turn so the iridescence shifts */}
+      {/* the sphere itself — slow float + slow turn so the iridescence shifts.
+          Sits to the far right, clear of the headline, so text stays crisp. */}
       <motion.div
-        className="absolute right-[6%] top-1/2 h-[52vh] w-[52vh] rounded-full"
+        className="absolute right-[-14%] top-[44%] h-[34vh] w-[34vh] rounded-full opacity-90 sm:right-[2%]"
         style={{ backgroundImage: "var(--gradient-sphere)" }}
         initial={{ y: "-50%" }}
         animate={reduce ? { y: "-50%" } : { rotate: 360, y: ["-50%", "-54%", "-50%"] }}
