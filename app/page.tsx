@@ -22,7 +22,7 @@ export default function Home() {
       <Turn />
       <Proof />
       {/* Natural decision point once credibility's established, before the long stretch. */}
-      <InlineWidgetCta entryPoint="post_proof" line="Seen enough? Build yours now — free." />
+      <InlineWidgetCta entryPoint="post_proof" line="Seen enough? Build yours now, free." />
       <Offer />
       <Faq />
       <InstantDemo />

@@ -4,6 +4,7 @@ import { CountUp } from "@/components/CountUp";
 import { Reveal } from "@/components/Reveal";
 import { ArrowLink } from "@/components/ArrowLink";
 import { RevenueGraph } from "@/components/RevenueGraph";
+import { Figure } from "@/components/Figure";
 import { SITE } from "@/lib/site";
 
 // SECTION 4 — PROOF (Southern Jerks). Real, current SEO/traffic numbers plus a
@@ -44,18 +45,26 @@ export default function Proof() {
           </h2>
         </div>
 
-        <Reveal className="mt-12 border border-ash bg-bg p-5 sm:mt-16 sm:p-8">
-          <RevenueGraph className="mx-auto w-full max-w-2xl" />
-          <p className="mx-auto mt-5 max-w-2xl text-sm text-ink-soft">
-            Real customers finding {proof.clientName} on Google — traffic that used to go to a delivery
-            app’s listing instead of the restaurant’s own site.
-          </p>
-        </Reveal>
+        <div className="mt-12 grid items-stretch gap-6 sm:mt-16 sm:grid-cols-2">
+          <Reveal className="flex flex-col justify-between border border-ash bg-bg p-5">
+            <RevenueGraph className="w-full" />
+            <p className="mt-4 text-sm text-ink-soft">
+              Real customers finding {proof.clientName} on Google. Traffic that used to go to a delivery
+              app’s listing instead of the restaurant’s own site.
+            </p>
+          </Reveal>
+          <Figure
+            src="/demo/food-vibe.jpg"
+            alt="A real restaurant dish"
+            ratio="4 / 3"
+            caption="Real food. Real customers. Their own site."
+          />
+        </div>
 
         {!ready && (
           <Reveal>
             <p className="mt-8 inline-block rounded-lg border border-amber/40 bg-amber/10 px-4 py-2 font-mono text-xs uppercase tracking-[0.15em] text-amber-deep">
-              Draft — real {proof.clientName} numbers pending before launch
+              Draft: real {proof.clientName} numbers pending before launch
             </p>
           </Reveal>
         )}
@@ -64,10 +73,10 @@ export default function Proof() {
           {(ready
             ? proof.stats
             : [
-                { label: "Search impressions (30d)", value: "—" },
-                { label: "Visitors (30d)", value: "—" },
-                { label: "Keywords ranking", value: "—" },
-                { label: "Avg. Google position", value: "—" },
+                { label: "Search impressions (30d)", value: "N/A" },
+                { label: "Visitors (30d)", value: "N/A" },
+                { label: "Keywords ranking", value: "N/A" },
+                { label: "Avg. Google position", value: "N/A" },
               ]
           ).map((s, i) => {
             const parsed = ready ? parseStat(s.value) : null;

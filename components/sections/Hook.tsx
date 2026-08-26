@@ -35,7 +35,7 @@ export default function Hook() {
           className="max-w-[16ch] font-display text-[clamp(2.5rem,8vw,5.75rem)] font-semibold uppercase leading-[0.92] tracking-[-0.015em] text-ink"
         >
           <span className="block">Still paying</span>
-          <span className="block">DoorDash <span className="text-amber-deep">15–30%</span></span>
+          <span className="block">DoorDash <span className="text-amber-deep">15-30%</span></span>
           <span className="block">on every order?</span>
         </h1>
 

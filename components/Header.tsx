@@ -39,7 +39,7 @@ export default function Header() {
       } ${scrolled ? "border-b border-line bg-white/80 backdrop-blur-md" : "border-b border-transparent"}`}
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3 sm:px-10">
-        <a href="#hook" aria-label="Starvega — home">
+        <a href="#hook" aria-label="Starvega home">
           <Image
             src="/starvega.png"
             alt="Starvega"

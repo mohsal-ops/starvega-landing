@@ -23,14 +23,14 @@ const STATS = [
     to: 1800,
     prefix: "$",
     unit: "/mo",
-    label: "gone to commission every month — roughly $1,000 to $1,800.",
+    label: "gone to commission every month, roughly $1,000 to $1,800.",
   },
   {
     qualifier: "up to",
     to: 20000,
     prefix: "$",
     unit: "/yr",
-    label: "a year of revenue you already earned — $12,000 to $20,000.",
+    label: "a year of revenue you already earned, $12,000 to $20,000.",
   },
   {
     qualifier: "and another",

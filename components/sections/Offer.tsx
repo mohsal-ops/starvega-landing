@@ -12,7 +12,7 @@ import { PRICING, formatUsd } from "@/lib/pricing";
 const INCLUDED = [
   "A free preview of your site, built with your real menu and branding.",
   "Real dashboard access to click around and see how it works.",
-  "Your own online ordering — no commission on a single order.",
+  "Your own online ordering, with no commission on a single order.",
   "You own it: the site, the ordering, your customer list.",
 ];
 
@@ -45,7 +45,7 @@ export default function Offer() {
             objectPosition="center 25%"
           />
           <p className="text-[clamp(1.1rem,3vw,1.6rem)] font-medium leading-snug text-white/85">
-            Built for people who cook — not people who code. I design, build, and run each site
+            Built for people who cook, not people who code. I design, build, and run each site
             personally, so it actually fits your restaurant.
           </p>
         </div>
@@ -86,7 +86,7 @@ export default function Offer() {
               </p>
               <p className="mt-5 border-t border-white/15 pt-5 text-sm leading-relaxed text-white/70">
                 I build and manage each of these personally, so I only take on a
-                handful of restaurants at a time. That is the only limit — no fake
+                handful of restaurants at a time. That is the only limit. No fake
                 countdown, no expiring deal.
               </p>
             </div>

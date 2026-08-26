@@ -9,11 +9,11 @@ export const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "What happens to my data or site if I don't go live?",
-    a: "Nothing bad. If you pass, the preview simply comes down. Your menu, photos, and info stay yours — nothing is sold, shared, or held over you.",
+    a: "Nothing bad. If you pass, the preview simply comes down. Your menu, photos, and info stay yours. Nothing is sold, shared, or held over you.",
   },
   {
     q: "Why is this cheaper than a typical agency or Toast/Square?",
-    a: "Agencies price in overhead and account managers; Toast and Square charge you every month forever. I build each site personally, once, for a one-time price — so there's no monthly middleman to fund.",
+    a: "Agencies price in overhead and account managers; Toast and Square charge you every month forever. I build each site personally, once, for a one-time price, so there's no monthly middleman to fund.",
   },
   {
     q: "Do I actually own it after?",
@@ -25,6 +25,6 @@ export const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "What if I already have a website?",
-    a: "That's fine. Most restaurant sites can't take an order without handing a commission to an app. This gives you ordering you actually own — I'll work from whatever you already have.",
+    a: "That's fine. Most restaurant sites can't take an order without handing a commission to an app. This gives you ordering you actually own, and I'll work from whatever you already have.",
   },
 ];
