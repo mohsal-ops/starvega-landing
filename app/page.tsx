@@ -3,6 +3,7 @@ import Agitate from "@/components/sections/Agitate";
 import Turn from "@/components/sections/Turn";
 import Proof from "@/components/sections/Proof";
 import Offer from "@/components/sections/Offer";
+import Loyalty from "@/components/sections/Loyalty";
 import Faq from "@/components/sections/Faq";
 import InstantDemo from "@/components/sections/InstantDemo";
 import Footer from "@/components/Footer";
@@ -24,6 +25,7 @@ export default function Home() {
       {/* Natural decision point once credibility's established, before the long stretch. */}
       <InlineWidgetCta entryPoint="post_proof" line="Seen enough? Build yours now, free." />
       <Offer />
+      <Loyalty />
       <Faq />
       <InstantDemo />
       <Footer />
