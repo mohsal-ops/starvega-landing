@@ -39,4 +39,22 @@ model InstantDemoLead {
   sessionId    String?
   config       Json?    // full generated DemoConfig, so the exact preview can be reloaded
   createdAt    DateTime @default(now())
+
+  // Paid ad-funnel checkout (PayPal). Only the server capture flips this to
+  // "paid"; a client-side approval never does. See /checkout/[leadId] +
+  // /api/paypal/*. The free manual path (builder /onboard/[slug]) never touches
+  // these fields.
+  paypalOrderId String?
+  paymentStatus String    @default("unpaid") // unpaid | pending | paid
+  paidAt        DateTime?
+  amountPaid    Decimal?
+
+  // Gated onboarding submission from /onboard/paid/[leadId] (only reachable once
+  // paid). Stored as JSON: { story, hoursNote, menuChanges, requests,
+  // paymentReady, photos[] } — the same fields as the builder's /onboard/[slug].
+  onboarding    Json?
+
+  // Set once the paid submission has been handed off to the builder and a
+  // Project row was created there (Phase 4). status flips to "converted" too.
+  projectId     String?
 }

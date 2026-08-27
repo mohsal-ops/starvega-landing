@@ -2,7 +2,7 @@
 
 import { Reveal } from "@/components/Reveal";
 import { Figure } from "@/components/Figure";
-import { PRICING, formatUsd } from "@/lib/pricing";
+import { PRICING, formatUsd, BUILD_PRICE_LABEL } from "@/lib/pricing";
 
 // SECTION 5 — THE OFFER. Job: state it plainly. Free preview, real dashboard to
 // explore, one-time price to go live. Public DEFAULT pricing only (reused from
@@ -77,7 +77,7 @@ export default function Offer() {
                   data-price-new
                   className="text-[clamp(2.75rem,10vw,4rem)] font-semibold leading-none tracking-[-0.03em] text-amber"
                 >
-                  {formatUsd(PRICING.discountedPrice)}
+                  {BUILD_PRICE_LABEL}
                 </span>
               </div>
               <p className="mt-4 text-sm leading-relaxed text-white/70">

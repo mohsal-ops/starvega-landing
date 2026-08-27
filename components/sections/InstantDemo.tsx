@@ -20,6 +20,7 @@ export default function InstantDemo() {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [error, setError] = useState("");
   const [config, setConfig] = useState<DemoConfig | null>(null);
+  const [leadId, setLeadId] = useState<string | null>(null);
   const [opened, setOpened] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -59,6 +60,7 @@ export default function InstantDemo() {
       const data = await res.json();
       if (!res.ok || !data.ok || !data.config) throw new Error(data.error || "Something went wrong.");
       setConfig(data.config);
+      setLeadId(data.id ?? null); // carried into the preview's checkout CTA
       setPhase("preview");
     } catch (err) {
       setError((err as Error).message);
@@ -154,7 +156,7 @@ export default function InstantDemo() {
                 <span className="inline-block h-1.5 w-1.5 rounded-full bg-amber" />
                 Your preview. Click around, open the menu and catering.
               </p>
-              <DemoPreview config={config} />
+              <DemoPreview config={config} leadId={leadId} />
             </>
           )
         )}
