@@ -25,7 +25,7 @@ export default async function CheckoutPage({
   // Already paid → straight to the gated onboarding form, no double charge.
   if (lead.paymentStatus === "paid") redirect(`/onboard/paid/${lead.id}`);
 
-  const paypalClientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "";
+  const paypalClientId = process.env.NEXT_PAYPAL_CLIENT_ID || "";
 
   return (
     <main className="min-h-screen bg-paper px-6 py-16 text-ink sm:py-24">

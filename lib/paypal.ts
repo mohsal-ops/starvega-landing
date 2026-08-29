@@ -2,7 +2,7 @@
 //
 // Sandbox in development, live in production, selected by PAYPAL_ENV (falls back
 // to NODE_ENV). The client SECRET is read only here, on the server; the browser
-// only ever receives NEXT_PUBLIC_PAYPAL_CLIENT_ID (safe to expose). Never import
+// only ever receives NEXT_PAYPAL_CLIENT_ID (safe to expose). Never import
 // this module into a client component.
 
 const ENV = (
@@ -16,11 +16,11 @@ const BASE =
     : "https://api-m.sandbox.paypal.com";
 
 function creds(): { clientId: string; secret: string } {
-  const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
+  const clientId = process.env.NEXT_PAYPAL_CLIENT_ID;
   const secret = process.env.PAYPAL_CLIENT_SECRET;
   if (!clientId || !secret) {
     throw new Error(
-      "PayPal is not configured — set NEXT_PUBLIC_PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET in the environment.",
+      "PayPal is not configured — set NEXT_PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET in the environment.",
     );
   }
   return { clientId, secret };
