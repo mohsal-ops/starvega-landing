@@ -129,21 +129,13 @@ export function PreviewEmbed() {
         </button>
       )}
 
-      {/* Fullscreen overlay */}
+      {/* Fullscreen overlay - control bar in its own row (no overlap with the
+          demo's own navbar), iframe fills the rest. */}
       {fullscreen && (
-        <div className="fixed inset-0 z-[280] bg-ink">
-          <div className="absolute inset-0">
-            <iframe
-              key={view}
-              src={view === "site" ? SITE_SRC : DASHBOARD_SRC}
-              title={view === "site" ? "Live demo restaurant site" : "Read-only owner dashboard"}
-              className="h-full w-full bg-bg"
-            />
-          </div>
-
-          {/* Top controls: a black gradient from the top, buttons in black/white */}
-          <div className="pointer-events-none absolute inset-x-0 top-0 z-10 bg-gradient-to-b from-black via-black/70 to-transparent px-4 pb-10 pt-3">
-            <div className="pointer-events-auto flex items-center justify-between gap-3">
+        <div className="fixed inset-0 z-[280] flex flex-col bg-ink">
+          {/* Top controls: a black gradient bar, buttons in black/white */}
+          <div className="shrink-0 bg-gradient-to-b from-black via-black to-black/90 px-4 py-2.5">
+            <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-1.5 rounded-full border border-white/20 bg-black/40 p-1 backdrop-blur-sm">
                 <button
                   type="button"
@@ -187,6 +179,16 @@ export function PreviewEmbed() {
                 </button>
               </div>
             </div>
+          </div>
+
+          {/* The demo, filling the rest below the control bar (no overlap) */}
+          <div className="relative flex-1">
+            <iframe
+              key={view}
+              src={view === "site" ? SITE_SRC : DASHBOARD_SRC}
+              title={view === "site" ? "Live demo restaurant site" : "Read-only owner dashboard"}
+              className="h-full w-full bg-bg"
+            />
           </div>
         </div>
       )}
