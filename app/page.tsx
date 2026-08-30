@@ -6,6 +6,7 @@ import Offer from "@/components/sections/Offer";
 import Loyalty from "@/components/sections/Loyalty";
 import Faq from "@/components/sections/Faq";
 import InstantDemo from "@/components/sections/InstantDemo";
+import { PreviewEmbed } from "@/components/PreviewEmbed";
 import Footer from "@/components/Footer";
 import FaqSchema from "@/components/FaqSchema";
 import ScrollTracker from "@/components/ScrollTracker";
@@ -28,6 +29,8 @@ export default function Home() {
       <Loyalty />
       <Faq />
       <InstantDemo />
+      {/* Live, explorable demo near the end + a persistent floating "Preview" button. */}
+      <PreviewEmbed />
       <Footer />
 
       <FaqSchema />

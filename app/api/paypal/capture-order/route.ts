@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import db from "@/lib/db";
 import { captureOrder } from "@/lib/paypal";
+import { sendOwnerMail } from "@/lib/mail";
 
 // POST /api/paypal/capture-order  { leadId, orderId }
 // Captures the order SERVER-SIDE and only marks the lead paid when PayPal
@@ -46,6 +47,22 @@ export async function POST(req: NextRequest) {
         amountPaid: result.amount ? Number(result.amount) : undefined,
       },
     });
+
+    // Owner notification: a payment actually completed (best-effort).
+    sendOwnerMail(
+      `Starvega: PAID — ${lead.businessName}${lead.packTier ? ` (${lead.packTier})` : ""}`,
+      [
+        `Payment completed.`,
+        `Business: ${lead.businessName}`,
+        lead.packTier ? `Plan: ${lead.packTier}` : "",
+        result.amount ? `Amount: $${result.amount}` : "",
+        lead.contact ? `Contact: ${lead.contact}` : "",
+        `Lead: ${lead.id}`,
+      ]
+        .filter(Boolean)
+        .join("\n"),
+    ).catch(() => {});
+
     return NextResponse.json({ ok: true });
   } catch (e) {
     return NextResponse.json(

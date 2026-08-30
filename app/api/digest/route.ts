@@ -50,7 +50,7 @@ export async function GET(req: NextRequest) {
 
     const widget = (await db.$queryRawUnsafe(
       `SELECT "eventType" t, COUNT(DISTINCT "sessionId")::int c FROM "PageEvent"
-       WHERE "eventType" IN ('widget_opened','widget_submitted','preview_generated','text_cta_clicked') AND ${W} GROUP BY 1`,
+       WHERE "eventType" IN ('widget_opened','widget_submitted','preview_generated','preview_opened','pack_selected','text_cta_clicked') AND ${W} GROUP BY 1`,
     )) as { t: string; c: number }[];
     const wMap = new Map(widget.map((w) => [w.t, w.c]));
 
@@ -89,6 +89,8 @@ export async function GET(req: NextRequest) {
       `  opened     ${wMap.get("widget_opened") ?? 0}`,
       `  submitted  ${wMap.get("widget_submitted") ?? 0}`,
       `  preview    ${wMap.get("preview_generated") ?? 0}`,
+      `  live prev  ${wMap.get("preview_opened") ?? 0}`,
+      `  plan chosen ${wMap.get("pack_selected") ?? 0}`,
       `  texted     ${wMap.get("text_cta_clicked") ?? 0}`,
       ``,
       `New leads: ${leads.length}`,

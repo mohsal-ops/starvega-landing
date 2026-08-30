@@ -40,6 +40,11 @@ model InstantDemoLead {
   config       Json?    // full generated DemoConfig, so the exact preview can be reloaded
   createdAt    DateTime @default(now())
 
+  // Chosen product tier (STARTER | STANDARD | PRO). Drives the checkout amount,
+  // validated server-side from lib/pricing PACKAGES — never trusted from the
+  // client. Null on pre-packs leads, which fall back to the legacy build price.
+  packTier      String?
+
   // Paid ad-funnel checkout (PayPal). Only the server capture flips this to
   // "paid"; a client-side approval never does. See /checkout/[leadId] +
   // /api/paypal/*. The free manual path (builder /onboard/[slug]) never touches

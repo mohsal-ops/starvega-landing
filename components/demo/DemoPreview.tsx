@@ -6,7 +6,7 @@ import { DemoNav, DemoHome, type Tab } from "./DemoHome";
 import type { DemoConfig } from "@/lib/demo/generate";
 import { track } from "@/lib/track-client";
 import { EmailUsCta } from "./EmailUsCta";
-import { BUILD_PRICE_LABEL } from "@/lib/pricing";
+import { ChoosePlanButton } from "@/components/packs/ChoosePlanButton";
 import { SITE } from "@/lib/site";
 
 // Menu + Catering only load when their tab is first opened (code-split).
@@ -53,14 +53,8 @@ export function DemoPreview({ config, leadId }: { config: DemoConfig; leadId?: s
             Love it? Get {config.businessName} built for real.
           </p>
           <div className="mt-5">
-            <a
-              href={`/checkout/${leadId}`}
-              onClick={() => track("onboarding_clicked")}
-              className="inline-flex min-h-[56px] items-center justify-center rounded-xl bg-amber px-8 py-4 text-base font-semibold text-ink transition-transform hover:bg-[#f0904a] active:scale-[0.99]"
-            >
-              Get my site — {BUILD_PRICE_LABEL}
-            </a>
-            <p className="mt-3 text-sm text-white/50">Live in ~7 business days. Yours to keep.</p>
+            <ChoosePlanButton>Choose your plan</ChoosePlanButton>
+            <p className="mt-3 text-sm text-white/50">One-time price, yours to keep. Live in ~7 business days.</p>
           </div>
           <a
             href={SITE.instagramProfileUrl}

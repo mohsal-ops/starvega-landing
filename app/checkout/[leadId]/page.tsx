@@ -1,7 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 import db from "@/lib/db";
-import { BUILD_PRICE_LABEL } from "@/lib/pricing";
+import { BUILD_PRICE_LABEL, PACKS_BY_TIER, formatUsd, type PackTier } from "@/lib/pricing";
 import { CheckoutClient } from "./CheckoutClient";
 
 // Paid ad-funnel checkout, reached from the instant-demo preview's final CTA.
@@ -27,6 +27,21 @@ export default async function CheckoutPage({
 
   const paypalClientId = process.env.NEXT_PAYPAL_CLIENT_ID || "";
 
+  // Pack-aware summary: the chosen tier drives the label, price and what's
+  // included; a pre-packs lead falls back to the legacy build price.
+  const pack = lead.packTier ? PACKS_BY_TIER[lead.packTier as PackTier] : null;
+  const priceLabel = pack ? formatUsd(pack.price) : BUILD_PRICE_LABEL;
+  const lineTitle = pack ? `${pack.label} plan` : "Website build";
+  const included = pack
+    ? [...pack.features.filter((f) => !f.endsWith(":")), "Yours to keep once delivered"]
+    : [
+        "Your full site built from the preview you just saw",
+        "Real menu, photos, hours, and story added for you",
+        "Online ordering + catering pages included",
+        "Delivered ready to go live in ~7 business days",
+        "It's yours to keep once delivered",
+      ];
+
   return (
     <main className="min-h-screen bg-paper px-6 py-16 text-ink sm:py-24">
       <div className="mx-auto w-full max-w-lg">
@@ -44,18 +59,12 @@ export default async function CheckoutPage({
 
         <div className="mt-8 rounded-2xl border border-ash bg-white p-6 shadow-sm">
           <div className="flex items-baseline justify-between border-b border-ash pb-4">
-            <span className="font-medium">Website build</span>
-            <span className="text-2xl font-semibold">{BUILD_PRICE_LABEL}</span>
+            <span className="font-medium">{lineTitle}</span>
+            <span className="text-2xl font-semibold">{priceLabel}</span>
           </div>
 
           <ul className="mt-4 space-y-2 text-sm text-ink-soft">
-            {[
-              "Your full site built from the preview you just saw",
-              "Real menu, photos, hours, and story added for you",
-              "Online ordering + catering pages included",
-              "Delivered ready to go live in ~7 business days",
-              "It's yours to keep once delivered",
-            ].map((line) => (
+            {included.map((line) => (
               <li key={line} className="flex gap-2">
                 <span aria-hidden className="mt-0.5 text-amber">✓</span>
                 <span>{line}</span>
@@ -67,7 +76,7 @@ export default async function CheckoutPage({
             <CheckoutClient
               leadId={lead.id}
               businessName={lead.businessName}
-              priceLabel={BUILD_PRICE_LABEL}
+              priceLabel={priceLabel}
               paypalClientId={paypalClientId}
             />
           </div>

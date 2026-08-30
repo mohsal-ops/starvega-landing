@@ -10,6 +10,8 @@ const WIDGET_STEPS: [string, string][] = [
   ["widget_opened", "Opened"],
   ["widget_submitted", "Submitted"],
   ["preview_generated", "Preview"],
+  ["preview_opened", "Live preview opened"],
+  ["pack_selected", "Plan chosen"],
   ["text_cta_clicked", "Texted"],
 ];
 
@@ -50,7 +52,7 @@ async function getData() {
   const widget = (await db.$queryRaw`
     SELECT "eventType" AS t, COUNT(DISTINCT "sessionId")::int AS c
     FROM "PageEvent"
-    WHERE "eventType" IN ('widget_opened','widget_submitted','preview_generated','text_cta_clicked')
+    WHERE "eventType" IN ('widget_opened','widget_submitted','preview_generated','preview_opened','pack_selected','text_cta_clicked')
     GROUP BY 1
   `) as { t: string; c: number }[];
 

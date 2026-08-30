@@ -8,6 +8,7 @@ import MotionLayer from "@/components/MotionLayer";
 import CustomCursor from "@/components/CustomCursor";
 import Header from "@/components/Header";
 import Tracker from "@/components/Tracker";
+import { PackModalHost } from "@/components/packs/PackModalHost";
 
 // OFF+BRAND-adapted: a single geometric-sans voice. Inter is the doc's named
 // substitute for Ataero Retina — monumental all-caps at display sizes, editorial
@@ -35,6 +36,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Tracker />
         <Header />
         {children}
+        {/* The pricing popup — opened from any "choose your plan" CTA. */}
+        <PackModalHost />
         {gaId && <GoogleAnalytics gaId={gaId} />}
       </body>
     </html>

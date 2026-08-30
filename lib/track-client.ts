@@ -21,7 +21,7 @@ export function sessionId(): string {
 export type TrackEvent =
   | "pageview" | "section_view" | "widget_opened"
   | "widget_submitted" | "preview_generated" | "onboarding_clicked"
-  | "text_cta_clicked";
+  | "text_cta_clicked" | "preview_opened" | "preview_dashboard_opened";
 
 export function track(eventType: TrackEvent, extra?: { sectionId?: string; entryPoint?: string }) {
   try {

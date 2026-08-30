@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import db from "@/lib/db";
 import { createOrder } from "@/lib/paypal";
-import { BUILD_PRICE_USD } from "@/lib/pricing";
+import { BUILD_PRICE_USD, packPriceUsd, PACKS_BY_TIER, type PackTier } from "@/lib/pricing";
 
 // POST /api/paypal/create-order  { leadId }
-// Creates a PayPal order server-side for the single fixed price, records the
-// returned orderId + paymentStatus="pending" on that lead, and returns the
-// orderId to the client so the PayPal Buttons can proceed. The amount is taken
-// from the server constant, never from the client.
+// Creates a PayPal order server-side, records the returned orderId +
+// paymentStatus="pending" on that lead, and returns the orderId so the PayPal
+// Buttons can proceed. The amount is derived from the lead's chosen pack tier
+// (via lib/pricing), NEVER from the client; pre-packs leads fall back to the
+// legacy build price.
 export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
@@ -20,12 +21,17 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "This preview has already been paid for." }, { status: 409 });
   }
 
+  // Amount is trusted from the server side only: the pack price for the lead's
+  // tier, or the legacy build price if this lead predates packs.
+  const amountUsd = lead.packTier ? packPriceUsd(lead.packTier) ?? BUILD_PRICE_USD : BUILD_PRICE_USD;
+  const planLabel = lead.packTier ? PACKS_BY_TIER[lead.packTier as PackTier]?.label ?? "Website" : "Website";
+
   try {
     const order = await createOrder({
-      amount: BUILD_PRICE_USD.toFixed(2),
+      amount: amountUsd.toFixed(2),
       currency: "USD",
       referenceId: lead.id,
-      description: `Website build — ${lead.businessName}`,
+      description: `${planLabel} plan — ${lead.businessName}`,
     });
     await db.instantDemoLead.update({
       where: { id: lead.id },
