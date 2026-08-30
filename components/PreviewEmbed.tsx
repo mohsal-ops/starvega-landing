@@ -162,6 +162,17 @@ export function PreviewEmbed() {
               </p>
 
               <div className="flex items-center gap-2">
+                {view === "dashboard" && (
+                  <a
+                    href={DASHBOARD_SRC}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hidden items-center gap-1 rounded-[10px] border border-white/40 px-3 py-2 text-xs font-medium text-white/90 transition-colors hover:bg-white/10 sm:inline-flex"
+                    title="If the dashboard doesn't load here (blocked cookies), open it in a new tab"
+                  >
+                    Open in new tab ↗
+                  </a>
+                )}
                 <button
                   type="button"
                   onClick={openPackModal}
