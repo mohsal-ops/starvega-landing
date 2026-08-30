@@ -7,7 +7,7 @@ import { RevenueGraph } from "@/components/RevenueGraph";
 import { Figure } from "@/components/Figure";
 import { SITE } from "@/lib/site";
 
-// SECTION 4 — PROOF (Southern Jerks). Real, current SEO/traffic numbers plus a
+// SECTION 4 - PROOF (Southern Jerks). Real, current SEO/traffic numbers plus a
 // link to the live site so a visitor can verify independently. Nothing here is
 // generated or invented. Stats are gated on SITE.proof.verified.
 //

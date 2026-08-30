@@ -3,13 +3,13 @@
 import { CountUp } from "@/components/CountUp";
 import { Reveal } from "@/components/Reveal";
 
-// SECTION 2 — AGITATE. Job: make the cost of doing nothing concrete and
+// SECTION 2 - AGITATE. Job: make the cost of doing nothing concrete and
 // uncomfortable. Real commission ranges, presented as a few big scannable
 // numbers a tired owner can absorb in five seconds. NO solution here (that's
 // THE TURN). Inverted to near-black so the cost lands with weight.
 //
 // Honesty: the premise ($5-6k/mo in orders) is stated as a conditional example,
-// and 15-30% is DoorDash's real published commission range — nothing invented.
+// and 15-30% is DoorDash's real published commission range - nothing invented.
 
 const STATS = [
   {

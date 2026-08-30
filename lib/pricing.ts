@@ -12,7 +12,7 @@ export const PRICING = {
 
 // ── Product ladder (the 3 packs) ─────────────────────────────────────────────
 // One-time prices, mirroring src/lib/packages.ts in the builder panel + client
-// template. This is the ONLY place the landing defines pack prices — the pricing
+// template. This is the ONLY place the landing defines pack prices - the pricing
 // popup, the Offer section, and the server-side checkout amount all read it, so a
 // price can never drift. Standard/Pro are a starting point and safe to adjust.
 export type PackTier = "STARTER" | "STANDARD" | "PRO";
@@ -34,7 +34,7 @@ export const PACKAGES: Pack[] = [
     audience: "Food trucks & counter-service, first website ever.",
     features: [
       "Home, Story, Menu & Location pages",
-      "Online ordering — pickup",
+      "Online ordering - pickup",
       "Edit your menu, prices, categories & hours",
       "Indexable pages + standard SEO",
     ],
@@ -48,7 +48,7 @@ export const PACKAGES: Pack[] = [
     features: [
       "Everything in Starter, plus:",
       "Catering, photo gallery, gift cards & blog",
-      "Ordering — pickup + delivery + time-slot scheduling",
+      "Ordering - pickup + delivery + time-slot scheduling",
       "Gallery/branding controls, reviews & content editor",
       "Structured-data SEO on an indexable menu",
     ],
@@ -69,9 +69,22 @@ export const PACKAGES: Pack[] = [
 ];
 
 // Loyalty/SMS is a separate small monthly add-on on every pack (real per-message
-// cost) — the one honest recurring line. Never bundled into a pack's one-time price.
+// cost) - the one honest recurring line. Never bundled into a pack's one-time price.
 export const LOYALTY_ADDON_NOTE =
-  "Add Loyalty & SMS to any plan — a small monthly add-on that only covers the real cost of sending texts.";
+  "Add Loyalty & SMS to any plan - a small monthly add-on that only covers the real cost of sending texts.";
+
+// Custom / bespoke option. No fixed price and no self-serve checkout: it starts
+// a conversation. Rendered as a fourth card that opens a contact CTA.
+export const CUSTOM_PACK = {
+  label: "Custom",
+  audience: "Want something bespoke: a custom design, extra features, integrations, or a bigger build.",
+  features: [
+    "A design tailored to your brand from scratch",
+    "Custom features, pages, or third-party integrations",
+    "Multi-location or unusual ordering workflows",
+    "Quoted to the project after a quick chat",
+  ],
+};
 
 export const PACKS_BY_TIER: Record<PackTier, Pack> = Object.fromEntries(
   PACKAGES.map((p) => [p.tier, p]),

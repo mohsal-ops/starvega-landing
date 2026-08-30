@@ -1,7 +1,7 @@
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 // Ghost text link with the OFF+BRAND scaleX wipe + arrow slide (see .link in
-// globals.css). Text and destination are passed through unchanged — this only
+// globals.css). Text and destination are passed through unchanged - this only
 // restyles the hover, never the copy or where the link goes. Use onInk on the
 // dark (bg-ink) sections so the fill inverts correctly.
 export function ArrowLink({

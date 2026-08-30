@@ -6,7 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// An upward revenue/traffic line chart that draws itself on scroll — bars rise,
+// An upward revenue/traffic line chart that draws itself on scroll - bars rise,
 // the line traces from left to right, the area fills, and the leading dot lands.
 // Pure SVG, amber on white, editorial. Reduced-motion renders the final state.
 export function RevenueGraph({ className = "" }: { className?: string }) {

@@ -14,7 +14,7 @@ export type EntryPoint = "sticky_nav" | "post_hook" | "post_proof" | "final_cta"
 let currentEntryPoint: EntryPoint = "final_cta";
 
 // The site's Lenis instance, registered by <SmoothScroll>. Null when the visitor
-// has prefers-reduced-motion (no smooth scroll) — we fall back to native scroll.
+// has prefers-reduced-motion (no smooth scroll) - we fall back to native scroll.
 let lenis: Lenis | null = null;
 
 export function registerLenis(instance: Lenis | null) {
@@ -43,7 +43,7 @@ export function openWidget(entryPoint: EntryPoint) {
   // Put the cursor in the first field so the widget is truly "opened" and ready.
   // preventScroll keeps the smooth scroll above from being interrupted. Focusing
   // the field fires its onFocus -> markOpened, which logs widget_opened tagged
-  // with the entry point we just set. Absent in the "preview" phase — harmless.
+  // with the entry point we just set. Absent in the "preview" phase - harmless.
   const nameField = document.getElementById(NAME_FIELD_ID) as HTMLElement | null;
   nameField?.focus({ preventScroll: true });
 }

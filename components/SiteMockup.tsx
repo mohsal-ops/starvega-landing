@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-// A polished, modern restaurant-site mockup in a browser window — a concrete
+// A polished, modern restaurant-site mockup in a browser window - a concrete
 // "here's what you get" visual. Rounded/soft-shadowed UI (it depicts a product,
 // not the Starvega page itself). Static markup + real food imagery, lazy-loaded.
 export function SiteMockup({ className = "" }: { className?: string }) {

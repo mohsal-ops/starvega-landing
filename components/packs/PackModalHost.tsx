@@ -57,7 +57,7 @@ export function PackModalHost() {
           One-time price. Yours forever.
         </h2>
         <p className="mb-7 max-w-2xl text-sm leading-relaxed text-ink-soft">
-          No monthly platform fee, no commission on your orders. Pick the plan that fits — you can
+          No monthly platform fee, no commission on your orders. Pick the plan that fits - you can
           always move up later.
         </p>
 

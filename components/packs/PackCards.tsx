@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { PACKAGES, LOYALTY_ADDON_NOTE, formatUsd, type PackTier } from "@/lib/pricing";
+import { PACKAGES, CUSTOM_PACK, LOYALTY_ADDON_NOTE, formatUsd, type PackTier } from "@/lib/pricing";
 import { startPackCheckout } from "@/lib/pack-checkout";
+import { SITE } from "@/lib/site";
 
 // The three product packs, rendered as on-brand cards (hairline borders, no
 // shadow, amber only on the primary action). Shared by the Offer section and the
@@ -94,6 +95,27 @@ export function PackCards({ onInk = false }: { onInk?: boolean }) {
             </div>
           );
         })}
+      </div>
+
+      {/* Custom / bespoke - starts a conversation instead of self-serve checkout */}
+      <div className={`mt-5 flex flex-col gap-4 rounded-[10px] border p-6 sm:flex-row sm:items-center sm:justify-between ${border} ${panel}`}>
+        <div>
+          <p className={`font-mono text-xs uppercase tracking-[0.18em] ${subtle}`}>{CUSTOM_PACK.label}</p>
+          <p className={`mt-1.5 text-lg font-semibold ${onInk ? "text-white" : "text-ink"}`}>
+            Something bespoke? Let&apos;s build it.
+          </p>
+          <p className={`mt-1 max-w-xl text-sm leading-snug ${subtle}`}>{CUSTOM_PACK.audience}</p>
+        </div>
+        <a
+          href={SITE.instagramDmUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`inline-flex min-h-[48px] shrink-0 items-center justify-center rounded-[10px] px-5 py-3 text-sm font-semibold transition-colors ${
+            onInk ? "border border-white/25 text-white hover:border-white/50" : "border border-ink/25 text-ink hover:border-ink/50"
+          }`}
+        >
+          Let&apos;s talk
+        </a>
       </div>
 
       <p className={`mt-6 text-center text-xs leading-relaxed ${subtle}`}>{LOYALTY_ADDON_NOTE}</p>

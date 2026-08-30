@@ -38,14 +38,14 @@ export const SITE = {
   // is a launch blocker the page can assert against.
   //
   // SCOPE: Southern Jerks has NO active online ordering, so cite it ONLY for
-  // what's true there — SEO / search impressions / visitors / ranking. Never add
+  // what's true there - SEO / search impressions / visitors / ranking. Never add
   // an ordering- or commission-related stat here; the zero-commission ordering
   // claim lives in THE OFFER as a system capability, not as SJ evidence.
   proof: {
     verified: true, // real GA4 + Search Console figures, last 30 days, pulled 2026-08-21
     clientName: "Southern Jerks",
-    liveUrl: "https://southernjerkshtx.com", // public site — visitor clicks to verify
-    // Curated SEO/traffic subset (6 of the confirmed metrics). Values verbatim —
+    liveUrl: "https://southernjerkshtx.com", // public site - visitor clicks to verify
+    // Curated SEO/traffic subset (6 of the confirmed metrics). Values verbatim -
     // "16K+" stays as-is (real 30d Search Console figure, not a fake precise digit).
     stats: [
       { label: "Search impressions (30d)", value: "16K+" },

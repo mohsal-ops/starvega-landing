@@ -9,7 +9,7 @@ import { CheckoutClient } from "./CheckoutClient";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Checkout — Starvega",
+  title: "Checkout - Starvega",
   robots: { index: false, follow: false },
 };
 
@@ -54,7 +54,7 @@ export default async function CheckoutPage({
         </h1>
         <p className="mt-3 text-ink-soft">
           You already saw your live preview. Pay once and we&apos;ll build it out with your
-          real menu, photos, and content — then hand it over.
+          real menu, photos, and content - then hand it over.
         </p>
 
         <div className="mt-8 rounded-2xl border border-ash bg-white p-6 shadow-sm">

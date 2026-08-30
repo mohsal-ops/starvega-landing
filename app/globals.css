@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ── Brand tokens (Tailwind v4 CSS-first theme) ──────────────────────────────
-   Design system: OFF+BRAND-adapted (styles.refero.design) on a WHITE canvas —
+   Design system: OFF+BRAND-adapted (styles.refero.design) on a WHITE canvas -
    typographic architecture, editorial restraint, shadowless flatness, hairline
    dividers, 0px cards / 10px interactive radius. Strict monochrome (ink on white,
    ash hairlines) with TWO deliberate color events: the iridescent hero sphere
@@ -9,8 +9,8 @@
    only. Single voice: Inter, monumental all-caps at display sizes (line-height
    0.8). Utilities: bg-ink, text-amber, bg-paper, border-ash, font-display… */
 @theme {
-  --color-ink: #1d1d1d;        /* near-black, zero blue cast — text, strokes, borders */
-  --color-ink-soft: #6b6b6b;   /* neutral gray — secondary text only */
+  --color-ink: #1d1d1d;        /* near-black, zero blue cast - text, strokes, borders */
+  --color-ink-soft: #6b6b6b;   /* neutral gray - secondary text only */
   --color-bg: #ffffff;         /* white canvas */
   --color-paper: #f6f6f5;      /* subtle panel / nested card surface */
   --color-surface: #ffffff;    /* elevated white surface (separated by hairlines, not shadow) */
@@ -20,7 +20,7 @@
   --color-amber: #e8833a;      /* reserved for primary CTAs only */
   --color-amber-deep: #c96a26;
 
-  /* The one iridescent moment — hero sphere only, never a UI accent. */
+  /* The one iridescent moment - hero sphere only, never a UI accent. */
   --gradient-sphere: linear-gradient(255deg, rgb(250, 203, 14), rgb(240, 107, 168) 30%, rgb(120, 186, 230) 65%, rgb(255, 255, 255));
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -76,14 +76,14 @@ html.lenis body {
 [data-price-new] { opacity: 0; }
 [data-reveal-chars] { visibility: hidden; }
 
-/* Reduced-motion (class set by MotionLayer) — show everything, no animation. */
+/* Reduced-motion (class set by MotionLayer) - show everything, no animation. */
 html.reduce [data-reveal],
 html.reduce [data-reveal-words],
 html.reduce [data-price-old],
 html.reduce [data-price-new] { opacity: 1 !important; }
 html.reduce [data-reveal-chars] { visibility: visible !important; }
 
-/* SplitText line mask — characters rise out from behind this. The negative
+/* SplitText line mask - characters rise out from behind this. The negative
    margin cancels the padding so line-height/stacking is visually unchanged
    (padding only exists to stop descenders like g/y clipping mid-animation). */
 .line { overflow: hidden; padding-bottom: 0.12em; margin-bottom: -0.12em; }
@@ -155,7 +155,7 @@ html.custom-cursor select { cursor: auto; }
 }
 .cursor-dot.is-hover { width: 44px; height: 44px; margin: -22px 0 0 -22px; }
 
-/* Faint animated grain behind the hero — texture only, never competes with copy. */
+/* Faint animated grain behind the hero - texture only, never competes with copy. */
 .grain {
   position: absolute;
   inset: -40%;

@@ -7,7 +7,7 @@ import { SplitText } from "gsap/SplitText";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
-// The OFF+BRAND motion layer. Renders nothing — it scans the DOM for data-hooks
+// The OFF+BRAND motion layer. Renders nothing - it scans the DOM for data-hooks
 // and wires the reveals/parallax onto the existing funnel sections, so copy and
 // CTAs stay exactly where they are. Everything is a fromTo tween (the resting
 // hidden state lives in CSS as a FOUC guard; fromTo overrides it to animate in).
@@ -20,7 +20,7 @@ gsap.registerPlugin(ScrollTrigger, SplitText);
 //   data-reveal-stagger→ container: its direct children fade up in sequence
 //   data-parallax      → scrubbed vertical drift tied to the element's scroll
 //   data-price-anchor  → reveal [data-price-old] first, then [data-price-new]
-//   data-reveal-now    → play immediately on load (no scroll gate) — used above
+//   data-reveal-now    → play immediately on load (no scroll gate) - used above
 //                        the fold so the hero animates the moment the page opens
 export default function MotionLayer() {
   useEffect(() => {
@@ -40,7 +40,7 @@ export default function MotionLayer() {
       ctx = gsap.context(() => {
         const EASE = "power3.out";
 
-        // 1 — Headlines: per-character reveal out of a per-line mask.
+        // 1 - Headlines: per-character reveal out of a per-line mask.
         gsap.utils.toArray<HTMLElement>("[data-reveal-chars]").forEach((el) => {
           const split = new SplitText(el, { type: "lines,words,chars", linesClass: "line" });
           splits.push(split);
@@ -63,7 +63,7 @@ export default function MotionLayer() {
           );
         });
 
-        // 2 — Sub-copy: words rise, no rotation, softer stagger.
+        // 2 - Sub-copy: words rise, no rotation, softer stagger.
         gsap.utils.toArray<HTMLElement>("[data-reveal-words]").forEach((el) => {
           const split = new SplitText(el, { type: "lines,words", linesClass: "line" });
           splits.push(split);
@@ -85,7 +85,7 @@ export default function MotionLayer() {
           );
         });
 
-        // 3 — Blocks: fade-up. data-reveal-now plays on load in a small ladder.
+        // 3 - Blocks: fade-up. data-reveal-now plays on load in a small ladder.
         let nowIndex = 0;
         gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((el) => {
           const now = el.hasAttribute("data-reveal-now");
@@ -104,7 +104,7 @@ export default function MotionLayer() {
           );
         });
 
-        // 4 — Staggered containers: direct children in sequence.
+        // 4 - Staggered containers: direct children in sequence.
         gsap.utils.toArray<HTMLElement>("[data-reveal-stagger]").forEach((el) => {
           gsap.fromTo(
             Array.from(el.children),
@@ -120,7 +120,7 @@ export default function MotionLayer() {
           );
         });
 
-        // 5 — Parallax: scrubbed drift across the element's own scroll span.
+        // 5 - Parallax: scrubbed drift across the element's own scroll span.
         gsap.utils.toArray<HTMLElement>("[data-parallax]").forEach((el) => {
           gsap.fromTo(
             el,
@@ -138,7 +138,7 @@ export default function MotionLayer() {
           );
         });
 
-        // 6 — Price anchor: old price lands first, then the new price arrives.
+        // 6 - Price anchor: old price lands first, then the new price arrives.
         gsap.utils.toArray<HTMLElement>("[data-price-anchor]").forEach((el) => {
           const oldP = el.querySelector<HTMLElement>("[data-price-old]");
           const newP = el.querySelector<HTMLElement>("[data-price-new]");
@@ -154,7 +154,7 @@ export default function MotionLayer() {
         });
       });
 
-      // Layout may have shifted (split text, late fonts) — recompute triggers.
+      // Layout may have shifted (split text, late fonts) - recompute triggers.
       ScrollTrigger.refresh();
     };
 

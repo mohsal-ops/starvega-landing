@@ -8,7 +8,7 @@ import { registerLenis } from "@/lib/widget-cta";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Site-wide inertia scroll (Lenis), driven by GSAP's ticker — the standard
+// Site-wide inertia scroll (Lenis), driven by GSAP's ticker - the standard
 // pairing for a single rAF loop. Renders nothing; just installs the scroll loop.
 //
 // Guardrail: visitors with prefers-reduced-motion get native scrolling and no

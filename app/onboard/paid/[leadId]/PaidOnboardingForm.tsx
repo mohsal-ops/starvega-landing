@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { upload } from "@vercel/blob/client";
 
 // Paid onboarding form. Same fields as the builder's /onboard/[slug]
-// (story, hours, menu changes, requests, payment-ready, photos) — recreated
+// (story, hours, menu changes, requests, payment-ready, photos) - recreated
 // here because it's a different repo. Photos reuse the instant-demo blob route.
 // Submits to /api/onboard/paid, which re-checks payment server-side.
 
@@ -88,7 +88,7 @@ export function PaidOnboardingForm({
         <p className="text-lg font-semibold text-green-800">Got it, thank you!</p>
         <p className="mt-1 text-green-700">
           Payment received and your details are in. We&apos;ll build {businessName} out and
-          reach out if we need anything — expect it live in about 7 business days.
+          reach out if we need anything - expect it live in about 7 business days.
         </p>
       </div>
     );
@@ -108,7 +108,7 @@ export function PaidOnboardingForm({
         </p>
         <h1 className="text-2xl font-bold text-ink sm:text-3xl">Let&apos;s finish your site 🎉</h1>
         <p className="mt-2 text-ink-soft">
-          A few quick things to make {businessName} yours. Most of it is optional — anything you
+          A few quick things to make {businessName} yours. Most of it is optional - anything you
           don&apos;t have handy, skip it and send it later.
         </p>
       </header>
@@ -123,7 +123,7 @@ export function PaidOnboardingForm({
       {/* 2. Photos */}
       <section className="rounded-2xl border border-ash bg-white p-5">
         <span className={label}>Photos</span>
-        <p className={hint}>Food, your space, your team — upload as many as you&apos;d like.</p>
+        <p className={hint}>Food, your space, your team - upload as many as you&apos;d like.</p>
         <div
           onClick={() => fileRef.current?.click()}
           onDragOver={(e) => e.preventDefault()}
@@ -173,7 +173,7 @@ export function PaidOnboardingForm({
       <section className="rounded-2xl border border-ash bg-white p-5">
         <span className={label}>Online ordering setup</span>
         <p className={hint}>
-          We&apos;ll personally walk you through connecting your Stripe account — no technical
+          We&apos;ll personally walk you through connecting your Stripe account - no technical
           steps on your end. Check this and we&apos;ll reach out to set up a quick time.
         </p>
         <label className="mt-3 flex cursor-pointer items-start gap-3 rounded-xl border border-ash bg-stone-50 p-3.5">
@@ -193,7 +193,7 @@ export function PaidOnboardingForm({
         {submitting ? "Sending…" : uploading ? "Finishing photo upload…" : "Send it over"}
       </button>
       <p className="text-center text-xs text-ink-soft">
-        Everything here is optional — send what you have now, the rest whenever.
+        Everything here is optional - send what you have now, the rest whenever.
       </p>
     </div>
   );

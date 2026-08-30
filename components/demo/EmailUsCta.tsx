@@ -16,7 +16,7 @@ export function EmailUsCta({ businessName }: { businessName: string }) {
   const subject = `My ${businessName} preview on Starvega`;
   const body = `Hi! I just built my ${businessName} preview on Starvega, send me my link!`;
   // Gmail web compose opens a real, prefilled compose window in the browser
-  // (works on desktop even with no default mail app) — the visitor just hits
+  // (works on desktop even with no default mail app) - the visitor just hits
   // Send. Falls back to mailto for anyone not on Gmail via the Copy option below.
   const compose =
     `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}` +
@@ -29,7 +29,7 @@ export function EmailUsCta({ businessName }: { businessName: string }) {
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
     } catch {
-      /* clipboard blocked — the address is visible to copy manually */
+      /* clipboard blocked - the address is visible to copy manually */
     }
   };
 

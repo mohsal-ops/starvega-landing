@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { useReducedMotion } from "motion/react";
 
-// A number that counts up from 0 when it scrolls into view — the GSAP count-up
+// A number that counts up from 0 when it scrolls into view - the GSAP count-up
 // treatment the funnel spec calls for on the big commission/proof figures.
 //
 // Trigger is an IntersectionObserver (reliable, independent of the smooth-scroll

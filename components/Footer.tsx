@@ -3,7 +3,7 @@ import { SITE } from "@/lib/site";
 import { ArrowLink } from "@/components/ArrowLink";
 
 // Minimal footer: logo, the same Instagram contact the CTA routes to (kept
-// consistent), and the copyright line. No link wall, no showcase — matches the
+// consistent), and the copyright line. No link wall, no showcase - matches the
 // page's uncluttered register.
 export default function Footer() {
   return (

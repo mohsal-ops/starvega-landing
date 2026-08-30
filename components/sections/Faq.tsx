@@ -5,7 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { FAQS } from "@/lib/faq";
 import { track } from "@/lib/track";
 
-// SECTION 6 — OBJECTION HANDLING. Job: remove the last hesitation before the
+// SECTION 6 - OBJECTION HANDLING. Job: remove the last hesitation before the
 // click, not add new information. Simple accordion so it stays short on mobile.
 // Each open fires a GA event so we can see which doubts people actually have.
 export default function Faq() {

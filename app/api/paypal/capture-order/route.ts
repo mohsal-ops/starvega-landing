@@ -6,7 +6,7 @@ import { sendOwnerMail } from "@/lib/mail";
 // POST /api/paypal/capture-order  { leadId, orderId }
 // Captures the order SERVER-SIDE and only marks the lead paid when PayPal
 // reports status COMPLETED. A client-only success callback never unlocks
-// access — this route is the single source of truth for "paid".
+// access - this route is the single source of truth for "paid".
 export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
 
     // Owner notification: a payment actually completed (best-effort).
     sendOwnerMail(
-      `Starvega: PAID — ${lead.businessName}${lead.packTier ? ` (${lead.packTier})` : ""}`,
+      `Starvega: PAID - ${lead.businessName}${lead.packTier ? ` (${lead.packTier})` : ""}`,
       [
         `Payment completed.`,
         `Business: ${lead.businessName}`,

@@ -2,8 +2,8 @@ import { Reveal } from "@/components/Reveal";
 import { Figure } from "@/components/Figure";
 import { PackCards } from "@/components/packs/PackCards";
 
-// SECTION 5 — THE OFFER. Job: state it plainly. One-time price, yours forever,
-// no monthly fee and no commission — against a market that charges every month.
+// SECTION 5 - THE OFFER. Job: state it plainly. One-time price, yours forever,
+// no monthly fee and no commission - against a market that charges every month.
 // Three packs (Starter/Standard/Pro) sourced from lib/pricing so the numbers can
 // never drift from the popup or the checkout. Each card's button goes straight to
 // that pack's checkout. Honest capacity, no fake urgency.
@@ -38,7 +38,7 @@ export default function Offer() {
           />
           <p className="text-[clamp(1.1rem,3vw,1.6rem)] font-medium leading-snug text-white/85">
             Built for people who cook, not people who code. No monthly platform fee and no commission
-            on your orders — compare that to $150–500 every month for a typical Toast or Square setup.
+            on your orders - compare that to $150–500 every month for a typical Toast or Square setup.
           </p>
         </div>
 
@@ -51,7 +51,7 @@ export default function Offer() {
         <Reveal delay={0.1}>
           <p className="mt-12 max-w-xl text-sm leading-relaxed text-white/60">
             I build and manage each of these personally, so I only take on a handful of restaurants at
-            a time. That is the only limit — no fake countdown, no expiring deal.
+            a time. That is the only limit - no fake countdown, no expiring deal.
           </p>
         </Reveal>
       </div>

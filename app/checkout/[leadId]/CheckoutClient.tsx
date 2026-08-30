@@ -10,7 +10,7 @@ import {
 // Client half of the checkout. The PayPal Buttons drive a SERVER create-order
 // and a SERVER capture-order; the client never decides "paid" on its own. On a
 // confirmed capture we move to the gated onboarding form. Any failure/denial
-// shows an inline error and stays put — we never redirect on failure.
+// shows an inline error and stays put - we never redirect on failure.
 export function CheckoutClient({
   leadId,
   businessName,
@@ -75,7 +75,7 @@ export function CheckoutClient({
               if (!res.ok || !out.ok) {
                 throw new Error(out.error || "Your payment couldn't be completed.");
               }
-              // Confirmed paid by the server — go to the gated onboarding form.
+              // Confirmed paid by the server - go to the gated onboarding form.
               router.push(`/onboard/paid/${leadId}`);
             } catch (e) {
               setError((e as Error).message);
@@ -100,7 +100,7 @@ export function CheckoutClient({
       )}
 
       <p className="mt-3 text-center text-xs text-ink-soft">
-        Paying {priceLabel} for {businessName}. Secure checkout via PayPal — card or PayPal balance.
+        Paying {priceLabel} for {businessName}. Secure checkout via PayPal - card or PayPal balance.
       </p>
     </div>
   );

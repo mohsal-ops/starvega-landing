@@ -1,5 +1,5 @@
 // Thin wrapper over GA4's gtag (loaded by @next/third-parties). Every funnel
-// event goes through here so tracking is consistent and safe to call anywhere —
+// event goes through here so tracking is consistent and safe to call anywhere -
 // it no-ops on the server and when GA isn't loaded (e.g. no measurement id set).
 export function track(event: string, params?: Record<string, unknown>) {
   if (typeof window === "undefined") return;

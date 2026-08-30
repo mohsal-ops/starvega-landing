@@ -5,7 +5,7 @@ import { useEffect } from "react";
 // Small dot that trails the pointer and swells over interactive elements. Uses
 // mix-blend-difference (see .cursor-dot) so one dot stays legible on both the
 // white canvas and the ink sections. Desktop/fine-pointer only, and never for
-// reduced-motion visitors — touch users keep the native cursor untouched.
+// reduced-motion visitors - touch users keep the native cursor untouched.
 export default function CustomCursor() {
   useEffect(() => {
     const fine = window.matchMedia("(pointer: fine)").matches;

@@ -3,7 +3,7 @@
 import { openWidget, type EntryPoint } from "@/lib/widget-cta";
 
 // Shared buttons that open the single instant-preview widget. `entryPoint` is the
-// only thing that differs between placements — the destination is always #cta.
+// only thing that differs between placements - the destination is always #cta.
 
 const base =
   "inline-flex items-center justify-center rounded-xl bg-amber font-semibold text-ink transition-transform hover:bg-[#f0904a] active:scale-[0.99]";
@@ -30,7 +30,7 @@ export function WidgetCtaButton({
   );
 }
 
-// A low-key inline band placed between funnel sections — a short line + a button,
+// A low-key inline band placed between funnel sections - a short line + a button,
 // no re-pitching the offer. Just a door for anyone already convinced.
 export function InlineWidgetCta({
   entryPoint,

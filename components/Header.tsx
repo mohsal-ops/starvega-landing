@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { WidgetCtaButton } from "@/components/WidgetCta";
 
-// Minimal fixed header — logo + one small CTA that opens the instant-preview
+// Minimal fixed header - logo + one small CTA that opens the instant-preview
 // widget (entry point "sticky_nav"), for visitors ready to act immediately.
 // Banner behavior: hides when scrolling down, reappears when scrolling up.
 // Transparent at the top; gains a white blurred bar once scrolled. Not rendered

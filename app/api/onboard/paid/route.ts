@@ -3,7 +3,7 @@ import db from "@/lib/db";
 
 // POST /api/onboard/paid  { leadId, story, hoursNote, menuChanges, requests, paymentReady, photos[] }
 // Saves the paid customer's onboarding submission. Payment is re-verified
-// SERVER-SIDE here (never trust that the client was on the gated page) — an
+// SERVER-SIDE here (never trust that the client was on the gated page) - an
 // unpaid lead is rejected. Phase 4 extends this to also create the builder
 // Project. Mirrors the builder's /api/onboard field set.
 export const runtime = "nodejs";
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
   // Hand off to the builder to create the Project so this shows up in the
   // Projects tab. Best-effort: the submission is already valid and about to be
   // saved on the lead, so a builder hiccup must not fail the customer's
-  // thank-you — the owner can reconcile from a lead that has onboarding but no
+  // thank-you - the owner can reconcile from a lead that has onboarding but no
   // projectId. Idempotent via the lead's existing projectId.
   let projectId: string | null = lead.projectId ?? null;
   const builderUrl = process.env.BUILDER_API_URL;

@@ -1,6 +1,6 @@
 // Objection-handling content. Shared by the accordion UI and the FAQPage schema
 // so the crawlable rich-result content can never drift from what's on screen.
-// Order matters — these are sequenced by the doubt most likely to stop a click.
+// Order matters - these are sequenced by the doubt most likely to stop a click.
 
 export const FAQS: { q: string; a: string }[] = [
   {

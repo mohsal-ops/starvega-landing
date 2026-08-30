@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import db from "@/lib/db";
 
-// 3-hourly digest (triggered by a GitHub Actions schedule — see
+// 3-hourly digest (triggered by a GitHub Actions schedule - see
 // .github/workflows/digest.yml; Vercel Hobby only allows daily crons).
 // Summarizes the last 3 hours from the analytics DB and emails it. Sends only
 // when there was activity, so quiet windows don't spam the inbox. Replaces the
@@ -76,7 +76,7 @@ export async function GET(req: NextRequest) {
 
     const pct = (n: number) => (visitors ? Math.round((n / visitors) * 100) : 0);
     const lines = [
-      `Starvega — last 3 hours`,
+      `Starvega - last 3 hours`,
       ``,
       `Visitors: ${visitors}   (${visitors - (ov.returning || 0)} new, ${ov.returning || 0} returning)`,
       `Pageviews: ${ov.pageviews}   Avg session: ${fmtDur(dur?.secs ?? 0)}`,
@@ -97,10 +97,10 @@ export async function GET(req: NextRequest) {
       ...leads.map((l) => `  - ${l.businessName}${l.businessType ? ` (${l.businessType})` : ""}${l.city ? `, ${l.city}` : ""}`),
       ``,
       `Top referrers:`,
-      ...(refs.length ? refs.map((r) => `  ${r.r} — ${r.c}`) : ["  (none)"]),
+      ...(refs.length ? refs.map((r) => `  ${r.r} - ${r.c}`) : ["  (none)"]),
       ``,
       `Top locations:`,
-      ...(locs.length ? locs.map((l) => `  ${[l.city, l.country].filter(Boolean).join(", ")} — ${l.c}`) : ["  (none)"]),
+      ...(locs.length ? locs.map((l) => `  ${[l.city, l.country].filter(Boolean).join(", ")} - ${l.c}`) : ["  (none)"]),
     ];
 
     await sendMail(`Starvega digest: ${visitors} visitors, ${leads.length} leads (3h)`, lines.join("\n"));

@@ -2,7 +2,7 @@ import { Reveal } from "@/components/Reveal";
 import { CountUp } from "@/components/CountUp";
 import { PhoneMockup } from "@/components/PhoneMockup";
 
-// Loyalty & text-marketing add-on. Truthful capability description only — the
+// Loyalty & text-marketing add-on. Truthful capability description only - the
 // stat block is framed as an INDUSTRY benchmark, never a claim about Starvega's
 // own results. Matches the OFF+BRAND system (monochrome on white, amber for CTAs
 // only) and the funnel's data-reveal motion hooks.
@@ -38,7 +38,7 @@ const CARDS = [
   { icon: <IconSend />, title: "One-click specials",
     body: "Slow Tuesday? Text every regular a same-day offer from your dashboard in seconds.", mockup: true },
   { icon: <IconLoop />, title: "Automatic re-engagement",
-    body: "Turn one-time customers into regulars with the occasional nudge — the repeat business the big apps keep for themselves." },
+    body: "Turn one-time customers into regulars with the occasional nudge - the repeat business the big apps keep for themselves." },
 ];
 
 export default function Loyalty() {
@@ -125,7 +125,7 @@ export default function Loyalty() {
 
         {/* ── Compliance footer (wording unchanged, just smaller/muted) ── */}
         <p className="mt-12 border-t border-line pt-6 text-xs leading-relaxed text-ink-soft">
-          Opt-in only, one tap to unsubscribe — built to the messaging rules, so it stays yours and
+          Opt-in only, one tap to unsubscribe - built to the messaging rules, so it stays yours and
           stays compliant.
         </p>
       </div>

@@ -1,4 +1,4 @@
-// A phone frame showing a realistic incoming birthday-offer text — the concrete
+// A phone frame showing a realistic incoming birthday-offer text - the concrete
 // "here's what this looks like" visual for the loyalty section. Real phone
 // proportions (~9:19.5), dynamic island, status bar, message thread pinned to
 // the bottom, and an iMessage input bar so it reads as a real screen. Monochrome
@@ -42,12 +42,12 @@ export function PhoneMockup({ className = "" }: { className?: string }) {
           </span>
         </div>
 
-        {/* thread — pinned to the bottom like a real conversation */}
+        {/* thread - pinned to the bottom like a real conversation */}
         <div className="flex flex-1 flex-col justify-end gap-2.5 px-3.5 pb-3">
           <p className="text-center text-[10px] font-medium text-ink-soft">Last month</p>
           <div className="flex justify-start">
             <div className="max-w-[82%] rounded-2xl rounded-bl-md bg-[#eaeaea] px-3.5 py-2 text-[12.5px] leading-snug text-ink">
-              You&apos;re on the list 🎉 We&apos;ll text you the occasional treat — nothing spammy.
+              You&apos;re on the list 🎉 We&apos;ll text you the occasional treat - nothing spammy.
             </div>
           </div>
 
@@ -55,7 +55,7 @@ export function PhoneMockup({ className = "" }: { className?: string }) {
           <div className="flex justify-start">
             <div className="max-w-[86%] rounded-2xl rounded-bl-md bg-[#eaeaea] px-3.5 py-2.5 text-[13px] leading-snug text-ink">
               Happy early birthday from Bella Kitchen! 🎂 Here&apos;s{" "}
-              <span className="font-semibold">15% off</span> this week — come celebrate with us.
+              <span className="font-semibold">15% off</span> this week - come celebrate with us.
             </div>
           </div>
           <p className="pl-1 text-[9px] font-medium text-ink-soft">Delivered</p>

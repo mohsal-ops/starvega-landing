@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
       amount: amountUsd.toFixed(2),
       currency: "USD",
       referenceId: lead.id,
-      description: `${planLabel} plan — ${lead.businessName}`,
+      description: `${planLabel} plan - ${lead.businessName}`,
     });
     await db.instantDemoLead.update({
       where: { id: lead.id },

@@ -4,8 +4,8 @@ import { Reveal } from "@/components/Reveal";
 import { ArrowLink } from "@/components/ArrowLink";
 import { SiteMockup } from "@/components/SiteMockup";
 
-// SECTION 3 — THE TURN. Job: signal there's a way out, briefly. Just enough to
-// create relief after AGITATE. No price, no hard sell — the full case is PROOF
+// SECTION 3 - THE TURN. Job: signal there's a way out, briefly. Just enough to
+// create relief after AGITATE. No price, no hard sell - the full case is PROOF
 // and THE OFFER next.
 const PILLARS = [
   { k: "One-time", v: "One price, paid once. Not a monthly fee that never ends." },

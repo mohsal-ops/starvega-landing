@@ -4,13 +4,13 @@ import db from "@/lib/db";
 import { PaidOnboardingForm } from "./PaidOnboardingForm";
 
 // Gated onboarding form for the PAID ad-funnel path. Renders nothing unless the
-// lead's payment is captured — an unpaid (or pending) visitor is bounced back
+// lead's payment is captured - an unpaid (or pending) visitor is bounced back
 // to checkout. This is the paid counterpart to the builder's public
 // /onboard/[slug]; that free/manual route is untouched.
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Finish your site — Starvega",
+  title: "Finish your site - Starvega",
   robots: { index: false, follow: false },
 };
 

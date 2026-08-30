@@ -1,4 +1,4 @@
-// Server-side PayPal Orders v2 helpers (REST via fetch — no SDK).
+// Server-side PayPal Orders v2 helpers (REST via fetch - no SDK).
 //
 // Sandbox in development, live in production, selected by PAYPAL_ENV (falls back
 // to NODE_ENV). The client SECRET is read only here, on the server; the browser
@@ -20,7 +20,7 @@ function creds(): { clientId: string; secret: string } {
   const secret = process.env.PAYPAL_CLIENT_SECRET;
   if (!clientId || !secret) {
     throw new Error(
-      "PayPal is not configured — set NEXT_PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET in the environment.",
+      "PayPal is not configured - set NEXT_PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET in the environment.",
     );
   }
   return { clientId, secret };
@@ -77,7 +77,7 @@ export async function createOrder(params: {
 
 /**
  * Capture a previously-created order, server-side. This is the ONLY thing that
- * proves payment — a client onApprove callback is never trusted on its own.
+ * proves payment - a client onApprove callback is never trusted on its own.
  * Returns the order status (expect "COMPLETED") and the captured amount.
  */
 export async function captureOrder(orderId: string): Promise<{

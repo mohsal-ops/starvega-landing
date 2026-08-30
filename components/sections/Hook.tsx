@@ -3,7 +3,7 @@
 import { motion, useReducedMotion } from "motion/react";
 import { ArrowLink } from "@/components/ArrowLink";
 
-// SECTION 1 — HERO / HOOK. OFF+BRAND-adapted on a white canvas: a typographic
+// SECTION 1 - HERO / HOOK. OFF+BRAND-adapted on a white canvas: a typographic
 // architecture where monumental all-caps Inter carries the message, and the one
 // iridescent gradient sphere is the sole chromatic event (it, not the type, gets
 // the ambient motion). The headline runs its SplitText character reveal on load
@@ -101,7 +101,7 @@ function HeroBackdrop({ reduce }: { reduce: boolean }) {
         animate={reduce ? { y: "-50%" } : { y: "-50%", scale: [1, 1.06, 1] }}
         transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
       />
-      {/* the sphere itself — slow float + slow turn so the iridescence shifts.
+      {/* the sphere itself - slow float + slow turn so the iridescence shifts.
           Sits to the far right, clear of the headline, so text stays crisp. */}
       <motion.div
         className="absolute right-[-14%] top-[44%] h-[34vh] w-[34vh] rounded-full opacity-90 sm:right-[2%]"

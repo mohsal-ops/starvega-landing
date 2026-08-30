@@ -8,7 +8,7 @@ import { isPackTier, PACKS_BY_TIER, formatUsd } from "@/lib/pricing";
 // A prospect chose a pack. We create a lead carrying the chosen tier, record a
 // pack_selected event (feeds the admin funnel + digest), notify the owner by
 // email, and return the leadId so the client can go straight to /checkout/[id].
-// The price is NEVER taken from here — checkout/create-order derive it from the
+// The price is NEVER taken from here - checkout/create-order derive it from the
 // tier via lib/pricing, server-side.
 export const runtime = "nodejs";
 
@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
         geo.city || geo.country ? `Location: ${[geo.city, geo.country].filter(Boolean).join(", ")}` : "",
         `Lead: ${lead.id}`,
         ``,
-        `They're being sent to checkout now — you'll get the paid confirmation if they complete it.`,
+        `They're being sent to checkout now - you'll get the paid confirmation if they complete it.`,
       ]
         .filter(Boolean)
         .join("\n"),
