@@ -24,14 +24,28 @@ export function PreviewEmbed() {
   const [fullscreen, setFullscreen] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // React doesn't reliably set the DOM `muted` property from the `muted` prop,
-  // which makes browsers block autoplay. Set it explicitly and kick off play().
+  // React doesn't reliably set the DOM `muted` property from the `muted` prop
+  // (so browsers block autoplay), and browsers pause off-screen videos. Set muted
+  // explicitly and play/pause the loop as the window enters/leaves the viewport.
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
     v.muted = true;
-    const p = v.play();
-    if (p && typeof p.catch === "function") p.catch(() => {});
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            const p = v.play();
+            if (p && typeof p.catch === "function") p.catch(() => {});
+          } else {
+            v.pause();
+          }
+        }
+      },
+      { threshold: 0.25 },
+    );
+    io.observe(v);
+    return () => io.disconnect();
   }, []);
 
   const open = useCallback(() => {
