@@ -5,7 +5,7 @@
 // write even if the beacon somehow fires). Set by visiting /owner-mode.
 export const OWNER_FLAG = "starvega_owner";
 
-// 2 years — effectively permanent for a dev machine, but not literally forever.
+// 2 years - effectively permanent for a dev machine, but not literally forever.
 const MAX_AGE = 60 * 60 * 24 * 730;
 
 function readCookie(name: string): string {
@@ -16,7 +16,7 @@ function readCookie(name: string): string {
 
 // True when THIS browser has been flagged as the owner. Checks localStorage
 // first (survives cookie clears in some browsers) then the cookie. Guarded so it
-// is safe to call during SSR (always false there — the server uses the cookie).
+// is safe to call during SSR (always false there - the server uses the cookie).
 export function isOwner(): boolean {
   if (typeof window === "undefined") return false;
   try {

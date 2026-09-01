@@ -73,7 +73,7 @@ export function OfferCta() {
         Own your ordering instead of renting it
       </h2>
       <p className="mt-3 max-w-[52ch] text-[17px] leading-[1.5] text-ink-soft">
-        Starvega builds restaurants a fast website with their own online ordering and dashboard —
+        Starvega builds restaurants a fast website with their own online ordering and dashboard -
         a one-time price, zero commission, and you own it. See the packages and pricing.
       </p>
       <div className="mt-6">

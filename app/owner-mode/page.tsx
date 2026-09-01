@@ -8,7 +8,7 @@ import { OWNER_FLAG, setOwnerFlag, clearOwnerFlag, isOwner } from "@/lib/owner";
 // `starvega_owner` cookie + localStorage flag; from then on the GA4 loader is
 // disabled and /api/track logging is skipped for this browser (see lib/owner.ts).
 //
-// Not in any nav and blocked in robots.ts — reachable only by typing the URL.
+// Not in any nav and blocked in robots.ts - reachable only by typing the URL.
 // To undo (e.g. to test tracking), visit /owner-mode?off=1.
 export default function OwnerMode() {
   const [state, setState] = useState<"on" | "off" | null>(null);

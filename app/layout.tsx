@@ -44,7 +44,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               Owner exclusion: if THIS browser was flagged via /owner-mode, set
               GA's own kill-switch (window['ga-disable-<id>']=true) BEFORE the GA
               loader runs, so no page_view or event is ever collected. Reads the
-              flag from localStorage/cookie on the client — no server cookie read,
+              flag from localStorage/cookie on the client - no server cookie read,
               so the page stays statically rendered. See lib/owner.ts.
             */}
             <script

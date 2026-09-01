@@ -13,7 +13,7 @@ export default function Footer() {
         <Image src="/starvega.png" alt="Starvega" width={150} height={50} className="h-6 w-auto" />
 
         {/* Links the funnel (and every page) to the /learn hub so it isn't
-            orphaned — carries internal-link authority into the content section. */}
+            orphaned - carries internal-link authority into the content section. */}
         <Link href="/learn" className="text-sm font-medium text-ink-soft hover:text-ink">
           Learn: delivery fees & alternatives
         </Link>

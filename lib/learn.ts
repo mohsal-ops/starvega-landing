@@ -36,7 +36,7 @@ export const LEARN_PAGES: LearnPage[] = [
     group: "commissions",
     title: "What DoorDash, Uber Eats & Grubhub Actually Cost You",
     description:
-      "A plain breakdown of 2026 delivery-app commissions — DoorDash, Uber Eats and Grubhub tiers, the blended real-world cost, and what those fees do to a restaurant's margin.",
+      "A plain breakdown of 2026 delivery-app commissions - DoorDash, Uber Eats and Grubhub tiers, the blended real-world cost, and what those fees do to a restaurant's margin.",
     pillarSlug: PILLAR_COMMISSIONS,
   },
   {
@@ -45,7 +45,7 @@ export const LEARN_PAGES: LearnPage[] = [
     group: "commissions",
     title: "DoorDash Fees for Restaurants, Explained (2026)",
     description:
-      "DoorDash's 2026 commission tiers — Basic 15%, Plus 25%, Premier 30% on delivery and 6% on pickup — and what they really cost you once processing and promotions stack on top.",
+      "DoorDash's 2026 commission tiers - Basic 15%, Plus 25%, Premier 30% on delivery and 6% on pickup - and what they really cost you once processing and promotions stack on top.",
     pillarSlug: PILLAR_COMMISSIONS,
   },
   {
@@ -54,7 +54,7 @@ export const LEARN_PAGES: LearnPage[] = [
     group: "commissions",
     title: "Uber Eats Fees for Restaurants, Explained (2026)",
     description:
-      "Uber Eats' 2026 commission runs 15–30% depending on tier. Here's how the tiers work, what's added on top, and the real per-order cost to an independent restaurant.",
+      "Uber Eats' 2026 commission runs 15-30% depending on tier. Here's how the tiers work, what's added on top, and the real per-order cost to an independent restaurant.",
     pillarSlug: PILLAR_COMMISSIONS,
   },
   {
@@ -63,7 +63,7 @@ export const LEARN_PAGES: LearnPage[] = [
     group: "commissions",
     title: "Grubhub Fees for Restaurants, Explained (2026)",
     description:
-      "Grubhub's 2026 marketing tiers — Basic 5%, Plus 15%, All-access 20%, plus an optional 10% when Grubhub handles delivery — and the true cost per order.",
+      "Grubhub's 2026 marketing tiers - Basic 5%, Plus 15%, All-access 20%, plus an optional 10% when Grubhub handles delivery - and the true cost per order.",
     pillarSlug: PILLAR_COMMISSIONS,
   },
   // Pillar 2 (the step-by-step guide is the pillar itself)
@@ -73,7 +73,7 @@ export const LEARN_PAGES: LearnPage[] = [
     group: "leaving",
     title: "How to Get Your Restaurant Off Third-Party Delivery Apps",
     description:
-      "An honest, step-by-step guide to moving diners to direct online ordering you own — what it actually takes, what to keep, and why owning the customer relationship matters more than the fee.",
+      "An honest, step-by-step guide to moving diners to direct online ordering you own - what it actually takes, what to keep, and why owning the customer relationship matters more than the fee.",
     pillarSlug: PILLAR_LEAVING,
   },
   // Pillar 3 + one comparison page per named competitor
@@ -83,7 +83,7 @@ export const LEARN_PAGES: LearnPage[] = [
     group: "alternatives",
     title: "Restaurant Online-Ordering Alternatives, Compared",
     description:
-      "A hub comparing the main restaurant online-ordering platforms — Toast, Square, Clover, Menufy, ChowNow, BentoBox and Restolabs — and where an owned, one-time-cost site fits.",
+      "A hub comparing the main restaurant online-ordering platforms - Toast, Square, Clover, Menufy, ChowNow, BentoBox and Restolabs - and where an owned, one-time-cost site fits.",
     pillarSlug: PILLAR_ALTERNATIVES,
   },
   {

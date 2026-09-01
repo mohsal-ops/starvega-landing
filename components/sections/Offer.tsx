@@ -38,7 +38,7 @@ export default function Offer() {
           />
           <p className="text-[clamp(1.1rem,3vw,1.6rem)] font-medium leading-snug text-white/85">
             Built for people who cook, not people who code. No monthly platform fee and no commission
-            on your orders - compare that to $150–500 every month for a typical Toast or Square setup.
+            on your orders - compare that to $150-500 every month for a typical Toast or Square setup.
           </p>
         </div>
 

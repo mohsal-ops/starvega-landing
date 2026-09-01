@@ -25,7 +25,7 @@ export default function LearnIndex() {
           </h1>
           <p className="mt-6 max-w-[58ch] text-[19px] leading-[1.55] text-ink">
             Straight answers for restaurant owners weighing what delivery apps and ordering
-            platforms actually cost — and what it takes to run ordering you own instead.
+            platforms actually cost - and what it takes to run ordering you own instead.
           </p>
         </header>
 

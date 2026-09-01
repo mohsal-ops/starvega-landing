@@ -10,13 +10,13 @@ const DESCRIPTION =
   "Stop paying DoorDash 15-30% on every order. I build restaurants a fast website with their own online ordering and dashboard. One-time price, zero commission, you own it.";
 
 // Social share image. The existing brand wordmark (2172x724). A dedicated
-// 1200x630 card would crop cleaner in some social previews — swap the path here
+// 1200x630 card would crop cleaner in some social previews - swap the path here
 // if one is ever produced; declaring the true dimensions keeps crawlers honest.
 const OG_IMAGE = {
   url: "/starvega.png",
   width: 2172,
   height: 724,
-  alt: "Starvega — restaurant websites with zero-commission online ordering",
+  alt: "Starvega - restaurant websites with zero-commission online ordering",
 };
 
 // Per-page override hook so /learn articles can set their own title/description/

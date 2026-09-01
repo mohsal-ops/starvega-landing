@@ -27,7 +27,7 @@ export function classifyChannel(ref: string | null | undefined): string {
   return "Referral";
 }
 
-// Channel display order for the dashboard (organic + outreach first — the two the
+// Channel display order for the dashboard (organic + outreach first - the two the
 // brief cares about separating). Unknown channels sort after these.
 export const CHANNEL_ORDER = ["Organic search", "Outreach (IG DM)", "Social", "Referral", "Direct"];
 

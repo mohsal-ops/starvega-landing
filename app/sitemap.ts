@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/site";
 import { LEARN_PAGES, learnHref } from "@/lib/learn";
 
-// /sitemap.xml — the funnel page plus every /learn article. Public, indexable
+// /sitemap.xml - the funnel page plus every /learn article. Public, indexable
 // routes only; admin / owner-mode / checkout / onboard / api are excluded here
 // and Disallow'd in robots.ts. URLs are built from lib/learn.ts so the sitemap
 // can't drift from the pages that actually exist.
@@ -21,7 +21,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: `${base}${learnHref(p.slug)}`,
     lastModified: now,
     changeFrequency: "monthly",
-    // Pillars are the hubs authority flows to — rank them above clusters.
+    // Pillars are the hubs authority flows to - rank them above clusters.
     priority: p.kind === "pillar" ? 0.8 : 0.6,
   }));
 

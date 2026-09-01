@@ -15,7 +15,7 @@ import {
 import { getArticle } from "@/lib/learn-content";
 
 // One static page per /learn article. Content comes from lib/learn-content.tsx,
-// metadata from lib/learn.ts — both keyed by the same slug, so nothing drifts.
+// metadata from lib/learn.ts - both keyed by the same slug, so nothing drifts.
 export function generateStaticParams() {
   return LEARN_PAGES.map((p) => ({ slug: p.slug }));
 }

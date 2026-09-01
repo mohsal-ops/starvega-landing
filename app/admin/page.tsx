@@ -185,7 +185,7 @@ export default async function AdminDashboard() {
             </ul>
           </section>
 
-          {/* Traffic by channel — organic search vs outreach vs the rest */}
+          {/* Traffic by channel - organic search vs outreach vs the rest */}
           <section className="rounded-2xl border border-line bg-bg p-5">
             <h2 className="font-mono text-[11px] uppercase tracking-wider text-ink-soft">Traffic by channel</h2>
             <ul className="mt-4 space-y-1.5">
