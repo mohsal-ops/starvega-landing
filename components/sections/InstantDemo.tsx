@@ -15,7 +15,6 @@ export default function InstantDemo() {
   const [phase, setPhase] = useState<"form" | "submitting" | "preview">("form");
   const [name, setName] = useState("");
   const [cuisine, setCuisine] = useState("");
-  const [city, setCity] = useState("");
   const [company, setCompany] = useState(""); // honeypot
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [error, setError] = useState("");
@@ -55,7 +54,7 @@ export default function InstantDemo() {
       const res = await fetch("/api/instant-demo", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ businessName: name, cuisineKey: cuisine || "other", city: city || null, photoUrls, company, sessionId: sessionId() }),
+        body: JSON.stringify({ businessName: name, cuisineKey: cuisine || "other", city: null, photoUrls, company, sessionId: sessionId() }),
       });
       const data = await res.json();
       if (!res.ok || !data.ok || !data.config) throw new Error(data.error || "Something went wrong.");
@@ -112,8 +111,6 @@ export default function InstantDemo() {
                   {CUISINE_OPTIONS.map((o) => <option key={o.value} value={o.value} className="bg-ink">{o.label}</option>)}
                 </select>
               </div>
-
-              <input value={city} onFocus={markOpened} onChange={(e) => setCity(e.target.value)} placeholder="City (optional)" className={field} />
 
               <div>
                 <div
