@@ -9,6 +9,8 @@ import { TrendCharts } from "./TrendCharts";
 import { ReportButton } from "./ReportButton";
 import { buildReport } from "./report";
 import { fmtDuration, timeAgo } from "./format";
+import { SearchRankings } from "./SearchRankings";
+import { getRankings } from "@/lib/search-console";
 
 export const dynamic = "force-dynamic";
 
@@ -165,7 +167,12 @@ export default async function AdminDashboard({
   const sp = await searchParams;
   const str = (v: string | string[] | undefined) => (typeof v === "string" ? v : undefined);
   const range = resolveRange({ range: str(sp.range), from: str(sp.from), to: str(sp.to) });
-  const d = await getData(range.start, range.end);
+  // Dashboard metrics and Search Console rankings fetched in parallel; rankings
+  // return fast when GSC is not configured.
+  const [d, rankings] = await Promise.all([
+    getData(range.start, range.end),
+    getRankings(range.from, range.to),
+  ]);
   const newV = d.total - d.returning;
   const pct = (n: number) => (d.total ? Math.round((n / d.total) * 100) : 0);
   const sectionMax = Math.max(1, ...SECTION_ORDER.map((s) => d.sectionMap.get(s) ?? 0));
@@ -306,6 +313,11 @@ export default async function AdminDashboard({
               ))}
             </ul>
           </section>
+        </div>
+
+        {/* Search rankings (Google Search Console) */}
+        <div className="mt-3">
+          <SearchRankings data={rankings} />
         </div>
 
         {/* Leads */}
