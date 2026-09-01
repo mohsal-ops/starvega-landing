@@ -19,6 +19,9 @@ model PageEvent {
   referrer    String?
   country     String?
   city        String?
+  // Device class parsed server-side from the User-Agent at ingest ("mobile" |
+  // "tablet" | "desktop"). Null on rows created before device capture existed.
+  device      String?
   isReturning Boolean  @default(false)
   createdAt   DateTime @default(now())
 

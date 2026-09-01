@@ -19,6 +19,15 @@ const EVENTS = new Set([
 // widget_opened). Validated so a bad value never lands in the column.
 const ENTRY_POINTS = new Set(["sticky_nav", "post_hook", "post_proof", "final_cta"]);
 
+// Coarse device class from the User-Agent, for the mobile-vs-desktop split in
+// the report. Deliberately simple - tablets first (iPad reports as desktop-ish
+// on newer iOS but keeps "Tablet"/"iPad" tokens), then phones, else desktop.
+function deviceFromUA(ua: string): "mobile" | "tablet" | "desktop" {
+  if (/iPad|Tablet|PlayBook|Silk/i.test(ua)) return "tablet";
+  if (/Mobi|Android|iPhone|iPod|Windows Phone|BlackBerry|Opera Mini/i.test(ua)) return "mobile";
+  return "desktop";
+}
+
 export async function POST(req: NextRequest) {
   try {
     // Owner exclusion (server side): if the /owner-mode cookie is set, drop the
@@ -35,6 +44,7 @@ export async function POST(req: NextRequest) {
 
     const geo = geolocation(req);
     const isReturning = (await db.pageEvent.count({ where: { sessionId } })) > 0;
+    const device = deviceFromUA(req.headers.get("user-agent") || "");
 
     await db.pageEvent.create({
       data: {
@@ -46,6 +56,7 @@ export async function POST(req: NextRequest) {
         referrer: typeof b.referrer === "string" && b.referrer ? b.referrer : null,
         country: geo.country || null,
         city: geo.city ? decodeURIComponent(geo.city) : null,
+        device,
         isReturning,
       },
     });
