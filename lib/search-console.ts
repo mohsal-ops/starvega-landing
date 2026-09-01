@@ -20,10 +20,21 @@ export function gscConfigured(): boolean {
 
 type RawRow = { query: string; date: string; clicks: number; impressions: number; position: number };
 
+// Normalize a service-account private key pasted into an env var. Tolerates the
+// two common mistakes: surrounding quotes copied along with the value, and
+// literal "\n" escapes that were never turned into real newlines. Without this,
+// either one yields an OpenSSL "DECODER routines::unsupported" error.
+function normalizePrivateKey(raw: string): string {
+  let key = raw.trim();
+  if ((key.startsWith('"') && key.endsWith('"')) || (key.startsWith("'") && key.endsWith("'"))) {
+    key = key.slice(1, -1);
+  }
+  return key.replace(/\\r\\n/g, "\n").replace(/\\n/g, "\n").trim();
+}
+
 async function fetchSearchAnalytics(startDate: string, endDate: string): Promise<RawRow[]> {
   const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL!;
-  // Env-stored private keys usually carry literal "\n" - restore real newlines.
-  const key = (process.env.GOOGLE_SERVICE_ACCOUNT_KEY || "").replace(/\\n/g, "\n");
+  const key = normalizePrivateKey(process.env.GOOGLE_SERVICE_ACCOUNT_KEY || "");
 
   const auth = new google.auth.JWT({ email, key, scopes: [SCOPE] });
   const webmasters = google.webmasters({ version: "v3", auth });

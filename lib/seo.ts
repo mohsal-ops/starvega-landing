@@ -56,10 +56,19 @@ export function buildMetadata(opts?: {
       images: [OG_IMAGE.url],
     },
     robots: { index: true, follow: true },
-    // Set GOOGLE_SITE_VERIFICATION in the env to render the
-    // <meta name="google-site-verification"> tag Search Console asks for.
-    ...(process.env.GOOGLE_SITE_VERIFICATION
-      ? { verification: { google: process.env.GOOGLE_SITE_VERIFICATION } }
-      : {}),
+    // Search-engine ownership verification meta tags, each rendered only when its
+    // env var is set:
+    //   GOOGLE_SITE_VERIFICATION -> <meta name="google-site-verification"> (Search Console)
+    //   BING_SITE_VERIFICATION   -> <meta name="msvalidate.01">           (Bing Webmaster Tools)
+    // Bing matters here beyond Bing itself: ChatGPT's live Search retrieves from
+    // Bing's index, so getting indexed in Bing is what makes the site reachable there.
+    ...buildVerification(),
   };
+}
+
+function buildVerification(): Pick<Metadata, "verification"> {
+  const verification: NonNullable<Metadata["verification"]> = {};
+  if (process.env.GOOGLE_SITE_VERIFICATION) verification.google = process.env.GOOGLE_SITE_VERIFICATION;
+  if (process.env.BING_SITE_VERIFICATION) verification.other = { "msvalidate.01": process.env.BING_SITE_VERIFICATION };
+  return Object.keys(verification).length ? { verification } : {};
 }
