@@ -8,6 +8,7 @@ import MotionLayer from "@/components/MotionLayer";
 import Header from "@/components/Header";
 import Tracker from "@/components/Tracker";
 import { PackModalHost } from "@/components/packs/PackModalHost";
+import { OrganizationJsonLd } from "@/components/SeoJsonLd";
 
 // OFF+BRAND-adapted: a single geometric-sans voice. Inter is the doc's named
 // substitute for Ataero Retina - monumental all-caps at display sizes, editorial
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           Skip to content
         </a>
+        <OrganizationJsonLd />
         <SmoothScroll />
         <MotionLayer />
         <Tracker />
@@ -36,7 +38,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {children}
         {/* The pricing popup - opened from any "choose your plan" CTA. */}
         <PackModalHost />
-        {gaId && <GoogleAnalytics gaId={gaId} />}
+        {gaId && (
+          <>
+            {/*
+              Owner exclusion: if THIS browser was flagged via /owner-mode, set
+              GA's own kill-switch (window['ga-disable-<id>']=true) BEFORE the GA
+              loader runs, so no page_view or event is ever collected. Reads the
+              flag from localStorage/cookie on the client — no server cookie read,
+              so the page stays statically rendered. See lib/owner.ts.
+            */}
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `try{if(localStorage.getItem('starvega_owner')==='true'||document.cookie.indexOf('starvega_owner=true')>-1){window['ga-disable-${gaId}']=true;}}catch(e){}`,
+              }}
+            />
+            <GoogleAnalytics gaId={gaId} />
+          </>
+        )}
       </body>
     </html>
   );

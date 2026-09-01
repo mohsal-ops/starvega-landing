@@ -21,6 +21,13 @@ const ENTRY_POINTS = new Set(["sticky_nav", "post_hook", "post_proof", "final_ct
 
 export async function POST(req: NextRequest) {
   try {
+    // Owner exclusion (server side): if the /owner-mode cookie is set, drop the
+    // event without writing. Mirrors the client guard in lib/track-client.ts so
+    // the developer's own visits never reach the analytics DB. See lib/owner.ts.
+    if (req.cookies.get("starvega_owner")?.value === "true") {
+      return NextResponse.json({ ok: true, skipped: "owner" });
+    }
+
     const b = (await req.json()) as Record<string, unknown>;
     const sessionId = typeof b.sessionId === "string" ? b.sessionId : "";
     const eventType = typeof b.eventType === "string" ? b.eventType : "";

@@ -2,6 +2,7 @@ import { requireAuth } from "@/lib/auth";
 import db from "@/lib/db";
 import { logout } from "./_actions/auth";
 import { LeadsTable, type Lead } from "./LeadsTable";
+import { classifyChannel, CHANNEL_ORDER } from "@/lib/source";
 
 export const dynamic = "force-dynamic";
 
@@ -39,6 +40,27 @@ async function getData() {
     FROM "PageEvent" GROUP BY 1 ORDER BY c DESC LIMIT 8
   `) as { ref: string; c: number }[];
 
+  // Traffic by channel: bucket every stored referrer/source into a channel so
+  // organic search is distinguishable from outreach (see lib/source.ts). Pageview
+  // events only, to count visits rather than in-page interactions.
+  const refCounts = (await db.$queryRaw`
+    SELECT COALESCE(NULLIF("referrer", ''), 'Direct') AS ref, COUNT(DISTINCT "sessionId")::int AS c
+    FROM "PageEvent" WHERE "eventType" = 'pageview' GROUP BY 1
+  `) as { ref: string; c: number }[];
+  const channelMap = new Map<string, number>();
+  for (const { ref, c } of refCounts) {
+    const ch = classifyChannel(ref);
+    channelMap.set(ch, (channelMap.get(ch) ?? 0) + c);
+  }
+  const channels = [...channelMap.entries()]
+    .map(([channel, c]) => ({ channel, c }))
+    .sort((a, b) => {
+      const ai = CHANNEL_ORDER.indexOf(a.channel);
+      const bi = CHANNEL_ORDER.indexOf(b.channel);
+      if (ai !== -1 || bi !== -1) return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
+      return b.c - a.c;
+    });
+
   const locations = (await db.$queryRaw`
     SELECT COALESCE(NULLIF("city", ''), 'Unknown') AS city, COALESCE("country", '') AS country, COUNT(DISTINCT "sessionId")::int AS c
     FROM "PageEvent" GROUP BY 1, 2 ORDER BY c DESC LIMIT 15
@@ -63,6 +85,7 @@ async function getData() {
     returning: overview?.returning ?? 0,
     avgSecs: dur?.secs ?? 0,
     referrers,
+    channels,
     locations,
     sectionMap: new Map(sections.map((s) => [s.id, s.c])),
     widgetMap: new Map(widget.map((w) => [w.t, w.c])),
@@ -157,6 +180,20 @@ export default async function AdminDashboard() {
                 <li key={i} className="flex items-center justify-between text-sm">
                   <span className="text-ink">{[l.city, l.country].filter(Boolean).join(", ")}</span>
                   <span className="tabular-nums text-ink-soft">{l.c}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          {/* Traffic by channel — organic search vs outreach vs the rest */}
+          <section className="rounded-2xl border border-line bg-bg p-5">
+            <h2 className="font-mono text-[11px] uppercase tracking-wider text-ink-soft">Traffic by channel</h2>
+            <ul className="mt-4 space-y-1.5">
+              {d.channels.length === 0 && <li className="text-sm text-ink-soft">No data yet.</li>}
+              {d.channels.map((ch, i) => (
+                <li key={i} className="flex items-center justify-between gap-3 text-sm">
+                  <span className="truncate text-ink">{ch.channel}</span>
+                  <span className="tabular-nums text-ink-soft">{ch.c}</span>
                 </li>
               ))}
             </ul>

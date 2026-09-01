@@ -9,6 +9,7 @@ import InstantDemo from "@/components/sections/InstantDemo";
 import { PreviewEmbed } from "@/components/PreviewEmbed";
 import Footer from "@/components/Footer";
 import FaqSchema from "@/components/FaqSchema";
+import { ProductJsonLd } from "@/components/SeoJsonLd";
 import ScrollTracker from "@/components/ScrollTracker";
 import { InlineWidgetCta } from "@/components/WidgetCta";
 
@@ -35,6 +36,7 @@ export default function Home() {
       <Footer />
 
       <FaqSchema />
+      <ProductJsonLd />
       <ScrollTracker />
     </main>
   );
