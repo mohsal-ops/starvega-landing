@@ -122,14 +122,14 @@ export function PreviewEmbed() {
                 <button
                   type="button"
                   onClick={() => open("site")}
-                  className="inline-flex min-h-[44px] items-center justify-center rounded-[10px] bg-white px-5 py-2.5 text-sm font-semibold text-black shadow-sm transition-transform hover:bg-white/90 active:scale-[0.99]"
+                  className="inline-flex min-h-[48px] items-center justify-center rounded-[10px] bg-white px-5 py-2.5 text-sm font-semibold text-black shadow-sm transition-transform hover:bg-white/90 active:scale-[0.99]"
                 >
                   Explore the live preview
                 </button>
                 <button
                   type="button"
                   onClick={() => open("dashboard")}
-                  className="inline-flex min-h-[44px] items-center justify-center rounded-[10px] border border-white/70 bg-black/30 px-5 py-2.5 text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:bg-black/50"
+                  className="inline-flex min-h-[48px] items-center justify-center rounded-[10px] border border-white/70 bg-black/30 px-5 py-2.5 text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:bg-black/50"
                 >
                   See the owner dashboard
                 </button>
@@ -144,7 +144,7 @@ export function PreviewEmbed() {
         <button
           type="button"
           onClick={() => open("site")}
-          className="fixed bottom-5 right-5 z-[190] inline-flex items-center gap-2 rounded-full bg-black px-5 py-3 text-sm font-semibold text-white shadow-lg ring-1 ring-white/10 transition-transform hover:scale-[1.03] active:scale-[0.99]"
+          className="fixed bottom-5 right-5 z-[190] inline-flex min-h-[48px] items-center gap-2 rounded-full bg-black px-5 py-3 text-sm font-semibold text-white shadow-lg ring-1 ring-white/10 transition-transform hover:scale-[1.03] active:scale-[0.99]"
           aria-label="Open the live preview"
         >
           <span aria-hidden className="inline-block h-2 w-2 animate-pulse rounded-full bg-amber" />

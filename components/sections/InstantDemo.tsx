@@ -68,7 +68,7 @@ export default function InstantDemo() {
     }
   };
 
-  const field = "w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-bg placeholder:text-white/40 outline-none focus:border-amber";
+  const field = "w-full min-h-[48px] rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-bg placeholder:text-white/40 outline-none focus:border-amber";
 
   return (
     <section id="cta" className="scroll-mt-20 bg-ink px-6 py-24 text-bg sm:px-10 sm:py-32">

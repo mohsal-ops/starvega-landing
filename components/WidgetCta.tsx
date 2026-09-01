@@ -23,7 +23,7 @@ export function WidgetCtaButton({
     <button
       type="button"
       onClick={() => openWidget(entryPoint)}
-      className={`${base} ${small ? "px-4 py-2 text-sm" : "min-h-[52px] px-6 py-3 text-base"} ${className}`}
+      className={`${base} ${small ? "min-h-[48px] px-4 py-2 text-sm" : "min-h-[52px] px-6 py-3 text-base"} ${className}`}
     >
       {children}
     </button>

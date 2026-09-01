@@ -49,7 +49,7 @@ export default function Hook() {
         </p>
 
         <div data-reveal data-reveal-now className="mt-8">
-          <ArrowLink href="#agitate" className="text-[15px] text-ink">
+          <ArrowLink href="#agitate" className="min-h-[48px] text-[15px] text-ink">
             See what it&apos;s costing you
           </ArrowLink>
         </div>

@@ -3,14 +3,14 @@
 
 export const SITE = {
   name: "starvega.digital",
-  // Public URL of this landing page (used for canonical + OG). TODO: set to the
-  // real domain once chosen (currently the Vercel default is fine to start).
+  // Public URL of this landing page (used for canonical + OG). Confirmed final
+  // domain: custom domain, live, with GA4 + Search Console configured against it.
   url: "https://www.starvega.site/",
   tagline: "Restaurant websites with your own zero-commission online ordering.",
 
   // Final CTA target: Instagram DM deep link. ig.me/m/<handle> opens the DM
-  // thread directly on mobile. TODO: confirm the exact handle.
-  instagramHandle: "starvega.digital", // TODO confirm
+  // thread directly on mobile. Confirmed handle.
+  instagramHandle: "starvega.digital",
   get instagramDmUrl() {
     return `https://ig.me/m/${this.instagramHandle}`;
   },
