@@ -11,3 +11,6 @@ npm-debug.log*
 *.tsbuildinfo
 
 /generated
+
+.vercel
+.env*
