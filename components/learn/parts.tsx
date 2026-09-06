@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { ArrowLink } from "@/components/ArrowLink";
-import type { LearnTable } from "@/lib/learn-content";
+import { CountUp } from "@/components/CountUp";
+import type { LearnStat, LearnTable } from "@/lib/learn-content";
 
 // Small presentational pieces shared by the /learn index and article pages.
-// Kept server-rendered (no "use client") so all article content is in the HTML.
+// Kept server-rendered (composing the CountUp/Reveal client islands) so all
+// article text stays in the HTML for crawlers.
 
 export function Breadcrumb({ trail }: { trail: { label: string; href?: string }[] }) {
   return (
@@ -28,7 +30,14 @@ export function Breadcrumb({ trail }: { trail: { label: string; href?: string }[
   );
 }
 
+// Phase 4: whichever row or column IS Starvega gets a subtle amber wash + a
+// solid amber edge, so the point of a competitor comparison lands at a glance.
+const isStarvega = (s: string) => s.trim().toLowerCase() === "starvega";
+
 export function DataTable({ table }: { table: LearnTable }) {
+  const starvegaCol = table.head.findIndex(isStarvega);
+  const wash = "bg-amber/[0.08]";
+
   return (
     <figure className="my-8">
       <div className="overflow-x-auto border border-ash">
@@ -36,22 +45,45 @@ export function DataTable({ table }: { table: LearnTable }) {
           <thead>
             <tr className="border-b border-ash bg-paper">
               {table.head.map((h, i) => (
-                <th key={i} className="px-4 py-3 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-soft">
+                <th
+                  key={i}
+                  className={`px-4 py-3 font-mono text-[11px] uppercase tracking-[0.14em] ${
+                    i === starvegaCol
+                      ? `${wash} border-x border-amber-deep/40 text-amber-deep`
+                      : "text-ink-soft"
+                  }`}
+                >
                   {h}
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {table.rows.map((row, r) => (
-              <tr key={r} className="border-b border-line last:border-0">
-                {row.map((cell, c) => (
-                  <td key={c} className={`px-4 py-3 align-top ${c === 0 ? "font-semibold text-ink" : "text-ink-soft"}`}>
-                    {cell}
-                  </td>
-                ))}
-              </tr>
-            ))}
+            {table.rows.map((row, r) => {
+              const starvegaRow = isStarvega(row[0]);
+              const last = r === table.rows.length - 1;
+              return (
+                <tr
+                  key={r}
+                  className={`border-b border-line last:border-0 ${starvegaRow ? `${wash} border-y border-amber-deep/40` : ""}`}
+                >
+                  {row.map((cell, c) => {
+                    const colHit = c === starvegaCol && !starvegaRow;
+                    const strong = c === 0 || starvegaRow || c === starvegaCol;
+                    return (
+                      <td
+                        key={c}
+                        className={`px-4 py-3 align-top ${strong ? "font-semibold text-ink" : "text-ink-soft"} ${
+                          colHit ? `${wash} border-x border-amber-deep/40 ${last ? "border-b" : ""}` : ""
+                        }`}
+                      >
+                        {cell}
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
@@ -61,6 +93,26 @@ export function DataTable({ table }: { table: LearnTable }) {
         </figcaption>
       )}
     </figure>
+  );
+}
+
+// Phase 2: CountUp stat callout, reusing the Loyalty money-argument card look
+// (bordered paper card, oversized counting figures). Entrance is handled by the
+// section-level Reveal in the article template, so this is card-only.
+export function StatCallout({ stats }: { stats: LearnStat[] }) {
+  return (
+    <div className="my-8 rounded-xl border border-ash bg-paper p-6 sm:p-8">
+      <div className="flex flex-wrap gap-x-10 gap-y-6">
+        {stats.map((s, i) => (
+          <div key={i} className={i > 0 ? "sm:border-l sm:border-ash sm:pl-10" : ""}>
+            <div className="text-4xl font-semibold tracking-[-0.03em] text-ink sm:text-5xl">
+              <CountUp to={s.value} prefix={s.prefix} suffix={s.suffix} decimals={s.decimals} />
+            </div>
+            <p className="mt-1 max-w-[24ch] text-sm leading-snug text-ink-soft">{s.label}</p>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 

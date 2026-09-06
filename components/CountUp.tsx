@@ -14,12 +14,14 @@ export function CountUp({
   to,
   prefix = "",
   suffix = "",
+  decimals = 0,
   duration = 1.7,
   className,
 }: {
   to: number;
   prefix?: string;
   suffix?: string;
+  decimals?: number; // fixed decimal places, e.g. 2 for a $0.49 fee
   duration?: number;
   className?: string;
 }) {
@@ -29,7 +31,10 @@ export function CountUp({
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const fmt = (n: number) => prefix + Math.round(n).toLocaleString("en-US") + suffix;
+    const fmt = (n: number) =>
+      prefix +
+      n.toLocaleString("en-US", { minimumFractionDigits: decimals, maximumFractionDigits: decimals }) +
+      suffix;
 
     if (reduce) {
       el.textContent = fmt(to);
@@ -64,12 +69,14 @@ export function CountUp({
       io.disconnect();
       tween?.kill();
     };
-  }, [to, prefix, suffix, duration, reduce]);
+  }, [to, prefix, suffix, decimals, duration, reduce]);
 
   // SSR / no-JS / crawler fallback shows the real final number.
   return (
     <span ref={ref} className={className}>
-      {prefix + to.toLocaleString("en-US") + suffix}
+      {prefix +
+        to.toLocaleString("en-US", { minimumFractionDigits: decimals, maximumFractionDigits: decimals }) +
+        suffix}
     </span>
   );
 }

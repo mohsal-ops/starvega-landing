@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Footer from "@/components/Footer";
-import { Breadcrumb, DataTable, OfferCta } from "@/components/learn/parts";
+import { Reveal } from "@/components/Reveal";
+import { Breadcrumb, DataTable, OfferCta, StatCallout } from "@/components/learn/parts";
 import { buildMetadata } from "@/lib/seo";
 import { SITE } from "@/lib/site";
 import {
@@ -134,6 +136,21 @@ export default async function LearnArticlePage({
         />
 
         <article>
+          {/* Phase 1: modest header banner. Above the fold, so it is the LCP -
+              priority-loaded and NOT wrapped in a fade, to keep LCP fast. */}
+          {article.hero && (
+            <div className="relative mb-8 aspect-[2/1] w-full overflow-hidden rounded-lg border border-line sm:aspect-[21/9]">
+              <Image
+                src={article.hero.src}
+                alt={article.hero.alt}
+                fill
+                priority
+                sizes="(max-width: 736px) 100vw, 736px"
+                className="object-cover"
+              />
+            </div>
+          )}
+
           <header>
             <h1 className="max-w-[20ch] font-display text-[clamp(2rem,5vw,3.25rem)] font-semibold uppercase leading-[0.98] tracking-[-0.015em] text-ink">
               {page.title}
@@ -145,26 +162,30 @@ export default async function LearnArticlePage({
             </p>
           </header>
 
+          {/* Phase 3: each section gets a light entrance fade-up as it scrolls in. */}
           {article.sections.map((s, i) => (
-            <section key={i} className="mt-10">
-              <h2 className="font-display text-[1.55rem] font-semibold tracking-[-0.01em] text-ink">{s.h}</h2>
-              {s.body?.map((p, j) => (
-                <p key={j} className="mt-4 max-w-[62ch] text-[17px] leading-[1.6] text-ink-soft">
-                  {p}
-                </p>
-              ))}
-              {s.bullets && (
-                <ul className="mt-4 max-w-[62ch] space-y-2">
-                  {s.bullets.map((b, j) => (
-                    <li key={j} className="flex gap-3 text-[17px] leading-[1.55] text-ink-soft">
-                      <span aria-hidden className="mt-[0.55em] h-[6px] w-[6px] shrink-0 bg-amber-deep" />
-                      <span>{b}</span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-              {s.table && <DataTable table={s.table} />}
-            </section>
+            <Reveal key={i}>
+              <section className="mt-10">
+                <h2 className="font-display text-[1.55rem] font-semibold tracking-[-0.01em] text-ink">{s.h}</h2>
+                {s.body?.map((p, j) => (
+                  <p key={j} className="mt-4 max-w-[62ch] text-[17px] leading-[1.6] text-ink-soft">
+                    {p}
+                  </p>
+                ))}
+                {s.bullets && (
+                  <ul className="mt-4 max-w-[62ch] space-y-2">
+                    {s.bullets.map((b, j) => (
+                      <li key={j} className="flex gap-3 text-[17px] leading-[1.55] text-ink-soft">
+                        <span aria-hidden className="mt-[0.55em] h-[6px] w-[6px] shrink-0 bg-amber-deep" />
+                        <span>{b}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {s.stats && <StatCallout stats={s.stats} />}
+                {s.table && <DataTable table={s.table} />}
+              </section>
+            </Reveal>
           ))}
 
           <OfferCta />

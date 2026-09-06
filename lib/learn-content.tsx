@@ -13,16 +13,36 @@ export type LearnTable = {
   rows: string[][];
 };
 
+// A CountUp stat callout (Phase 2). Pulls a key number out of prose into the
+// same card treatment as the Loyalty section's money argument. `value` is what
+// the number counts up to; `decimals` supports figures like 0.49.
+export type LearnStat = {
+  value: number;
+  prefix?: string;
+  suffix?: string;
+  decimals?: number;
+  label: string; // short caption under the number
+};
+
 export type LearnSection = {
   h: string;
   body?: string[]; // paragraphs
   bullets?: string[];
   table?: LearnTable;
+  stats?: LearnStat[]; // rendered as a CountUp stat callout card
+};
+
+// Modest header image for the article (Phase 1). A banner proportional to long-
+// form reading, not a full-viewport hero. `src` is a /public path.
+export type LearnHero = {
+  src: string;
+  alt: string;
 };
 
 export type LearnArticle = {
   // One-paragraph direct answer, rendered as the standfirst under the H1.
   lead: string;
+  hero?: LearnHero;
   sections: LearnSection[];
   updated: string; // ISO date, shown + used for Article schema
 };
@@ -44,6 +64,7 @@ export const LEARN_CONTENT: Record<string, LearnArticle> = {
   // ── PILLAR 1 ────────────────────────────────────────────────────────────────
   "delivery-app-commissions": {
     lead: "In 2026, DoorDash, Uber Eats, and Grubhub take roughly 15-30% of each delivery order in commission, and once payment processing and in-app promotions stack on top, the blended real-world cost commonly lands between 25% and 40% of the order. For an independent restaurant, that is usually the single largest controllable cost in the business.",
+    hero: { src: "/diners.jpg", alt: "Diners sharing a meal at a restaurant table" },
     updated: UPDATED,
     sections: [
       {
@@ -67,6 +88,10 @@ export const LEARN_CONTENT: Record<string, LearnArticle> = {
           "The National Restaurant Association reports a median pre-tax margin for independent restaurants of roughly 2.8-4.0%. Marketplace commissions do not come out of that margin - they dwarf it.",
           "Work a realistic example: an independent doing 650 marketplace orders a month at a $25 average ticket is $16,250 in monthly marketplace sales. At a blended 25% cost, that is about $4,060 a month - roughly $48,750 a year handed to the marketplaces. That is a concrete, attributable number, not a vague 'you're losing a lot.'",
         ],
+        stats: [
+          { value: 48750, prefix: "$", label: "a year to marketplace fees, for one independent restaurant" },
+          { value: 40, suffix: "%", label: "of an order at the high end, once fees and promos stack up" },
+        ],
       },
       {
         h: "The part a price markup doesn't fix",
@@ -86,6 +111,7 @@ export const LEARN_CONTENT: Record<string, LearnArticle> = {
 
   "doordash-fees": {
     lead: "DoorDash charges restaurants 15% (Basic), 25% (Plus), or 30% (Premier) in commission on delivery orders in 2026, plus 6% on pickup orders. Once payment processing and promotions are added, the real cost of a DoorDash order to a restaurant often lands well above the headline rate.",
+    hero: { src: "/chef.jpg", alt: "A chef plating food in a restaurant kitchen" },
     updated: UPDATED,
     sections: [
       {
@@ -95,6 +121,11 @@ export const LEARN_CONTENT: Record<string, LearnArticle> = {
           "Plus - 25% commission. Adds DashPass visibility to subscribed diners.",
           "Premier - 30% commission. Top placement and the broadest delivery area.",
           "Pickup - 6% commission on orders the customer collects themselves.",
+        ],
+        stats: [
+          { value: 15, suffix: "%", label: "Basic tier commission on delivery" },
+          { value: 25, suffix: "%", label: "Plus tier commission on delivery" },
+          { value: 30, suffix: "%", label: "Premier tier commission on delivery" },
         ],
       },
       {
@@ -120,12 +151,17 @@ export const LEARN_CONTENT: Record<string, LearnArticle> = {
 
   "uber-eats-fees": {
     lead: "Uber Eats charges restaurants between 15% and 30% commission on orders in 2026, depending on the plan tier, with payment processing added on top. As with the other marketplaces, the effective cost per order typically runs higher than the base commission once promotions are included.",
+    hero: { src: "/hero.jpg", alt: "A restaurant interior set for service" },
     updated: UPDATED,
     sections: [
       {
         h: "How the Uber Eats tiers work",
         body: [
           "Uber Eats sells plans the same way its rivals do: a lower commission tier that keeps you present in the app, and higher tiers (typically in the 25-30% range) that buy reach, delivery radius, and promotional placement. The exact tier names shift, but the economics don't - more visibility costs more commission.",
+        ],
+        stats: [
+          { value: 15, suffix: "%", label: "commission at the lowest tier" },
+          { value: 30, suffix: "%", label: "commission at the top tier, before processing" },
         ],
       },
       {
@@ -151,6 +187,7 @@ export const LEARN_CONTENT: Record<string, LearnArticle> = {
 
   "grubhub-fees": {
     lead: "Grubhub charges restaurants a marketing commission of 5% (Basic), 15% (Plus), or 20% (All-access) in 2026, and adds an optional ~10% delivery commission when Grubhub handles the delivery. Combined with processing, a full-service Grubhub order can cost a restaurant around a third of the ticket.",
+    hero: { src: "/diners.jpg", alt: "Diners enjoying a meal together" },
     updated: UPDATED,
     sections: [
       {
@@ -160,6 +197,11 @@ export const LEARN_CONTENT: Record<string, LearnArticle> = {
           "Plus - 15% marketing commission. More placement and promotion.",
           "All-access - 20% marketing commission. Maximum reach in the app.",
           "Delivery - an optional ~10% on top when Grubhub's drivers deliver instead of yours.",
+        ],
+        stats: [
+          { value: 5, suffix: "%", label: "Basic marketing commission" },
+          { value: 20, suffix: "%", label: "All-access marketing commission" },
+          { value: 10, suffix: "%", label: "optional delivery commission on top" },
         ],
       },
       {
@@ -186,6 +228,7 @@ export const LEARN_CONTENT: Record<string, LearnArticle> = {
   // ── PILLAR 2 ────────────────────────────────────────────────────────────────
   "leaving-delivery-apps": {
     lead: "You can move most of your orders off third-party delivery apps, but not by deleting them overnight. The realistic path is to stand up online ordering you own, make it the easiest option everywhere you touch a customer, and use the marketplaces only for discovery - so you keep the reach without paying commission on the orders you could have taken directly.",
+    hero: { src: "/chef.jpg", alt: "A chef at work in a restaurant kitchen" },
     updated: UPDATED,
     sections: [
       {
@@ -193,6 +236,9 @@ export const LEARN_CONTENT: Record<string, LearnArticle> = {
         body: [
           "Marketplaces are a discovery channel. New diners find you there, and that has real value. The problem isn't that they exist - it's using them for repeat orders from customers who already know you, where you're paying 25-40% to a middleman for a sale you'd have gotten anyway.",
           "So the goal isn't zero apps. It's moving the repeat business you already earned onto ordering you own.",
+        ],
+        stats: [
+          { value: 40, suffix: "%", label: "of an order you stop paying on every sale you take directly" },
         ],
       },
       {
@@ -223,6 +269,7 @@ export const LEARN_CONTENT: Record<string, LearnArticle> = {
   // ── PILLAR 3 (hub) ──────────────────────────────────────────────────────────
   "restaurant-online-ordering-alternatives": {
     lead: "The main restaurant online-ordering platforms fall into a few groups: POS-tied systems (Toast, Square, Clover), commission-free but subscription-based ordering (ChowNow, Restolabs), premium website platforms (BentoBox), and hosted order pages funded by a diner fee (Menufy). Almost all of them are something you rent monthly or pay per order. The alternative is a site you own outright for a one-time price.",
+    hero: { src: "/hero.jpg", alt: "A restaurant dining room" },
     updated: UPDATED,
     sections: [
       {
@@ -238,6 +285,7 @@ export const LEARN_CONTENT: Record<string, LearnArticle> = {
             ["ChowNow", "Commission-free ordering", "$249-$449/mo + setup + per-order processing"],
             ["BentoBox", "Premium website platform", "Premium monthly subscription"],
             ["Restolabs", "Commission-free ordering", "$69-$199/mo, site/app extra"],
+            ["App2Food", "Commission-free ordering", "~$0.49 diner fee per order"],
             ["Starvega", "Owned site + ordering", "One-time price, no platform fee"],
           ],
         },
@@ -260,6 +308,7 @@ export const LEARN_CONTENT: Record<string, LearnArticle> = {
   // ── PILLAR 3 clusters (comparisons) ───────────────────────────────────────────
   "toast-alternative": {
     lead: "Toast is a full restaurant POS with online ordering attached. It's capable, but ordering is tied to Toast's hardware and monthly software plans, and Toast adds a $0.99 fee per online order (charged to the guest, or absorbed by you). If you want online ordering without the per-order fee and the hardware lock-in, an owned site is the cleaner fit.",
+    hero: { src: "/diners.jpg", alt: "Guests dining at a restaurant" },
     updated: UPDATED,
     sections: [
       {
@@ -267,6 +316,7 @@ export const LEARN_CONTENT: Record<string, LearnArticle> = {
         body: [
           "Toast's online ordering rides on its POS: monthly software fees, payment processing, and in most configurations that $0.99-per-order guest fee. It's a strong all-in-one if you also want Toast's terminals and want everything under one roof - but you're buying an ecosystem, on a monthly bill, with a fee on each online order.",
         ],
+        stats: [{ value: 0.99, prefix: "$", decimals: 2, label: "guest fee added to every online order" }],
       },
       {
         h: "The honest gap",
@@ -280,6 +330,7 @@ export const LEARN_CONTENT: Record<string, LearnArticle> = {
 
   "square-online-ordering-alternative": {
     lead: "Square Online is one of the easiest ways to start taking orders, and its free tier is genuinely useful. The catch is the ceiling: as you grow, real restaurant needs - catering, time-slot scheduling, deeper menu logic - thin out, and you're still paying per-order processing on every sale. For a restaurant that has outgrown the starter store, an owned site removes both limits.",
+    hero: { src: "/chef.jpg", alt: "A cook preparing a dish in a kitchen" },
     updated: UPDATED,
     sections: [
       {
@@ -300,6 +351,7 @@ export const LEARN_CONTENT: Record<string, LearnArticle> = {
 
   "clover-alternative": {
     lead: "Clover is a POS system with online ordering added through its app market. Like Toast, the ordering is tied to Clover's hardware and monthly plans, and getting the setup you want often means stacking paid apps on top. If you want online ordering that isn't chained to a POS and its monthly stack, an owned site is simpler and cheaper over time.",
+    hero: { src: "/hero.jpg", alt: "A restaurant ready for service" },
     updated: UPDATED,
     sections: [
       {
@@ -320,6 +372,7 @@ export const LEARN_CONTENT: Record<string, LearnArticle> = {
 
   "menufy-alternative": {
     lead: "Menufy will build a restaurant an online-ordering page at little or no cost to you - because the model is funded by a convenience fee (around $1.75) charged to your customer on each order, on a site hosted on Menufy's platform. If you'd rather not put a per-order fee in front of your diners on a page you don't own, an owned site is the alternative.",
+    hero: { src: "/diners.jpg", alt: "Diners at a restaurant table" },
     updated: UPDATED,
     sections: [
       {
@@ -327,6 +380,7 @@ export const LEARN_CONTENT: Record<string, LearnArticle> = {
         body: [
           "Menufy's pitch is low cost to the restaurant, and that part is real. The trade is that the diner pays a per-order convenience fee, and the ordering page lives on Menufy's platform. You get orders without a big bill; your customer gets a surcharge, and you don't own the storefront it happens on.",
         ],
+        stats: [{ value: 1.75, prefix: "$", decimals: 2, label: "convenience fee charged to your diner per order" }],
       },
       {
         h: "The honest gap",
@@ -340,12 +394,17 @@ export const LEARN_CONTENT: Record<string, LearnArticle> = {
 
   "chownow-alternative": {
     lead: "ChowNow gets one big thing right: no commission on orders. But it delivers that as a subscription - published plans around $249-$449/month, a setup fee of roughly $119-$499, and per-order payment processing (about 2.95% + 29¢) on top. If you want the commission-free promise without a monthly subscription, a one-time-cost owned site gets you there.",
+    hero: { src: "/chef.jpg", alt: "A chef preparing food in a restaurant" },
     updated: UPDATED,
     sections: [
       {
         h: "What ChowNow actually charges",
         body: [
           "ChowNow removes marketplace commission, which is genuinely valuable. It funds that with a monthly plan (published tiers roughly $249-$449/month), an upfront setup fee, and standard per-order processing. Over a year, that's a few thousand dollars in subscription before a single order's processing - a recurring cost that never ends.",
+        ],
+        stats: [
+          { value: 249, prefix: "$", label: "a month at the entry plan, before setup and processing" },
+          { value: 449, prefix: "$", label: "a month at the top published tier" },
         ],
       },
       {
@@ -360,6 +419,7 @@ export const LEARN_CONTENT: Record<string, LearnArticle> = {
 
   "bentobox-alternative": {
     lead: "BentoBox makes genuinely beautiful, design-led restaurant websites - on a premium monthly subscription, with online ordering as an added part of the package. If you want a site that looks the part without a premium recurring bill, an owned site delivers the design once, for a one-time price.",
+    hero: { src: "/hero.jpg", alt: "A styled restaurant dining space" },
     updated: UPDATED,
     sections: [
       {
@@ -380,12 +440,17 @@ export const LEARN_CONTENT: Record<string, LearnArticle> = {
 
   "restolabs-alternative": {
     lead: "Restolabs is a commission-free online-ordering platform sold as a monthly subscription - roughly $69 to $199 a month depending on tier, with a branded website and mobile app available as extra monthly add-ons. If you like the commission-free part but not renting it forever, an owned site gives you the same ordering for a one-time price.",
+    hero: { src: "/diners.jpg", alt: "People sharing a meal at a restaurant" },
     updated: UPDATED,
     sections: [
       {
         h: "What Restolabs actually charges",
         body: [
           "Restolabs takes no commission and no per-order fee of its own - you pay a flat monthly subscription (around $69 Basic, $99 Growth, $199 Pro) plus your payment processor's fees. A branded website and a mobile app are separate monthly add-ons. It's fair and transparent; it's also a bill that recurs every month you use it.",
+        ],
+        stats: [
+          { value: 69, prefix: "$", label: "a month at the Basic tier" },
+          { value: 199, prefix: "$", label: "a month at Pro, before website and app add-ons" },
         ],
       },
       {
@@ -395,6 +460,29 @@ export const LEARN_CONTENT: Record<string, LearnArticle> = {
         ],
       },
       OWNED_ALT("The website and the commission-free ordering come together in one owned build, instead of a monthly subscription with the site and app billed as add-ons."),
+    ],
+  },
+
+  "app2food-alternative": {
+    lead: "App2Food offers restaurants commission-free online ordering, funded by a convenience fee (around $0.49) charged to the diner on each order, on an ordering page hosted on App2Food's platform. If you'd rather not put a per-order fee in front of your customers on a page you don't own, an owned site is the alternative.",
+    hero: { src: "/chef.jpg", alt: "A chef preparing an order in a restaurant kitchen" },
+    updated: UPDATED,
+    sections: [
+      {
+        h: "How App2Food's model works",
+        body: [
+          "App2Food's appeal is the same as the other diner-funded platforms: little to no commission taken from the restaurant, because the economics are covered by a small convenience fee the customer pays at checkout. You get commission-free orders without a large monthly bill; the trade is a surcharge shown to your diner, on an ordering page that lives on App2Food's platform rather than a site you own.",
+        ],
+        stats: [{ value: 0.49, prefix: "$", decimals: 2, label: "convenience fee charged to your diner on every order" }],
+      },
+      {
+        h: "The honest gap",
+        body: [
+          "$0.49 is small, and for a restaurant it is far cheaper than marketplace commission - that part is real and worth crediting. But it is still a fee your own regulars see every time they order, on a page that isn't yours. The ordering, the storefront, and the customer relationship sit inside App2Food; if you leave, they don't come with you.",
+          "A per-order fee is friction on the exact customers you most want ordering directly, and 'cheap to the restaurant' is true precisely because the cost was moved onto the diner, not removed.",
+        ],
+      },
+      OWNED_ALT("There's no convenience fee in front of your diner at checkout, and the ordering page is your own site rather than a hosted page on someone else's platform."),
     ],
   },
 };

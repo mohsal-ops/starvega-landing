@@ -149,6 +149,15 @@ export const LEARN_PAGES: LearnPage[] = [
       "Restolabs is a monthly-subscription online-ordering platform. Here's how an owned, one-time-cost restaurant site with its own ordering compares.",
     pillarSlug: PILLAR_ALTERNATIVES,
   },
+  {
+    slug: "app2food-alternative",
+    kind: "cluster",
+    group: "alternatives",
+    title: "An App2Food Alternative Without the Per-Order Diner Fee",
+    description:
+      "App2Food runs commission-free online ordering funded by a $0.49 convenience fee charged to your diner on each order, on its platform. Here's an owned alternative with no per-order fee and a site you keep.",
+    pillarSlug: PILLAR_ALTERNATIVES,
+  },
 ];
 
 export const LEARN_BASE = "/learn";

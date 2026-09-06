@@ -1,11 +1,16 @@
 "use client";
 
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
+
+// Routes that opt out of the funnel's sales-page choreography: /learn articles
+// use their own light Reveal/CountUp, and /admin is a data dashboard.
+const SKIP = (p: string | null) => !!p && (p.startsWith("/learn") || p.startsWith("/admin"));
 
 // The OFF+BRAND motion layer. Renders nothing - it scans the DOM for data-hooks
 // and wires the reveals/parallax onto the existing funnel sections, so copy and
@@ -23,7 +28,9 @@ gsap.registerPlugin(ScrollTrigger, SplitText);
 //   data-reveal-now    → play immediately on load (no scroll gate) - used above
 //                        the fold so the hero animates the moment the page opens
 export default function MotionLayer() {
+  const pathname = usePathname();
   useEffect(() => {
+    if (SKIP(pathname)) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) {
       // CSS reveals everything under html.reduce; skip all motion.
@@ -167,7 +174,7 @@ export default function MotionLayer() {
       splits.forEach((s) => s.revert());
       ctx?.revert();
     };
-  }, []);
+  }, [pathname]);
 
   return null;
 }
