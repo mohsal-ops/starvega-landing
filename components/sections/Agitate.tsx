@@ -98,7 +98,7 @@ export default function Agitate() {
               in the commissions pillar without competing with the primary CTA. */}
           <Link
             href="/learn/delivery-app-commissions"
-            className="mt-6 inline-block text-sm text-white/45 underline-offset-4 transition-colors hover:text-white/80 hover:underline"
+            className="mt-6 inline-block text-sm text-white/70 underline decoration-white/30 underline-offset-4 transition-colors hover:text-white hover:decoration-white/70"
           >
             See how we calculated these numbers →
           </Link>
