@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { FAQS } from "@/lib/faq";
 import { track } from "@/lib/track";
@@ -76,9 +77,17 @@ export default function Faq() {
                       transition={{ duration: reduce ? 0 : 0.28, ease: [0.16, 1, 0.3, 1] }}
                       className="overflow-hidden"
                     >
-                      <p className="max-w-2xl pb-6 text-base leading-relaxed text-ink-soft">
-                        {f.a}
-                      </p>
+                      <div className="max-w-2xl pb-6">
+                        <p className="text-base leading-relaxed text-ink-soft">{f.a}</p>
+                        {f.href && (
+                          <Link
+                            href={f.href}
+                            className="mt-3 inline-block text-sm text-ink-soft underline-offset-4 transition-colors hover:text-ink hover:underline"
+                          >
+                            {f.linkText ?? "Learn more"} →
+                          </Link>
+                        )}
+                      </div>
                     </motion.div>
                   )}
                 </AnimatePresence>

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { CountUp } from "@/components/CountUp";
 import { Reveal } from "@/components/Reveal";
 
@@ -93,6 +94,14 @@ export default function Agitate() {
             That is money you already earned, walking out the door every month.
             That is the real cost of doing nothing.
           </p>
+          {/* Secondary, muted-on-dark: lets a skeptical reader verify the fee math
+              in the commissions pillar without competing with the primary CTA. */}
+          <Link
+            href="/learn/delivery-app-commissions"
+            className="mt-6 inline-block text-sm text-white/45 underline-offset-4 transition-colors hover:text-white/80 hover:underline"
+          >
+            See how we calculated these numbers →
+          </Link>
         </Reveal>
       </div>
     </section>
