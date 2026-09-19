@@ -3,8 +3,7 @@
 import { useEffect, useState } from "react";
 import { PackCards } from "./PackCards";
 import { closePackModal, subscribePackModal } from "@/lib/pack-modal";
-import { SITE } from "@/lib/site";
-import { track } from "@/lib/track-client";
+import { openContactMenu } from "@/lib/contact";
 
 // The pricing popup. Mounted once (in the root layout); opened from any CTA via
 // openPackModal(). Shows all three packs with who-it's-for + what's included and
@@ -69,15 +68,13 @@ export function PackModalHost() {
             to self-checkout convert better by reaching out first. */}
         <p className="mt-7 border-t border-ash pt-5 text-center text-sm text-ink-soft">
           Not sure which fits, or want to talk it through first?{" "}
-          <a
-            href={SITE.instagramDmUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => track("text_cta_clicked")}
+          <button
+            type="button"
+            onClick={openContactMenu}
             className="font-semibold text-ink underline decoration-amber decoration-2 underline-offset-4 hover:text-amber"
           >
             Message me and I&apos;ll help you pick
-          </a>
+          </button>
         </p>
       </div>
     </div>

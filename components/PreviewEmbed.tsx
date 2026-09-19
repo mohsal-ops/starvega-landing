@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { openPackModal } from "@/lib/pack-modal";
 import { track } from "@/lib/track-client";
-import { SITE } from "@/lib/site";
+import { openContactMenu } from "@/lib/contact";
 
 // The live demo (starvega-demo) shown two ways:
 //  1) An inline window near the end of the funnel autoplaying a looping tour
@@ -21,6 +21,9 @@ const DASHBOARD_SRC = `${DEMO_URL}/admin`; // public read-only owner dashboard
 export function PreviewEmbed() {
   const [fullscreen, setFullscreen] = useState(false);
   const [view, setView] = useState<"site" | "dashboard">("site");
+  // The demo iframe can take a beat to boot (cold start + its own loader), which
+  // otherwise shows as a black void. Cover it with a branded loader until onLoad.
+  const [frameLoaded, setFrameLoaded] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   // React doesn't reliably set the DOM `muted` property (so browsers block
@@ -59,6 +62,11 @@ export function PreviewEmbed() {
     setView("dashboard");
     track("preview_dashboard_opened");
   };
+
+  // Show the loader again whenever the framed page changes (open, or toggle view).
+  useEffect(() => {
+    setFrameLoaded(false);
+  }, [view, fullscreen]);
 
   useEffect(() => {
     if (!fullscreen) return;
@@ -184,15 +192,13 @@ export function PreviewEmbed() {
               </p>
 
               <div className="flex items-center gap-2">
-                <a
-                  href={SITE.instagramDmUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => track("text_cta_clicked")}
+                <button
+                  type="button"
+                  onClick={openContactMenu}
                   className="inline-flex min-h-[40px] items-center justify-center rounded-[10px] border border-white/50 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-white/10"
                 >
                   Message me
-                </a>
+                </button>
                 <button
                   type="button"
                   onClick={openPackModal}
@@ -212,13 +218,29 @@ export function PreviewEmbed() {
             </div>
           </div>
 
-          <div className="relative flex-1">
+          <div className="relative flex-1 bg-bg">
             <iframe
               key={view}
               src={view === "site" ? SITE_SRC : DASHBOARD_SRC}
               title={view === "site" ? "Live demo restaurant site" : "Read-only owner dashboard"}
+              onLoad={() => setFrameLoaded(true)}
               className="h-full w-full bg-bg"
             />
+            {/* Branded loader over the iframe until it's ready (no black void). */}
+            <div
+              aria-hidden={frameLoaded}
+              className={`pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-4 bg-bg transition-opacity duration-500 ${
+                frameLoaded ? "opacity-0" : "opacity-100"
+              }`}
+            >
+              <span className="relative grid h-14 w-14 place-items-center">
+                <span className="absolute inset-0 rounded-full" style={{ backgroundImage: "var(--gradient-sphere)", opacity: 0.25, filter: "blur(8px)" }} />
+                <span className="h-9 w-9 animate-spin rounded-full border-2 border-ash border-t-amber" />
+              </span>
+              <p className="font-mono text-xs uppercase tracking-[0.2em] text-ink-soft">
+                {view === "site" ? "Loading the live demo…" : "Loading the owner dashboard…"}
+              </p>
+            </div>
           </div>
         </div>
       )}

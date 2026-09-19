@@ -8,6 +8,7 @@ import MotionLayer from "@/components/MotionLayer";
 import Header from "@/components/Header";
 import Tracker from "@/components/Tracker";
 import { PackModalHost } from "@/components/packs/PackModalHost";
+import { ContactHost } from "@/components/ContactHost";
 import { OrganizationJsonLd } from "@/components/SeoJsonLd";
 
 // OFF+BRAND-adapted: a single geometric-sans voice. Inter is the doc's named
@@ -38,6 +39,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {children}
         {/* The pricing popup - opened from any "choose your plan" CTA. */}
         <PackModalHost />
+        {/* Persistent contact FAB + channel-picker popover (email / Instagram). */}
+        <ContactHost />
         {gaId && (
           <>
             {/*
