@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { openPackModal } from "@/lib/pack-modal";
 import { track } from "@/lib/track-client";
+import { SITE } from "@/lib/site";
 
 // The live demo (starvega-demo) shown two ways:
 //  1) An inline window near the end of the funnel autoplaying a looping tour
@@ -183,6 +184,15 @@ export function PreviewEmbed() {
               </p>
 
               <div className="flex items-center gap-2">
+                <a
+                  href={SITE.instagramDmUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => track("text_cta_clicked")}
+                  className="inline-flex min-h-[40px] items-center justify-center rounded-[10px] border border-white/50 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-white/10"
+                >
+                  Message me
+                </a>
                 <button
                   type="button"
                   onClick={openPackModal}
