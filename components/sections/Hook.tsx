@@ -44,7 +44,7 @@ export default function Hook() {
           data-reveal-now
           className="mt-7 max-w-[44ch] text-[18px] font-normal leading-[1.5] text-ink-soft"
         >
-          On every single order. Month after month &mdash; quietly the most
+          On every single order. Month after month - quietly the most
           expensive line item you never signed off on. There&apos;s a one-time
           fix, and it&apos;s yours to keep.
         </p>

@@ -17,7 +17,7 @@ import {
 //  - a floating pill (bottom-left) that stays with the visitor as they scroll,
 //  - a channel-picker popover that pre-fills a ready-to-send message.
 // Instagram DMs can't be prefilled from a link, so choosing Instagram copies the
-// message to the clipboard and opens the DM — paste & send. Email opens a real
+// message to the clipboard and opens the DM - paste & send. Email opens a real
 // prefilled Gmail compose. Both fire text_cta_clicked so they land in the funnel.
 // The same popover is opened from the preview bar and pricing modal via
 // openContactMenu(), so there's one contact surface everywhere.
@@ -43,7 +43,7 @@ export function ContactHost() {
       setCopied(true);
       setTimeout(() => setCopied(false), 3000);
     } catch {
-      /* clipboard blocked — they can still type in the DM */
+      /* clipboard blocked - they can still type in the DM */
     }
     window.open(instagramDmUrl, "_blank", "noopener,noreferrer");
   };
@@ -60,7 +60,7 @@ export function ContactHost() {
 
   return (
     <>
-      {/* Floating pill — hidden while the popover is open (the card replaces it). */}
+      {/* Floating pill - hidden while the popover is open (the card replaces it). */}
       <AnimatePresence>
         {!open && (
           <motion.button
@@ -142,8 +142,7 @@ export function ContactHost() {
                 Tell me about your spot.
               </h3>
               <p className="relative mt-2 text-sm leading-relaxed text-ink-soft">
-                I build and manage each site personally, so I take on a handful of restaurants at a
-                time. Pick how you&apos;d rather reach me — the message is written for you.
+                I take on a handful of spots at a time. The message is already written for you.
               </p>
 
               <div className="relative mt-5 space-y-2.5">
@@ -153,7 +152,7 @@ export function ContactHost() {
                   onClick={onInstagram}
                   icon={<InstagramIcon className="h-5 w-5" />}
                   title="Message me on Instagram"
-                  sub={copied ? "Message copied — just paste & send ✓" : "Opens your DM, message ready to paste"}
+                  sub={copied ? "Copied. Paste & send ✓" : "Ready message, opens your DM"}
                   highlight={copied}
                 />
                 <ChannelButton
