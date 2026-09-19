@@ -11,8 +11,21 @@ import { buildReport } from "./report";
 import { fmtDuration, timeAgo } from "./format";
 import { SearchRankings } from "./SearchRankings";
 import { getRankings } from "@/lib/search-console";
+import { Prisma } from "@/generated/prisma";
 
 export const dynamic = "force-dynamic";
+
+// Cities that are essentially all data-center / bot traffic (Google, AWS, Azure
+// hubs) rather than real audience. Excluded from every analytics query below so
+// they don't inflate visitor counts or dominate the locations list. The
+// ingestion route (api/track) already drops bot user-agents at the source; this
+// also cleans historical rows recorded before that filter existed. Edit this
+// list if a genuine audience city ever shows up here.
+const DATA_CENTER_CITIES = [
+  "council bluffs", "the dalles", "boardman", "umatilla", "quincy",
+  "moses lake", "ashburn", "sterling", "boydton", "moncks corner", "papillion",
+];
+const notDataCenter = Prisma.sql`AND LOWER(COALESCE("city", '')) <> ALL(ARRAY[${Prisma.join(DATA_CENTER_CITIES)}]::text[])`;
 
 const SECTION_ORDER = ["hook", "agitate", "turn", "proof", "offer", "objections", "cta"];
 const WIDGET_STEPS: [string, string][] = [
@@ -29,18 +42,18 @@ const WIDGET_STEPS: [string, string][] = [
 async function getData(start: Date, end: Date) {
   const [overview] = (await db.$queryRaw`
     SELECT
-      (SELECT COUNT(DISTINCT "sessionId")::int FROM "PageEvent" WHERE "createdAt" >= ${start} AND "createdAt" <= ${end}) AS total,
-      (SELECT COUNT(DISTINCT "sessionId")::int FROM "PageEvent" WHERE "isReturning" AND "createdAt" >= ${start} AND "createdAt" <= ${end}) AS "returning"
+      (SELECT COUNT(DISTINCT "sessionId")::int FROM "PageEvent" WHERE "createdAt" >= ${start} AND "createdAt" <= ${end} ${notDataCenter}) AS total,
+      (SELECT COUNT(DISTINCT "sessionId")::int FROM "PageEvent" WHERE "isReturning" AND "createdAt" >= ${start} AND "createdAt" <= ${end} ${notDataCenter}) AS "returning"
   `) as { total: number; returning: number }[];
 
   const [dur] = (await db.$queryRaw`
     SELECT COALESCE(AVG(EXTRACT(EPOCH FROM (mx - mn))), 0)::float AS secs
-    FROM (SELECT "sessionId", MIN("createdAt") mn, MAX("createdAt") mx FROM "PageEvent" WHERE "createdAt" >= ${start} AND "createdAt" <= ${end} GROUP BY "sessionId") s
+    FROM (SELECT "sessionId", MIN("createdAt") mn, MAX("createdAt") mx FROM "PageEvent" WHERE "createdAt" >= ${start} AND "createdAt" <= ${end} ${notDataCenter} GROUP BY "sessionId") s
   `) as { secs: number }[];
 
   const referrers = (await db.$queryRaw`
     SELECT COALESCE(NULLIF("referrer", ''), 'Direct') AS ref, COUNT(DISTINCT "sessionId")::int AS c
-    FROM "PageEvent" WHERE "createdAt" >= ${start} AND "createdAt" <= ${end} GROUP BY 1 ORDER BY c DESC LIMIT 8
+    FROM "PageEvent" WHERE "createdAt" >= ${start} AND "createdAt" <= ${end} ${notDataCenter} GROUP BY 1 ORDER BY c DESC LIMIT 8
   `) as { ref: string; c: number }[];
 
   // Traffic by channel: bucket every stored referrer/source into a channel so
@@ -48,7 +61,7 @@ async function getData(start: Date, end: Date) {
   // events only, to count visits rather than in-page interactions.
   const refCounts = (await db.$queryRaw`
     SELECT COALESCE(NULLIF("referrer", ''), 'Direct') AS ref, COUNT(DISTINCT "sessionId")::int AS c
-    FROM "PageEvent" WHERE "eventType" = 'pageview' AND "createdAt" >= ${start} AND "createdAt" <= ${end} GROUP BY 1
+    FROM "PageEvent" WHERE "eventType" = 'pageview' AND "createdAt" >= ${start} AND "createdAt" <= ${end} ${notDataCenter} GROUP BY 1
   `) as { ref: string; c: number }[];
   const channelMap = new Map<string, number>();
   for (const { ref, c } of refCounts) {
@@ -70,28 +83,28 @@ async function getData(start: Date, end: Date) {
   const locationsRaw = (await db.$queryRaw`
     SELECT COALESCE(NULLIF("city", ''), 'Unknown') AS city, COALESCE("country", '') AS country,
            COUNT(DISTINCT "sessionId")::int AS c, MAX("createdAt") AS "lastVisit"
-    FROM "PageEvent" WHERE "createdAt" >= ${start} AND "createdAt" <= ${end}
+    FROM "PageEvent" WHERE "createdAt" >= ${start} AND "createdAt" <= ${end} ${notDataCenter}
     GROUP BY 1, 2 ORDER BY "lastVisit" DESC LIMIT 15
   `) as { city: string; country: string; c: number; lastVisit: Date }[];
   const locations = locationsRaw.map((l) => ({ ...l, lastVisit: l.lastVisit.toISOString() }));
 
   const sections = (await db.$queryRaw`
     SELECT "sectionId" AS id, COUNT(DISTINCT "sessionId")::int AS c
-    FROM "PageEvent" WHERE "eventType" = 'section_view' AND "sectionId" IS NOT NULL AND "createdAt" >= ${start} AND "createdAt" <= ${end} GROUP BY 1
+    FROM "PageEvent" WHERE "eventType" = 'section_view' AND "sectionId" IS NOT NULL AND "createdAt" >= ${start} AND "createdAt" <= ${end} ${notDataCenter} GROUP BY 1
   `) as { id: string; c: number }[];
 
   const widget = (await db.$queryRaw`
     SELECT "eventType" AS t, COUNT(DISTINCT "sessionId")::int AS c
     FROM "PageEvent"
     WHERE "eventType" IN ('widget_opened','widget_submitted','preview_generated','preview_opened','pack_selected','text_cta_clicked')
-      AND "createdAt" >= ${start} AND "createdAt" <= ${end}
+      AND "createdAt" >= ${start} AND "createdAt" <= ${end} ${notDataCenter}
     GROUP BY 1
   `) as { t: string; c: number }[];
 
   // Device split (mobile / tablet / desktop / unknown) by unique session.
   const deviceRows = (await db.$queryRaw`
     SELECT COALESCE(NULLIF("device", ''), 'unknown') AS device, COUNT(DISTINCT "sessionId")::int AS c
-    FROM "PageEvent" WHERE "createdAt" >= ${start} AND "createdAt" <= ${end} GROUP BY 1
+    FROM "PageEvent" WHERE "createdAt" >= ${start} AND "createdAt" <= ${end} ${notDataCenter} GROUP BY 1
   `) as { device: string; c: number }[];
   const deviceMap = new Map(deviceRows.map((r) => [r.device, r.c]));
 
@@ -99,7 +112,7 @@ async function getData(start: Date, end: Date) {
   const dailyVisitorsRaw = (await db.$queryRaw`
     SELECT to_char(("createdAt" AT TIME ZONE 'UTC')::date, 'YYYY-MM-DD') AS day,
            COUNT(DISTINCT "sessionId")::int AS c
-    FROM "PageEvent" WHERE "createdAt" >= ${start} AND "createdAt" <= ${end}
+    FROM "PageEvent" WHERE "createdAt" >= ${start} AND "createdAt" <= ${end} ${notDataCenter}
     GROUP BY 1 ORDER BY 1
   `) as { day: string; c: number }[];
 
@@ -110,7 +123,7 @@ async function getData(start: Date, end: Date) {
            COUNT(DISTINCT "sessionId") FILTER (WHERE "eventType" = 'widget_opened')::int AS opened,
            COUNT(DISTINCT "sessionId") FILTER (WHERE "eventType" = 'widget_submitted')::int AS submitted
     FROM "PageEvent"
-    WHERE "eventType" IN ('widget_opened','widget_submitted') AND "createdAt" >= ${start} AND "createdAt" <= ${end}
+    WHERE "eventType" IN ('widget_opened','widget_submitted') AND "createdAt" >= ${start} AND "createdAt" <= ${end} ${notDataCenter}
     GROUP BY 1 ORDER BY 1
   `) as { day: string; opened: number; submitted: number }[];
 

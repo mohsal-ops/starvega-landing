@@ -37,6 +37,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true, skipped: "owner" });
     }
 
+    // Bot exclusion: crawlers, headless browsers, link-preview fetchers, uptime
+    // monitors and SEO scanners inflate every metric (and geo-cluster in data
+    // centers like Council Bluffs / Ashburn). Drop them at the source so they
+    // never reach the analytics DB.
+    const ua = req.headers.get("user-agent") || "";
+    if (
+      !ua ||
+      /bot|crawl|spider|slurp|headless|phantom|puppeteer|playwright|lighthouse|pagespeed|monitor|uptime|pingdom|gtmetrix|facebookexternalhit|whatsapp|telegram|slack|discord|twitter|linkedin|embedly|preview|scan|curl|wget|python-requests|axios|node-fetch|go-http|semrush|ahrefs|mj12|dotbot|dataprovider/i.test(ua)
+    ) {
+      return NextResponse.json({ ok: true, skipped: "bot" });
+    }
+
     const b = (await req.json()) as Record<string, unknown>;
     const sessionId = typeof b.sessionId === "string" ? b.sessionId : "";
     const eventType = typeof b.eventType === "string" ? b.eventType : "";

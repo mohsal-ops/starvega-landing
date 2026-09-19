@@ -42,10 +42,11 @@ export default function Hook() {
         <p
           data-reveal-words
           data-reveal-now
-          className="mt-7 max-w-[42ch] text-[18px] font-normal leading-[1.5] text-ink-soft"
+          className="mt-7 max-w-[44ch] text-[18px] font-normal leading-[1.5] text-ink-soft"
         >
-          On every single order. Month after month. It is quietly the most
-          expensive line item you never signed off on.
+          On every single order. Month after month &mdash; quietly the most
+          expensive line item you never signed off on. There&apos;s a one-time
+          fix, and it&apos;s yours to keep.
         </p>
 
         <div data-reveal data-reveal-now className="mt-8">
