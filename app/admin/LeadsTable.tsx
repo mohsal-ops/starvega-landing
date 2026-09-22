@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useConfirm } from "./useConfirm";
 
 export type Lead = {
   id: string;
@@ -25,6 +26,7 @@ const STATUS_CLASS: Record<string, string> = {
 export function LeadsTable({ leads }: { leads: Lead[] }) {
   const [rows, setRows] = useState(leads);
   const [busy, setBusy] = useState<string | null>(null);
+  const [confirm, confirmDialog] = useConfirm();
 
   const setStatus = async (id: string, status: string) => {
     setBusy(id);
@@ -41,7 +43,7 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
   };
 
   const del = async (id: string) => {
-    if (!confirm("Delete this lead? This can't be undone.")) return;
+    if (!(await confirm({ title: "Delete this lead?", description: "This can't be undone.", confirmText: "Delete", destructive: true }))) return;
     setBusy(id);
     setRows((r) => r.filter((x) => x.id !== id));
     try {
@@ -54,6 +56,7 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
   if (rows.length === 0) return <p className="text-sm text-ink-soft">No leads yet.</p>;
 
   return (
+    <>
     <div className="overflow-x-auto">
       <table className="w-full min-w-[720px] text-sm">
         <thead>
@@ -112,5 +115,7 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
         </tbody>
       </table>
     </div>
+    {confirmDialog}
+    </>
   );
 }
