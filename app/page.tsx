@@ -2,6 +2,7 @@ import Hook from "@/components/sections/Hook";
 import Agitate from "@/components/sections/Agitate";
 import Turn from "@/components/sections/Turn";
 import Proof from "@/components/sections/Proof";
+import DesignStyles from "@/components/sections/DesignStyles";
 import Offer from "@/components/sections/Offer";
 import Loyalty from "@/components/sections/Loyalty";
 import Faq from "@/components/sections/Faq";
@@ -26,6 +27,9 @@ export default function Home() {
       <Proof />
       {/* Let them EXPERIENCE the real product before they see a price. */}
       <PreviewEmbed />
+      {/* They've felt the product — now show it flexes to their brand. Framed as
+          optionality + trust (same system underneath), never as more decisions. */}
+      <DesignStyles />
       {/* Now that they've explored it, state the price. */}
       <Offer />
       <Loyalty />
