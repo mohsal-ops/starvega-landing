@@ -2,11 +2,12 @@
 
 import { motion, useReducedMotion } from "motion/react";
 import { ArrowLink } from "@/components/ArrowLink";
+import { DesignDeck } from "@/components/DesignDeck";
 
 // SECTION 1 - HERO / HOOK. OFF+BRAND-adapted on a white canvas: a typographic
-// architecture where monumental all-caps Inter carries the message, and the one
-// iridescent gradient sphere is the sole chromatic event (it, not the type, gets
-// the ambient motion). The headline runs its SplitText character reveal on load
+// architecture where monumental all-caps Inter carries the message, and a
+// floating 3D deck of the real site designs (DesignDeck) is the one visual event,
+// over the old sphere's soft iridescent glow. The headline runs its SplitText character reveal on load
 // (data-reveal-now), so the message assembles itself the instant the page opens.
 // Strict monochrome otherwise; amber is reserved for real CTAs elsewhere.
 export default function Hook() {
@@ -54,7 +55,12 @@ export default function Hook() {
             See what it&apos;s costing you
           </ArrowLink>
         </div>
+
+        <DesignDeck size="sm" className="mt-14 flex flex-col items-center lg:hidden" />
       </div>
+
+      {/* The real product, floating: four designs of one restaurant site. */}
+      <DesignDeck className="absolute right-[2%] top-1/2 hidden -translate-y-1/2 lg:block" />
 
       {/* Editorial scroll indicator, bottom-right */}
       <motion.div
@@ -102,19 +108,6 @@ function HeroBackdrop({ reduce }: { reduce: boolean }) {
         animate={reduce ? { y: "-50%" } : { y: "-50%", scale: [1, 1.06, 1] }}
         transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
       />
-      {/* the sphere itself - slow float + slow turn so the iridescence shifts.
-          Sits to the far right, clear of the headline, so text stays crisp. */}
-      <motion.div
-        className="absolute right-[-14%] top-[44%] h-[34vh] w-[34vh] rounded-full opacity-90 sm:right-[2%]"
-        style={{ backgroundImage: "var(--gradient-sphere)" }}
-        initial={{ y: "-50%" }}
-        animate={reduce ? { y: "-50%" } : { rotate: 360, y: ["-50%", "-54%", "-50%"] }}
-        transition={{
-          rotate: { duration: 44, repeat: Infinity, ease: "linear" },
-          y: { duration: 8, repeat: Infinity, ease: "easeInOut" },
-        }}
-      />
-
       {/* faint film grain over the whole hero */}
       {!reduce && <div className="grain" />}
     </div>
