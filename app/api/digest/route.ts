@@ -11,7 +11,7 @@ import db from "@/lib/db";
 export const runtime = "nodejs";
 export const maxDuration = 60;
 
-const SECTION_ORDER = ["hook", "agitate", "turn", "proof", "offer", "objections", "cta"];
+const SECTION_ORDER = ["hook", "problem", "proof", "offer", "signup"];
 
 function fmtDur(secs: number): string {
   const m = Math.floor(secs / 60);
@@ -34,7 +34,7 @@ export async function GET(req: NextRequest) {
         (SELECT COUNT(DISTINCT "sessionId")::int FROM "PageEvent" WHERE ${W}) AS visitors,
         (SELECT COUNT(DISTINCT "sessionId")::int FROM "PageEvent" WHERE "isReturning" AND ${W}) AS returning,
         (SELECT COUNT(*)::int FROM "PageEvent" WHERE "eventType"='pageview' AND ${W}) AS pageviews,
-        (SELECT COUNT(DISTINCT "sessionId")::int FROM "PageEvent" WHERE "eventType"='section_view' AND "sectionId"='cta' AND ${W}) AS reached_cta`,
+        (SELECT COUNT(DISTINCT "sessionId")::int FROM "PageEvent" WHERE "eventType"='section_view' AND "sectionId"='offer' AND ${W}) AS reached_cta`,
     )) as { visitors: number; returning: number; pageviews: number; reached_cta: number }[];
 
     const [dur] = (await db.$queryRawUnsafe(
@@ -80,21 +80,20 @@ export async function GET(req: NextRequest) {
       ``,
       `Visitors: ${visitors}   (${visitors - (ov.returning || 0)} new, ${ov.returning || 0} returning)`,
       `Pageviews: ${ov.pageviews}   Avg session: ${fmtDur(dur?.secs ?? 0)}`,
-      `Reached the offer/CTA: ${ov.reached_cta} of ${visitors} (${pct(ov.reached_cta)}%)`,
+      `Reached the offer: ${ov.reached_cta} of ${visitors} (${pct(ov.reached_cta)}%)`,
       ``,
       `Funnel (visitors who reached each section):`,
       ...SECTION_ORDER.map((s) => `  ${s.padEnd(11)} ${secMap.get(s) ?? 0}`),
       ``,
-      `Instant-preview widget:`,
+      `Mockup form & demo:`,
       `  opened     ${wMap.get("widget_opened") ?? 0}`,
-      `  submitted  ${wMap.get("widget_submitted") ?? 0}`,
-      `  preview    ${wMap.get("preview_generated") ?? 0}`,
-      `  live prev  ${wMap.get("preview_opened") ?? 0}`,
+      `  requested  ${wMap.get("widget_submitted") ?? 0}`,
+      `  live demo  ${wMap.get("preview_opened") ?? 0}`,
       `  plan chosen ${wMap.get("pack_selected") ?? 0}`,
       `  texted     ${wMap.get("text_cta_clicked") ?? 0}`,
       ``,
       `New leads: ${leads.length}`,
-      ...leads.map((l) => `  - ${l.businessName}${l.businessType ? ` (${l.businessType})` : ""}${l.city ? `, ${l.city}` : ""}`),
+      ...leads.map((l) => `  - ${l.businessName}${l.ownerName ? ` (${l.ownerName})` : ""}${l.contact ? ` ${l.contact}` : ""}${l.city ? `, ${l.city}` : ""}`),
       ``,
       `Top referrers:`,
       ...(refs.length ? refs.map((r) => `  ${r.r} - ${r.c}`) : ["  (none)"]),

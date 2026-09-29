@@ -37,14 +37,22 @@ const notOwnerCountry = OWNER_COUNTRIES.length
   ? Prisma.sql`AND COALESCE("country", '') <> ALL(ARRAY[${Prisma.join(OWNER_COUNTRIES)}]::text[])`
   : Prisma.empty;
 
-const SECTION_ORDER = ["hook", "agitate", "turn", "proof", "offer", "objections", "cta"];
+// The landing's 5 tracked sections, top to bottom (see components/Tracker.tsx).
+// Visits before the 2026-09-29 redesign used the old 7 ids, so older ranges
+// show little here - that's expected, not missing data.
+const SECTION_ORDER: [string, string][] = [
+  ["hook", "Hero + form"],
+  ["problem", "Problem & fix"],
+  ["proof", "Proof"],
+  ["offer", "Offer + loyalty"],
+  ["signup", "FAQ + form"],
+];
 const WIDGET_STEPS: [string, string][] = [
-  ["widget_opened", "Opened"],
-  ["widget_submitted", "Submitted"],
-  ["preview_generated", "Preview"],
-  ["preview_opened", "Live preview opened"],
-  ["pack_selected", "Plan chosen"],
-  ["text_cta_clicked", "Texted"],
+  ["widget_opened", "Started the form"],
+  ["widget_submitted", "Sent a request"],
+  ["preview_opened", "Opened live demo"],
+  ["pack_selected", "Picked a plan"],
+  ["text_cta_clicked", "Messaged me"],
 ];
 
 // Every query below is scoped to [start, end]. The window is resolved from the
@@ -190,15 +198,12 @@ export default async function AdminDashboard({
   const sp = await searchParams;
   const str = (v: string | string[] | undefined) => (typeof v === "string" ? v : undefined);
   const range = resolveRange({ range: str(sp.range), from: str(sp.from), to: str(sp.to) });
-  // Dashboard metrics and Search Console rankings fetched in parallel; rankings
-  // return fast when GSC is not configured.
-  const [d, rankings] = await Promise.all([
-    getData(range.start, range.end),
-    getRankings(range.from, range.to),
-  ]);
+  // Search Console is a slow third-party call, so it streams in on its own
+  // (see <Rankings/>) instead of holding the whole page until Google answers.
+  const d = await getData(range.start, range.end);
   const newV = d.total - d.returning;
   const pct = (n: number) => (d.total ? Math.round((n / d.total) * 100) : 0);
-  const sectionMax = Math.max(1, ...SECTION_ORDER.map((s) => d.sectionMap.get(s) ?? 0));
+  const sectionMax = Math.max(1, ...SECTION_ORDER.map(([s]) => d.sectionMap.get(s) ?? 0));
   const widgetMax = Math.max(1, ...WIDGET_STEPS.map(([k]) => d.widgetMap.get(k) ?? 0));
 
   // Pre-build the exportable report for the current range (markdown, no JSON).
@@ -208,7 +213,7 @@ export default async function AdminDashboard({
     newV,
     returning: d.returning,
     avgSecs: d.avgSecs,
-    sections: SECTION_ORDER.map((s) => ({ label: s.charAt(0).toUpperCase() + s.slice(1), c: d.sectionMap.get(s) ?? 0 })),
+    sections: SECTION_ORDER.map(([s, label]) => ({ label, c: d.sectionMap.get(s) ?? 0 })),
     widget: WIDGET_STEPS.map(([k, label]) => ({ label, c: d.widgetMap.get(k) ?? 0 })),
     channels: d.channels,
     locations: d.locations.map((l) => ({
@@ -240,6 +245,19 @@ export default async function AdminDashboard({
           <RangeControl range={range} />
         </div>
 
+        {/* Leads inbox - first, it's the thing to act on */}
+        <section className="mt-6 rounded-2xl border border-line bg-bg p-5">
+          <div className="flex items-baseline justify-between gap-3">
+            <h2 className="font-mono text-[11px] uppercase tracking-wider text-ink-soft">Leads inbox</h2>
+            <span className="text-xs text-ink-soft">
+              {d.leads.filter((l) => l.status === "new").length} new · {d.leads.length} in range
+            </span>
+          </div>
+          <div className="mt-2">
+            <LeadsTable leads={d.leads} />
+          </div>
+        </section>
+
         {/* Overview */}
         <section className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
           <Card label="Visitors" value={String(d.total)} sub="unique sessions" />
@@ -258,11 +276,11 @@ export default async function AdminDashboard({
           <section className="rounded-2xl border border-line bg-bg p-5">
             <h2 className="font-mono text-[11px] uppercase tracking-wider text-ink-soft">Funnel: section reach</h2>
             <div className="mt-4 space-y-2.5">
-              {SECTION_ORDER.map((s) => {
+              {SECTION_ORDER.map(([s, label]) => {
                 const c = d.sectionMap.get(s) ?? 0;
                 return (
                   <div key={s} className="flex items-center gap-3">
-                    <span className="w-20 shrink-0 text-sm capitalize text-ink">{s}</span>
+                    <span className="w-28 shrink-0 text-sm text-ink">{label}</span>
                     <div className="h-6 flex-1 overflow-hidden rounded bg-paper">
                       <div className="h-full rounded bg-ink" style={{ width: `${(c / sectionMax) * 100}%` }} />
                     </div>
@@ -275,13 +293,13 @@ export default async function AdminDashboard({
 
           {/* Widget funnel */}
           <section className="rounded-2xl border border-line bg-bg p-5">
-            <h2 className="font-mono text-[11px] uppercase tracking-wider text-ink-soft">Funnel: instant preview widget</h2>
+            <h2 className="font-mono text-[11px] uppercase tracking-wider text-ink-soft">Funnel: mockup form & demo</h2>
             <div className="mt-4 space-y-2.5">
               {WIDGET_STEPS.map(([k, label]) => {
                 const c = d.widgetMap.get(k) ?? 0;
                 return (
                   <div key={k} className="flex items-center gap-3">
-                    <span className="w-24 shrink-0 text-sm text-ink">{label}</span>
+                    <span className="w-32 shrink-0 text-sm text-ink">{label}</span>
                     <div className="h-6 flex-1 overflow-hidden rounded bg-paper">
                       <div className="h-full rounded bg-amber" style={{ width: `${(c / widgetMax) * 100}%` }} />
                     </div>
@@ -345,13 +363,6 @@ export default async function AdminDashboard({
           </Suspense>
         </div>
 
-        {/* Leads */}
-        <section className="mt-3 rounded-2xl border border-line bg-bg p-5">
-          <h2 className="font-mono text-[11px] uppercase tracking-wider text-ink-soft">Instant-demo leads</h2>
-          <div className="mt-4">
-            <LeadsTable leads={d.leads} />
-          </div>
-        </section>
       </div>
     </main>
   );

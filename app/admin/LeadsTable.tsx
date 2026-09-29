@@ -2,16 +2,21 @@
 
 import { useState } from "react";
 import { useConfirm } from "./useConfirm";
+import { timeAgo } from "./format";
 
 export type Lead = {
   id: string;
   businessName: string;
   businessType: string | null;
+  ownerName: string | null;
   contact: string | null;
+  email: string | null;
+  source: string | null;
   country: string | null;
   city: string | null;
   status: string;
-  photoUrls: string[];
+  packTier: string | null;
+  paymentStatus: string;
   createdAt: string;
 };
 
@@ -23,6 +28,11 @@ const STATUS_CLASS: Record<string, string> = {
   converted: "bg-green-100 text-green-700",
 };
 
+// wa.me wants digits only, country code included (no +, spaces or dashes).
+const waLink = (phone: string) => `https://wa.me/${phone.replace(/\D/g, "")}`;
+
+// The leads inbox - the thing to act on daily, so it sits at the top of /admin.
+// Every lead shows who, which restaurant, and one-tap WhatsApp / call / email.
 export function LeadsTable({ leads }: { leads: Lead[] }) {
   const [rows, setRows] = useState(leads);
   const [busy, setBusy] = useState<string | null>(null);
@@ -53,69 +63,87 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
     }
   };
 
-  if (rows.length === 0) return <p className="text-sm text-ink-soft">No leads yet.</p>;
+  if (rows.length === 0) {
+    return <p className="text-sm text-ink-soft">No leads in this range yet. New mockup requests land here (and in your email).</p>;
+  }
+
+  const chip = "inline-flex min-h-[32px] items-center rounded-full border border-line px-3 text-xs font-medium text-ink hover:border-ink";
 
   return (
     <>
-    <div className="overflow-x-auto">
-      <table className="w-full min-w-[720px] text-sm">
-        <thead>
-          <tr className="border-b border-line text-left font-mono text-[11px] uppercase tracking-wider text-ink-soft">
-            <th className="py-2 pr-3 font-medium">Business</th>
-            <th className="py-2 pr-3 font-medium">Type</th>
-            <th className="py-2 pr-3 font-medium">Contact</th>
-            <th className="py-2 pr-3 font-medium">Location</th>
-            <th className="py-2 pr-3 font-medium">Photos</th>
-            <th className="py-2 pr-3 font-medium">When</th>
-            <th className="py-2 pr-3 font-medium">Status</th>
-            <th className="py-2 font-medium sr-only">Delete</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((l) => (
-            <tr key={l.id} className="border-b border-line/60">
-              <td className="py-3 pr-3 font-medium text-ink">{l.businessName}</td>
-              <td className="py-3 pr-3 text-ink-soft">{l.businessType || "-"}</td>
-              <td className="py-3 pr-3 text-ink-soft">{l.contact || "-"}</td>
-              <td className="py-3 pr-3 text-ink-soft">{[l.city, l.country].filter(Boolean).join(", ") || "-"}</td>
-              <td className="py-3 pr-3">
-                {l.photoUrls[0] ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={l.photoUrls[0]} alt="" className="h-9 w-9 rounded object-cover" />
-                ) : (
-                  <span className="text-ink-soft">-</span>
-                )}
-              </td>
-              <td className="py-3 pr-3 whitespace-nowrap text-ink-soft">{new Date(l.createdAt).toLocaleDateString()}</td>
-              <td className="py-3">
+      <ul className="divide-y divide-line">
+        {rows.map((l) => {
+          const isNew = l.status === "new";
+          return (
+            <li key={l.id} className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="min-w-0">
+                <p className="flex flex-wrap items-center gap-2 text-[15px] font-semibold text-ink">
+                  {isNew && <span className="h-2 w-2 shrink-0 rounded-full bg-amber" aria-label="new" />}
+                  <span className="truncate">{l.businessName}</span>
+                  {l.ownerName && <span className="font-normal text-ink-soft">· {l.ownerName}</span>}
+                </p>
+                <p className="mt-1 text-xs text-ink-soft">
+                  {[
+                    l.source === "mockup_form" ? "Mockup request" : l.packTier ? `Chose ${l.packTier}` : "Old preview builder",
+                    l.paymentStatus === "paid" ? "PAID" : null,
+                    [l.city, l.country].filter(Boolean).join(", ") || null,
+                    timeAgo(l.createdAt),
+                  ]
+                    .filter(Boolean)
+                    .join(" · ")}
+                </p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {l.contact && (
+                    <>
+                      <a href={waLink(l.contact)} target="_blank" rel="noopener noreferrer" className={`${chip} border-green-600/40 text-green-700`}>
+                        WhatsApp {l.contact}
+                      </a>
+                      <a href={`tel:${l.contact.replace(/[^\d+]/g, "")}`} className={chip}>
+                        Call
+                      </a>
+                    </>
+                  )}
+                  {l.email && (
+                    <a href={`mailto:${l.email}`} className={chip}>
+                      {l.email}
+                    </a>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex shrink-0 items-center gap-2">
                 <select
                   value={l.status}
                   disabled={busy === l.id}
                   onChange={(e) => setStatus(l.id, e.target.value)}
+                  aria-label="Lead status"
                   className={`rounded-full px-2.5 py-1 text-xs font-medium ${STATUS_CLASS[l.status] || "bg-stone-100 text-stone-600"}`}
                 >
                   {STATUSES.map((s) => (
-                    <option key={s} value={s}>{s}</option>
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
                   ))}
                 </select>
-              </td>
-              <td className="py-3 pl-1">
                 <button
                   onClick={() => del(l.id)}
                   disabled={busy === l.id}
                   aria-label="Delete lead"
                   title="Delete lead"
-                  className="grid h-7 w-7 place-items-center rounded-md text-ink-soft transition-colors hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
+                  className="grid h-8 w-8 place-items-center rounded-md text-ink-soft transition-colors hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
                 >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18" /><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" /></svg>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M3 6h18" />
+                    <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                  </svg>
                 </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-    {confirmDialog}
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+      {confirmDialog}
     </>
   );
 }
