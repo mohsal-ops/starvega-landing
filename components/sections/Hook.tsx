@@ -1,115 +1,51 @@
-"use client";
+import { MockupForm } from "@/components/MockupForm";
+import { PreviewWindow, PreviewLink } from "@/components/PreviewWindow";
 
-import { motion, useReducedMotion } from "motion/react";
-import { ArrowLink } from "@/components/ArrowLink";
-import { DesignDeck } from "@/components/DesignDeck";
-
-// SECTION 1 - HERO / HOOK. OFF+BRAND-adapted on a white canvas: a typographic
-// architecture where monumental all-caps Inter carries the message, and a
-// floating 3D deck of the real site designs (DesignDeck) is the one visual event,
-// over the old sphere's soft iridescent glow. The headline runs its SplitText character reveal on load
-// (data-reveal-now), so the message assembles itself the instant the page opens.
-// Strict monochrome otherwise; amber is reserved for real CTAs elsewhere.
+// SECTION 1 - HERO. Most real visitors never scroll past this screen, so the
+// whole pitch AND the ask live here: headline, the two-part promise (orders
+// without commission + regulars who come back), the 3-field mockup form, and a
+// window onto the live demo. Server-rendered and paint-ready: no scroll/JS
+// reveals gate the headline, so it is the fast LCP element.
 export default function Hook() {
-  const reduce = useReducedMotion();
-
   return (
-    <section
-      id="hook"
-      className="relative flex min-h-svh flex-col justify-center overflow-hidden bg-bg px-6 pb-16 pt-28 sm:px-10"
-    >
-      {/* Concentric rings (parallax), the iridescent sphere, and faint grain. */}
-      <HeroBackdrop reduce={!!reduce} />
+    <section id="hook" className="relative overflow-hidden bg-bg px-4 pb-16 pt-24 sm:px-10 sm:pb-24 sm:pt-32">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute right-[-10%] top-[8%] -z-10 h-[46vh] w-[46vh] rounded-full opacity-20 blur-3xl"
+        style={{ backgroundImage: "var(--gradient-sphere)" }}
+      />
 
-      <div className="relative mx-auto w-full max-w-6xl">
-        <p
-          data-reveal
-          data-reveal-now
-          className="mb-6 text-[11px] font-normal uppercase tracking-[0.22em] text-ink-soft"
-        >
-          For restaurant owners
-        </p>
+      <div className="mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-[1fr_1.05fr] lg:gap-14">
+        <div>
+          <p className="mb-5 font-mono text-[11px] uppercase tracking-[0.22em] text-ink-soft">For independent restaurants</p>
 
-        <h1
-          data-reveal-chars
-          data-reveal-now
-          className="max-w-[16ch] font-display text-[clamp(2.5rem,8vw,5.75rem)] font-semibold uppercase leading-[0.92] tracking-[-0.015em] text-ink"
-        >
-          <span className="block">Still paying</span>
-          <span className="block">DoorDash <span className="text-amber-deep">15-30%</span></span>
-          <span className="block">on every order?</span>
-        </h1>
+          <h1 className="font-display text-[clamp(2.4rem,7vw,4.5rem)] font-semibold uppercase leading-[0.95] tracking-[-0.015em] text-ink">
+            Stop giving DoorDash <span className="text-amber-deep">30%</span> of every order.
+          </h1>
 
-        <p
-          data-reveal-words
-          data-reveal-now
-          className="mt-7 max-w-[44ch] text-[18px] font-normal leading-[1.5] text-ink-soft"
-        >
-          On every single order. Month after month - quietly the most
-          expensive line item you never signed off on. There&apos;s a one-time
-          fix, and it&apos;s yours to keep.
-        </p>
+          <p className="mt-6 max-w-[46ch] text-[18px] leading-[1.5] text-ink-soft">
+            Your own website with <strong className="font-semibold text-ink">commission-free online ordering</strong>, and an optional{" "}
+            <strong className="font-semibold text-ink">loyalty club that brings customers back</strong>. The site is a one-time
+            price, yours forever.
+          </p>
 
-        <div data-reveal data-reveal-now className="mt-8">
-          <ArrowLink href="#agitate" className="min-h-[48px] text-[15px] text-ink">
-            See what it&apos;s costing you
-          </ArrowLink>
+          <div className="mt-8 rounded-2xl border border-line bg-paper p-4 sm:p-6">
+            <p className="mb-4 text-[17px] font-semibold tracking-tight text-ink">
+              I&apos;ll design a free mockup of <span className="text-amber-deep">your</span> restaurant&apos;s site.
+            </p>
+            <MockupForm placement="hero" />
+          </div>
+
+          <PreviewLink className="mt-4 lg:hidden" />
         </div>
 
-        <DesignDeck size="sm" className="mt-14 flex flex-col items-center lg:hidden" />
+        <div className="hidden lg:block">
+          <PreviewWindow />
+          <p className="mt-4 text-center text-sm text-ink-soft">
+            A real, working site. Tap it: menu, ordering, loyalty and the owner dashboard.
+          </p>
+        </div>
       </div>
-
-      {/* The real product, floating: four designs of one restaurant site. */}
-      <DesignDeck className="absolute right-[2%] top-1/2 hidden -translate-y-1/2 lg:block" />
-
-      {/* Editorial scroll indicator, bottom-right */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: reduce ? 0 : 0.6, duration: 0.5 }}
-        className="pointer-events-none absolute bottom-[30px] right-[30px] hidden items-center gap-2 text-[11px] font-normal uppercase tracking-[0.2em] text-ink sm:flex"
-      >
-        Scroll
-        <motion.span
-          aria-hidden
-          animate={reduce ? undefined : { y: [0, 4, 0] }}
-          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-        >
-          ↓
-        </motion.span>
-      </motion.div>
     </section>
-  );
-}
-
-// The single chromatic moment. A large iridescent sphere sits right-of-center,
-// partly behind the headline, drifting and slowly turning so the gradient reads
-// as alive. Thin ash concentric rings (parallaxed on scroll) anchor it into an
-// editorial composition. All decorative and static under reduced-motion.
-function HeroBackdrop({ reduce }: { reduce: boolean }) {
-  return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-      {/* concentric rings, anchored to the sphere's focal point (far right) */}
-      <div data-parallax className="absolute right-[-4%] top-[42%] -translate-y-1/2 sm:right-[4%]">
-        {[440, 680, 940].map((d) => (
-          <div
-            key={d}
-            className="absolute rounded-full border border-ash/50"
-            style={{ width: d, height: d, left: -d / 2, top: -d / 2 }}
-          />
-        ))}
-      </div>
-
-      {/* soft glow behind the sphere */}
-      <motion.div
-        className="absolute right-[-14%] top-[44%] h-[34vh] w-[34vh] rounded-full blur-3xl sm:right-[2%]"
-        style={{ backgroundImage: "var(--gradient-sphere)", opacity: 0.22 }}
-        initial={{ y: "-50%" }}
-        animate={reduce ? { y: "-50%" } : { y: "-50%", scale: [1, 1.06, 1] }}
-        transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
-      />
-      {/* faint film grain over the whole hero */}
-      {!reduce && <div className="grain" />}
-    </div>
   );
 }

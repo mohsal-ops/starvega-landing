@@ -50,43 +50,23 @@ body {
   color: #fff;
 }
 
-/* Lenis smooth-scroll recommended base rules (only active once Lenis mounts) */
-html.lenis,
-html.lenis body {
-  height: auto;
-}
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
 
-/* ── OFF+BRAND motion layer ──────────────────────────────────────────────────
-   FOUC guards + hover/cursor/texture primitives for the GSAP layer (see
-   MotionLayer + SmoothScroll). Reveal targets are pre-hidden and animated to
-   visible by JS (via fromTo, so these resting values don't fight the tween). If
-   JS is absent or the visitor prefers reduced motion, everything shows. */
-[data-reveal],
-[data-reveal-words],
-[data-price-old],
-[data-price-new] { opacity: 0; }
-[data-reveal-chars] { visibility: hidden; }
-
-/* Reduced-motion (class set by MotionLayer) - show everything, no animation. */
-html.reduce [data-reveal],
-html.reduce [data-reveal-words],
-html.reduce [data-price-old],
-html.reduce [data-price-new] { opacity: 1 !important; }
-html.reduce [data-reveal-chars] { visibility: visible !important; }
-
-/* SplitText line mask - characters rise out from behind this. The negative
-   margin cancels the padding so line-height/stacking is visually unchanged
-   (padding only exists to stop descenders like g/y clipping mid-animation). */
-.line { overflow: hidden; padding-bottom: 0.12em; margin-bottom: -0.12em; }
+/* ── Reveal layer ─────────────────────────────────────────────────────────────
+   Scroll-in fade-ups driven by a tiny IntersectionObserver (MotionLayer), all
+   motion done by CSS transitions. Targets are hidden only once MotionLayer adds
+   html.motion, so with no JS - or prefers-reduced-motion - everything shows. */
+html.motion [data-reveal],
+html.motion [data-reveal-stagger] > * {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--i, 0) * 80ms);
+}
+html.motion [data-reveal].is-in,
+html.motion [data-reveal-stagger].is-in > * {
+  opacity: 1;
+  transform: none;
+}
 
 /* Ghost link: trailing arrow slides + a scaleX fill wipes in from the left,
    inverting the label as it passes (OFF+BRAND's one interactive state). On a

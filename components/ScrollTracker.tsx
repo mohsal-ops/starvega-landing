@@ -7,7 +7,7 @@ import { track } from "@/lib/track";
 //  - scroll_depth: 25 / 50 / 75 / 100 %
 //  - section_view: did they actually reach proof / offer / cta, etc.
 // FAQ opens and the CTA click are tracked in their own components.
-const SECTIONS = ["hook", "agitate", "turn", "proof", "offer", "faq", "cta"];
+const SECTIONS = ["hook", "problem", "proof", "offer", "signup"];
 const DEPTHS = [25, 50, 75, 100];
 
 export default function ScrollTracker() {

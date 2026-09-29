@@ -2,14 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { PackCards } from "./PackCards";
-import { closePackModal, subscribePackModal } from "@/lib/pack-modal";
+import { closePackModal, isPackModalOpen, subscribePackModal } from "@/lib/pack-modal";
 import { openContactMenu } from "@/lib/contact";
 
 // The pricing popup. Mounted once (in the root layout); opened from any CTA via
 // openPackModal(). Shows all three packs with who-it's-for + what's included and
 // a Choose button on each. Closes on backdrop click or Escape.
 export function PackModalHost() {
-  const [open, setOpen] = useState(false);
+  // isPackModalOpen(): honours a tap made before this host lazily mounted.
+  const [open, setOpen] = useState(isPackModalOpen);
 
   useEffect(() => subscribePackModal(setOpen), []);
 

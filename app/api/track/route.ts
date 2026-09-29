@@ -17,7 +17,7 @@ const EVENTS = new Set([
 
 // Which entry point sent the visitor to the widget (only meaningful on
 // widget_opened). Validated so a bad value never lands in the column.
-const ENTRY_POINTS = new Set(["sticky_nav", "post_hook", "post_proof", "final_cta"]);
+const ENTRY_POINTS = new Set(["sticky_nav", "hero", "offer", "preview", "final_cta", "post_hook", "post_proof"]);
 
 // Coarse device class from the User-Agent, for the mobile-vs-desktop split in
 // the report. Deliberately simple - tablets first (iPad reports as desktop-ish

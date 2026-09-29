@@ -35,7 +35,12 @@ model InstantDemoLead {
   businessName String
   businessType String?
   photoUrls    String[]
-  contact      String?
+  contact      String?  // phone / WhatsApp for mockup-form leads
+  // Mockup-form leads (the landing's main CTA): who to message + an optional
+  // email. source = "mockup_form" | null (older instant-demo builder leads).
+  ownerName    String?
+  email        String?
+  source       String?
   country      String?
   city         String?
   status       String   @default("new") // new | reviewed | contacted | converted

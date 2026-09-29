@@ -50,7 +50,7 @@ export default function Header() {
           />
         </a>
         <WidgetCtaButton entryPoint="sticky_nav" small>
-          See your site
+          Get my free mockup
         </WidgetCtaButton>
       </div>
     </header>

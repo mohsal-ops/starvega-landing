@@ -2,8 +2,8 @@
 
 import { openWidget, type EntryPoint } from "@/lib/widget-cta";
 
-// Shared buttons that open the single instant-preview widget. `entryPoint` is the
-// only thing that differs between placements - the destination is always #cta.
+// The shared "Get my free mockup" button: scrolls to the nearest lead form (see
+// lib/widget-cta). `entryPoint` records which placement was used.
 
 const base =
   "inline-flex items-center justify-center rounded-xl bg-amber font-semibold text-ink transition-transform hover:bg-[#f0904a] active:scale-[0.99]";
@@ -27,28 +27,5 @@ export function WidgetCtaButton({
     >
       {children}
     </button>
-  );
-}
-
-// A low-key inline band placed between funnel sections - a short line + a button,
-// no re-pitching the offer. Just a door for anyone already convinced.
-export function InlineWidgetCta({
-  entryPoint,
-  line,
-  cta = "See your site",
-}: {
-  entryPoint: EntryPoint;
-  line: string;
-  cta?: string;
-}) {
-  return (
-    <section className="border-y border-line bg-paper px-6 py-8 sm:px-10">
-      <div className="mx-auto flex max-w-3xl flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
-        <p className="text-base font-medium text-ink sm:text-lg">{line}</p>
-        <WidgetCtaButton entryPoint={entryPoint} small className="shrink-0">
-          {cta}
-        </WidgetCtaButton>
-      </div>
-    </section>
   );
 }

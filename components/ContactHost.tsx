@@ -5,7 +5,6 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { track } from "@/lib/track-client";
 import {
   subscribeContactMenu,
-  openContactMenu,
   closeContactMenu,
   emailComposeUrl,
   instagramDmUrl,
@@ -60,42 +59,8 @@ export function ContactHost() {
 
   return (
     <>
-      {/* Floating pill - hidden while the popover is open (the card replaces it). */}
-      <AnimatePresence>
-        {!open && (
-          <motion.button
-            type="button"
-            onClick={openContactMenu}
-            aria-label="Apply to work with me"
-            initial={{ opacity: 0, y: 24, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 12, scale: 0.9 }}
-            transition={{ type: "spring", stiffness: 380, damping: 30, delay: reduce ? 0 : 1.2 }}
-            whileHover={reduce ? undefined : { scale: 1.04, y: -2 }}
-            whileTap={{ scale: 0.97 }}
-            className="group fixed bottom-5 left-5 z-[185] inline-flex items-center gap-2.5 overflow-hidden rounded-full bg-ink py-3 pl-3 pr-4 text-white shadow-xl ring-1 ring-white/10 sm:pr-5"
-          >
-            {/* Brand echo: the hero's iridescent sphere, breathing behind the icon. */}
-            <motion.span
-              aria-hidden
-              className="absolute -left-3 -top-3 h-14 w-14 rounded-full blur-md"
-              style={{ backgroundImage: "var(--gradient-sphere)", opacity: 0.55 }}
-              animate={reduce ? undefined : { scale: [1, 1.15, 1], rotate: [0, 360] }}
-              transition={{ scale: { duration: 6, repeat: Infinity, ease: "easeInOut" }, rotate: { duration: 30, repeat: Infinity, ease: "linear" } }}
-            />
-            <span className="relative grid h-8 w-8 place-items-center rounded-full bg-white/10">
-              <SendIcon className="h-4 w-4 text-white" />
-              <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full bg-amber ring-2 ring-ink">
-                {!reduce && <span className="absolute inset-0 animate-ping rounded-full bg-amber" />}
-              </span>
-            </span>
-            <span className="relative whitespace-nowrap text-sm font-semibold">
-              <span className="hidden sm:inline">Apply to work with me</span>
-              <span className="sm:hidden">Apply</span>
-            </span>
-          </motion.button>
-        )}
-      </AnimatePresence>
+      {/* No floating pill: the page has one ask (the mockup form). This popover
+          opens from the pricing popup's "message me" path via openContactMenu(). */}
 
       {/* Popover */}
       <AnimatePresence>
@@ -233,13 +198,6 @@ function ChannelButton({
   );
 }
 
-function SendIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden>
-      <path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
 function InstagramIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden>

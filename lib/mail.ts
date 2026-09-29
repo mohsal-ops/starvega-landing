@@ -13,6 +13,10 @@ export async function sendOwnerMail(subject: string, text: string): Promise<bool
     port,
     secure: port === 465,
     auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
+    // Fail fast instead of nodemailer's 2-minute defaults when SMTP is unreachable.
+    connectionTimeout: 10_000,
+    greetingTimeout: 10_000,
+    socketTimeout: 15_000,
   });
   await transport.sendMail({
     from: process.env.TRACK_NOTIFY_FROM || process.env.SMTP_USER,

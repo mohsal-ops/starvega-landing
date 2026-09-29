@@ -1,21 +1,22 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
-import { GoogleAnalytics } from "@next/third-parties/google";
+import Script from "next/script";
 import { buildMetadata } from "@/lib/seo";
-import SmoothScroll from "@/components/SmoothScroll";
-import MotionLayer from "@/components/MotionLayer";
 import Header from "@/components/Header";
 import Tracker from "@/components/Tracker";
-import { PackModalHost } from "@/components/packs/PackModalHost";
-import { ContactHost } from "@/components/ContactHost";
+import LazyEnhancements from "@/components/LazyEnhancements";
 import { OrganizationJsonLd } from "@/components/SeoJsonLd";
 
 // OFF+BRAND-adapted: a single geometric-sans voice. Inter is the doc's named
 // substitute for Ataero Retina - monumental all-caps at display sizes, editorial
 // at body sizes. Geist Mono stays only for tiny museum-signage labels.
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter", weight: ["400", "500", "600", "700"], display: "swap" });
-const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", display: "swap" });
+// Speed: Inter as ONE variable-font file (not a file per weight), and
+// display "optional" - the headline paints once, in whichever font is ready in
+// the first ~100ms, with no late swap that re-paints it and shifts layout.
+// Geist Mono is only for small labels, so it isn't preloaded at all.
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "optional" });
+const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", display: "optional", preload: false });
 
 export const metadata: Metadata = buildMetadata();
 
@@ -32,15 +33,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to content
         </a>
         <OrganizationJsonLd />
-        <SmoothScroll />
-        <MotionLayer />
         <Tracker />
         <Header />
         {children}
-        {/* The pricing popup - opened from any "choose your plan" CTA. */}
-        <PackModalHost />
-        {/* Persistent contact FAB + channel-picker popover (email / Instagram). */}
-        <ContactHost />
+        {/* Smooth scroll, reveal animations, pricing popup, contact picker and the
+            live-demo viewer - all loaded once the page is idle. */}
+        <LazyEnhancements />
         {gaId && (
           <>
             {/*
@@ -52,10 +50,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             */}
             <script
               dangerouslySetInnerHTML={{
-                __html: `try{if(localStorage.getItem('starvega_owner')==='true'||document.cookie.indexOf('starvega_owner=true')>-1){window['ga-disable-${gaId}']=true;}}catch(e){}`,
+                __html: `try{if(localStorage.getItem('starvega_owner')==='true'||document.cookie.indexOf('starvega_owner=true')>-1){window['ga-disable-${gaId}']=true;}}catch(e){}
+window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(arguments);};gtag('js',new Date());gtag('config','${gaId}');`,
               }}
             />
-            <GoogleAnalytics gaId={gaId} />
+            {/* gtag.js itself waits for idle; the stub above queues events until then. */}
+            <Script src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} strategy="lazyOnload" />
           </>
         )}
       </body>

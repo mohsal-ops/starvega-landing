@@ -1,7 +1,3 @@
-"use client";
-
-import { CountUp } from "@/components/CountUp";
-import { Reveal } from "@/components/Reveal";
 import { ArrowLink } from "@/components/ArrowLink";
 import { RevenueGraph } from "@/components/RevenueGraph";
 import { Figure } from "@/components/Figure";
@@ -13,13 +9,6 @@ import { SITE } from "@/lib/site";
 //
 // No screenshots: the admin dashboard is login-gated (not visitor-verifiable),
 // so proof is the real stat callouts + the clickable live-site link.
-
-// Parse "11,240" / "$2,010" / "18+" into pieces so real numbers count up.
-function parseStat(value: string) {
-  const m = value.match(/^(\D*)([\d,]+)(\D*)$/);
-  if (!m) return null;
-  return { prefix: m[1], to: parseInt(m[2].replace(/,/g, ""), 10), suffix: m[3] };
-}
 
 export default function Proof() {
   const { proof } = SITE;
@@ -37,7 +26,7 @@ export default function Proof() {
             Real restaurant. Real numbers.
           </p>
           <h2
-            data-reveal-chars
+            data-reveal
             className="max-w-3xl text-[clamp(2rem,6vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.02em]"
           >
             {proof.clientName} is live and ranking in Google search, and you can
@@ -46,13 +35,13 @@ export default function Proof() {
         </div>
 
         <div className="mt-12 grid items-stretch gap-6 sm:mt-16 sm:grid-cols-2">
-          <Reveal className="flex flex-col justify-between border border-ash bg-bg p-5">
+          <div data-reveal className="flex flex-col justify-between border border-ash bg-bg p-5">
             <RevenueGraph className="w-full" />
             <p className="mt-4 text-sm text-ink-soft">
               Real customers finding {proof.clientName} on Google. Traffic that used to go to a delivery
               app’s listing instead of the restaurant’s own site.
             </p>
-          </Reveal>
+          </div>
           <Figure
             src="/demo/food-vibe.jpg"
             alt="A real restaurant dish"
@@ -62,11 +51,11 @@ export default function Proof() {
         </div>
 
         {!ready && (
-          <Reveal>
+          <div data-reveal>
             <p className="mt-8 inline-block rounded-lg border border-amber/40 bg-amber/10 px-4 py-2 font-mono text-xs uppercase tracking-[0.15em] text-amber-deep">
               Draft: real {proof.clientName} numbers pending before launch
             </p>
-          </Reveal>
+          </div>
         )}
 
         <div className="mt-12 grid grid-cols-2 gap-x-8 gap-y-10 sm:mt-16 sm:grid-cols-3">
@@ -78,26 +67,19 @@ export default function Proof() {
                 { label: "Keywords ranking", value: "N/A" },
                 { label: "Avg. Google position", value: "N/A" },
               ]
-          ).map((s, i) => {
-            const parsed = ready ? parseStat(s.value) : null;
-            return (
-              <Reveal key={s.label} delay={i * 0.06}>
+          ).map((s) => (
+              <div key={s.label} data-reveal>
                 <div className="border-t-2 border-ink pt-4">
                   <div className="text-[clamp(2.25rem,7vw,3.5rem)] font-semibold leading-none tracking-[-0.03em] text-ink tabular-nums">
-                    {parsed ? (
-                      <CountUp to={parsed.to} prefix={parsed.prefix} suffix={parsed.suffix} />
-                    ) : (
-                      s.value
-                    )}
+                    {s.value}
                   </div>
                   <p className="mt-2 text-sm text-ink-soft">{s.label}</p>
                 </div>
-              </Reveal>
-            );
-          })}
+              </div>
+            ))}
         </div>
 
-        <Reveal delay={0.1}>
+        <div data-reveal>
           <div className="mt-14 sm:mt-20">
             {proof.liveUrl ? (
               <ArrowLink
@@ -115,7 +97,7 @@ export default function Proof() {
               </span>
             )}
           </div>
-        </Reveal>
+        </div>
       </div>
     </section>
   );

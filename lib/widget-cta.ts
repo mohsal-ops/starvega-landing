@@ -1,49 +1,36 @@
 "use client";
 
-import type Lenis from "lenis";
+// Every "Get my free mockup" door goes through here. The page has two copies of
+// the same lead form (hero + final section, both marked [data-lead-form]); a CTA
+// scrolls to whichever is nearest and focuses its first field, remembering which
+// door was used so the widget_opened event can be attributed.
 
-// Every "door" into the instant-preview widget goes through here. There is only
-// ONE widget (the <section id="cta"> at the end of the funnel); these helpers
-// just scroll to it and remember which entry point sent the visitor, so the
-// widget_opened event can be attributed. No forked forms, no duplicate state.
+export type EntryPoint = "sticky_nav" | "hero" | "offer" | "preview" | "final_cta";
 
-export type EntryPoint = "sticky_nav" | "post_hook" | "post_proof" | "final_cta";
+// Set by a CTA click, consumed by the next form focus. Null = the visitor went
+// straight to a form, which then reports its own placement.
+let pendingEntryPoint: EntryPoint | null = null;
 
-// Default is "final_cta": a visitor who simply scrolls to the widget and starts
-// typing (without using one of the shortcut doors) counts as the final section.
-let currentEntryPoint: EntryPoint = "final_cta";
-
-// The site's Lenis instance, registered by <SmoothScroll>. Null when the visitor
-// has prefers-reduced-motion (no smooth scroll) - we fall back to native scroll.
-let lenis: Lenis | null = null;
-
-export function registerLenis(instance: Lenis | null) {
-  lenis = instance;
+export function takeEntryPoint(fallback: EntryPoint): EntryPoint {
+  const e = pendingEntryPoint ?? fallback;
+  pendingEntryPoint = null;
+  return e;
 }
 
-export function getEntryPoint(): EntryPoint {
-  return currentEntryPoint;
-}
-
-const WIDGET_ID = "cta";
-const NAME_FIELD_ID = "instant-demo-name";
-const HEADER_OFFSET = 80; // matches the widget's scroll-mt-20 (5rem)
-
-/** Send the visitor to the one widget and record which door they used. */
+/** Send the visitor to the nearest lead form and record which door they used. */
 export function openWidget(entryPoint: EntryPoint) {
-  currentEntryPoint = entryPoint;
+  pendingEntryPoint = entryPoint;
   if (typeof document === "undefined") return;
 
-  const target = document.getElementById(WIDGET_ID);
-  if (!target) return;
+  const forms = Array.from(document.querySelectorAll<HTMLElement>("[data-lead-form]"));
+  if (!forms.length) return;
+  const target = forms
+    .map((el) => ({ el, d: Math.abs(el.getBoundingClientRect().top) }))
+    .sort((a, b) => a.d - b.d)[0].el;
 
-  if (lenis) lenis.scrollTo(target, { offset: -HEADER_OFFSET });
-  else target.scrollIntoView({ behavior: "smooth" });
+  target.scrollIntoView({ behavior: "smooth", block: "center" });
 
-  // Put the cursor in the first field so the widget is truly "opened" and ready.
-  // preventScroll keeps the smooth scroll above from being interrupted. Focusing
-  // the field fires its onFocus -> markOpened, which logs widget_opened tagged
-  // with the entry point we just set. Absent in the "preview" phase - harmless.
-  const nameField = document.getElementById(NAME_FIELD_ID) as HTMLElement | null;
-  nameField?.focus({ preventScroll: true });
+  // preventScroll keeps the smooth scroll from being interrupted; the focus
+  // fires the form's onFocus -> widget_opened tagged with this entry point.
+  target.querySelector<HTMLInputElement>("input[name='name']")?.focus({ preventScroll: true });
 }

@@ -7,12 +7,12 @@
 // so the answer text stays self-contained and crawlable on its own.
 export const FAQS: { q: string; a: string; href?: string; linkText?: string }[] = [
   {
-    q: "Is the free preview actually free?",
-    a: "Yes. I build a real, working preview of your site with your menu and branding, and you explore it with no payment and no card on file. You only pay if you've seen it and decide to go live.",
+    q: "Is the free mockup actually free?",
+    a: "Yes. You give me your name, your restaurant and a number to message, and I design a mockup of your site with your name and menu. No payment, no card. You only pay if you have seen it and want it live.",
   },
   {
-    q: "What happens to my data or site if I don't go live?",
-    a: "Nothing bad. If you pass, the preview simply comes down. Your menu, photos, and info stay yours. Nothing is sold, shared, or held over you.",
+    q: "What happens if I don't go ahead?",
+    a: "Nothing. The mockup simply comes down and I won't keep messaging you. Your menu, photos and number are never sold or shared.",
   },
   {
     q: "Why is this cheaper than a typical agency or Toast/Square?",
@@ -25,12 +25,16 @@ export const FAQS: { q: string; a: string; href?: string; linkText?: string }[] 
     linkText: "See the full commission breakdown",
   },
   {
+    q: "How does the loyalty club work?",
+    a: "Customers opt in at checkout or by scanning a QR code in your restaurant. From your dashboard you can text or email them a special in one tap, birthday offers go out automatically, and every promo code is tracked so you see what it brought in. It is a small monthly add-on that covers the real cost of sending messages, and you can add it to any plan.",
+  },
+  {
     q: "Do I actually own it after?",
     a: "Yes. Once you're live it's your site and your ordering system. No revenue share, no per-order fee, and you're not locked into my platform to keep it running.",
   },
   {
     q: "How long does it take?",
-    a: "The preview is usually ready within a few days. Going live after you approve it is quick, and I handle the technical setup with you step by step.",
+    a: "The mockup is usually ready within a day or two. Going live after you approve it is quick, and I handle the technical setup with you step by step.",
   },
   {
     q: "What if I already have a website?",

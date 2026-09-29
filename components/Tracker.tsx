@@ -5,16 +5,15 @@ import { usePathname } from "next/navigation";
 import { track } from "@/lib/track-client";
 
 // Fires one "pageview" per load and one "section_view" per funnel section per
-// session, the first time each section crosses 50% viewport visibility.
-// DOM id → canonical sectionId (the page's 7th section is id="faq" = "objections").
+// session. A section counts as seen once half of it is on screen OR it fills half
+// the viewport - tall sections (the offer on a phone) can never be 50% visible,
+// which used to make them look skipped.
 const SECTIONS: [domId: string, sectionId: string][] = [
   ["hook", "hook"],
-  ["agitate", "agitate"],
-  ["turn", "turn"],
+  ["problem", "problem"],
   ["proof", "proof"],
   ["offer", "offer"],
-  ["faq", "objections"],
-  ["cta", "cta"],
+  ["signup", "signup"],
 ];
 const FIRED_KEY = "sv_sections_fired";
 
@@ -34,7 +33,8 @@ export default function Tracker() {
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
-          if (!e.isIntersecting || e.intersectionRatio < 0.5) continue;
+          const seen = e.intersectionRatio >= 0.5 || e.intersectionRect.height >= window.innerHeight * 0.5;
+          if (!e.isIntersecting || !seen) continue;
           const match = SECTIONS.find(([domId]) => domId === e.target.id);
           if (!match) continue;
           const sectionId = match[1];
@@ -52,7 +52,7 @@ export default function Tracker() {
           io.unobserve(e.target);
         }
       },
-      { threshold: 0.5 },
+      { threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1] },
     );
 
     for (const [domId] of SECTIONS) {

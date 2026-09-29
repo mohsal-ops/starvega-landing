@@ -1,8 +1,7 @@
 import Image from "next/image";
 
 // Editorial image frame: sharp 0px corners, hairline border, image scaled a touch
-// so the caller's data-parallax can drift it inside the mask without exposing an
-// edge. Lazy-loaded (everything using this sits below the hero).
+// so the image never exposes an edge. Lazy-loaded (everything using this sits below the hero).
 export function Figure({
   src,
   alt,
@@ -26,7 +25,7 @@ export function Figure({
         className={`relative overflow-hidden border ${onInk ? "border-white/15" : "border-ash"}`}
         style={{ aspectRatio: ratio }}
       >
-        <div data-parallax className="absolute inset-0 scale-[1.12]">
+        <div className="absolute inset-0 scale-[1.12]">
           <Image
             src={src}
             alt={alt}
