@@ -12,6 +12,7 @@ import { fmtDuration, timeAgo } from "./format";
 import { SearchRankings } from "./SearchRankings";
 import { getRankings } from "@/lib/search-console";
 import { Prisma } from "@/generated/prisma";
+import { Suspense } from "react";
 
 export const dynamic = "force-dynamic";
 
@@ -27,6 +28,15 @@ const DATA_CENTER_CITIES = [
 ];
 const notDataCenter = Prisma.sql`AND LOWER(COALESCE("city", '')) <> ALL(ARRAY[${Prisma.join(DATA_CENTER_CITIES)}]::text[])`;
 
+// Countries whose traffic is the owner testing (the owner is in Algeria; the
+// market is US restaurants). Hidden from every panel so historical test visits,
+// recorded before admin browsers were auto-flagged, don't pollute the numbers.
+// Override with OWNER_COUNTRIES="DZ,FR" or set it to "" to show everything.
+const OWNER_COUNTRIES = (process.env.OWNER_COUNTRIES ?? "DZ").split(",").map((c) => c.trim().toUpperCase()).filter(Boolean);
+const notOwnerCountry = OWNER_COUNTRIES.length
+  ? Prisma.sql`AND COALESCE("country", '') <> ALL(ARRAY[${Prisma.join(OWNER_COUNTRIES)}]::text[])`
+  : Prisma.empty;
+
 const SECTION_ORDER = ["hook", "agitate", "turn", "proof", "offer", "objections", "cta"];
 const WIDGET_STEPS: [string, string][] = [
   ["widget_opened", "Opened"],
@@ -40,29 +50,79 @@ const WIDGET_STEPS: [string, string][] = [
 // Every query below is scoped to [start, end]. The window is resolved from the
 // URL search params (see ./range) and defaults to the last 30 days.
 async function getData(start: Date, end: Date) {
-  const [overview] = (await db.$queryRaw`
-    SELECT
-      (SELECT COUNT(DISTINCT "sessionId")::int FROM "PageEvent" WHERE "createdAt" >= ${start} AND "createdAt" <= ${end} ${notDataCenter}) AS total,
-      (SELECT COUNT(DISTINCT "sessionId")::int FROM "PageEvent" WHERE "isReturning" AND "createdAt" >= ${start} AND "createdAt" <= ${end} ${notDataCenter}) AS "returning"
-  `) as { total: number; returning: number }[];
+  const inRange = Prisma.sql`"createdAt" >= ${start} AND "createdAt" <= ${end} ${notDataCenter} ${notOwnerCountry}`;
 
-  const [dur] = (await db.$queryRaw`
-    SELECT COALESCE(AVG(EXTRACT(EPOCH FROM (mx - mn))), 0)::float AS secs
-    FROM (SELECT "sessionId", MIN("createdAt") mn, MAX("createdAt") mx FROM "PageEvent" WHERE "createdAt" >= ${start} AND "createdAt" <= ${end} ${notDataCenter} GROUP BY "sessionId") s
-  `) as { secs: number }[];
+  // Every read below is independent, so they run in one parallel batch instead
+  // of ~11 sequential round trips to Neon (that was the dashboard's slowness).
+  const [
+    [overview], [dur], referrers, refCounts, locationsRaw, sections, widget,
+    deviceRows, dailyVisitorsRaw, dailyWidgetRaw, leads,
+  ] = await Promise.all([
+    db.$queryRaw`
+      SELECT
+        (SELECT COUNT(DISTINCT "sessionId")::int FROM "PageEvent" WHERE ${inRange}) AS total,
+        (SELECT COUNT(DISTINCT "sessionId")::int FROM "PageEvent" WHERE "isReturning" AND ${inRange}) AS "returning"
+    ` as Promise<{ total: number; returning: number }[]>,
+    db.$queryRaw`
+      SELECT COALESCE(AVG(EXTRACT(EPOCH FROM (mx - mn))), 0)::float AS secs
+      FROM (SELECT "sessionId", MIN("createdAt") mn, MAX("createdAt") mx FROM "PageEvent" WHERE ${inRange} GROUP BY "sessionId") s
+    ` as Promise<{ secs: number }[]>,
+    db.$queryRaw`
+      SELECT COALESCE(NULLIF("referrer", ''), 'Direct') AS ref, COUNT(DISTINCT "sessionId")::int AS c
+      FROM "PageEvent" WHERE ${inRange} GROUP BY 1 ORDER BY c DESC LIMIT 8
+    ` as Promise<{ ref: string; c: number }[]>,
+    // Traffic by channel: pageview events only, to count visits rather than
+    // in-page interactions (bucketed via lib/source.ts below).
+    db.$queryRaw`
+      SELECT COALESCE(NULLIF("referrer", ''), 'Direct') AS ref, COUNT(DISTINCT "sessionId")::int AS c
+      FROM "PageEvent" WHERE "eventType" = 'pageview' AND ${inRange} GROUP BY 1
+    ` as Promise<{ ref: string; c: number }[]>,
+    // Locations sorted by recency (most recent visitor first), not just volume.
+    db.$queryRaw`
+      SELECT COALESCE(NULLIF("city", ''), 'Unknown') AS city, COALESCE("country", '') AS country,
+             COUNT(DISTINCT "sessionId")::int AS c, MAX("createdAt") AS "lastVisit"
+      FROM "PageEvent" WHERE ${inRange}
+      GROUP BY 1, 2 ORDER BY "lastVisit" DESC LIMIT 15
+    ` as Promise<{ city: string; country: string; c: number; lastVisit: Date }[]>,
+    db.$queryRaw`
+      SELECT "sectionId" AS id, COUNT(DISTINCT "sessionId")::int AS c
+      FROM "PageEvent" WHERE "eventType" = 'section_view' AND "sectionId" IS NOT NULL AND ${inRange} GROUP BY 1
+    ` as Promise<{ id: string; c: number }[]>,
+    db.$queryRaw`
+      SELECT "eventType" AS t, COUNT(DISTINCT "sessionId")::int AS c
+      FROM "PageEvent"
+      WHERE "eventType" IN (${Prisma.join(WIDGET_STEPS.map(([k]) => k))}) AND ${inRange}
+      GROUP BY 1
+    ` as Promise<{ t: string; c: number }[]>,
+    // Device split (mobile / tablet / desktop / unknown) by unique session.
+    db.$queryRaw`
+      SELECT COALESCE(NULLIF("device", ''), 'unknown') AS device, COUNT(DISTINCT "sessionId")::int AS c
+      FROM "PageEvent" WHERE ${inRange} GROUP BY 1
+    ` as Promise<{ device: string; c: number }[]>,
+    // Daily unique visitors across the window (UTC day buckets).
+    db.$queryRaw`
+      SELECT to_char(("createdAt" AT TIME ZONE 'UTC')::date, 'YYYY-MM-DD') AS day,
+             COUNT(DISTINCT "sessionId")::int AS c
+      FROM "PageEvent" WHERE ${inRange}
+      GROUP BY 1 ORDER BY 1
+    ` as Promise<{ day: string; c: number }[]>,
+    // Daily lead-form funnel: opened vs submitted, so a per-day conversion rate
+    // can be charted and a bad day is visible instead of buried in the total.
+    db.$queryRaw`
+      SELECT to_char(("createdAt" AT TIME ZONE 'UTC')::date, 'YYYY-MM-DD') AS day,
+             COUNT(DISTINCT "sessionId") FILTER (WHERE "eventType" = 'widget_opened')::int AS opened,
+             COUNT(DISTINCT "sessionId") FILTER (WHERE "eventType" = 'widget_submitted')::int AS submitted
+      FROM "PageEvent"
+      WHERE "eventType" IN ('widget_opened','widget_submitted') AND ${inRange}
+      GROUP BY 1 ORDER BY 1
+    ` as Promise<{ day: string; opened: number; submitted: number }[]>,
+    db.instantDemoLead.findMany({
+      where: { createdAt: { gte: start, lte: end } },
+      orderBy: { createdAt: "desc" },
+      take: 200,
+    }),
+  ]);
 
-  const referrers = (await db.$queryRaw`
-    SELECT COALESCE(NULLIF("referrer", ''), 'Direct') AS ref, COUNT(DISTINCT "sessionId")::int AS c
-    FROM "PageEvent" WHERE "createdAt" >= ${start} AND "createdAt" <= ${end} ${notDataCenter} GROUP BY 1 ORDER BY c DESC LIMIT 8
-  `) as { ref: string; c: number }[];
-
-  // Traffic by channel: bucket every stored referrer/source into a channel so
-  // organic search is distinguishable from outreach (see lib/source.ts). Pageview
-  // events only, to count visits rather than in-page interactions.
-  const refCounts = (await db.$queryRaw`
-    SELECT COALESCE(NULLIF("referrer", ''), 'Direct') AS ref, COUNT(DISTINCT "sessionId")::int AS c
-    FROM "PageEvent" WHERE "eventType" = 'pageview' AND "createdAt" >= ${start} AND "createdAt" <= ${end} ${notDataCenter} GROUP BY 1
-  `) as { ref: string; c: number }[];
   const channelMap = new Map<string, number>();
   for (const { ref, c } of refCounts) {
     const ch = classifyChannel(ref);
@@ -76,56 +136,8 @@ async function getData(start: Date, end: Date) {
       if (ai !== -1 || bi !== -1) return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
       return b.c - a.c;
     });
-
-  // Locations sorted by recency (most recent visitor first), not just volume.
-  // lastVisit = the newest event from that city/country, so the panel answers
-  // "when did the last visitor from that place show up".
-  const locationsRaw = (await db.$queryRaw`
-    SELECT COALESCE(NULLIF("city", ''), 'Unknown') AS city, COALESCE("country", '') AS country,
-           COUNT(DISTINCT "sessionId")::int AS c, MAX("createdAt") AS "lastVisit"
-    FROM "PageEvent" WHERE "createdAt" >= ${start} AND "createdAt" <= ${end} ${notDataCenter}
-    GROUP BY 1, 2 ORDER BY "lastVisit" DESC LIMIT 15
-  `) as { city: string; country: string; c: number; lastVisit: Date }[];
   const locations = locationsRaw.map((l) => ({ ...l, lastVisit: l.lastVisit.toISOString() }));
-
-  const sections = (await db.$queryRaw`
-    SELECT "sectionId" AS id, COUNT(DISTINCT "sessionId")::int AS c
-    FROM "PageEvent" WHERE "eventType" = 'section_view' AND "sectionId" IS NOT NULL AND "createdAt" >= ${start} AND "createdAt" <= ${end} ${notDataCenter} GROUP BY 1
-  `) as { id: string; c: number }[];
-
-  const widget = (await db.$queryRaw`
-    SELECT "eventType" AS t, COUNT(DISTINCT "sessionId")::int AS c
-    FROM "PageEvent"
-    WHERE "eventType" IN ('widget_opened','widget_submitted','preview_generated','preview_opened','pack_selected','text_cta_clicked')
-      AND "createdAt" >= ${start} AND "createdAt" <= ${end} ${notDataCenter}
-    GROUP BY 1
-  `) as { t: string; c: number }[];
-
-  // Device split (mobile / tablet / desktop / unknown) by unique session.
-  const deviceRows = (await db.$queryRaw`
-    SELECT COALESCE(NULLIF("device", ''), 'unknown') AS device, COUNT(DISTINCT "sessionId")::int AS c
-    FROM "PageEvent" WHERE "createdAt" >= ${start} AND "createdAt" <= ${end} ${notDataCenter} GROUP BY 1
-  `) as { device: string; c: number }[];
   const deviceMap = new Map(deviceRows.map((r) => [r.device, r.c]));
-
-  // Daily unique visitors across the window (UTC day buckets).
-  const dailyVisitorsRaw = (await db.$queryRaw`
-    SELECT to_char(("createdAt" AT TIME ZONE 'UTC')::date, 'YYYY-MM-DD') AS day,
-           COUNT(DISTINCT "sessionId")::int AS c
-    FROM "PageEvent" WHERE "createdAt" >= ${start} AND "createdAt" <= ${end} ${notDataCenter}
-    GROUP BY 1 ORDER BY 1
-  `) as { day: string; c: number }[];
-
-  // Daily widget funnel: opened vs submitted sessions, so a per-day conversion
-  // rate can be charted and a bad day is visible instead of buried in the total.
-  const dailyWidgetRaw = (await db.$queryRaw`
-    SELECT to_char(("createdAt" AT TIME ZONE 'UTC')::date, 'YYYY-MM-DD') AS day,
-           COUNT(DISTINCT "sessionId") FILTER (WHERE "eventType" = 'widget_opened')::int AS opened,
-           COUNT(DISTINCT "sessionId") FILTER (WHERE "eventType" = 'widget_submitted')::int AS submitted
-    FROM "PageEvent"
-    WHERE "eventType" IN ('widget_opened','widget_submitted') AND "createdAt" >= ${start} AND "createdAt" <= ${end} ${notDataCenter}
-    GROUP BY 1 ORDER BY 1
-  `) as { day: string; opened: number; submitted: number }[];
 
   // Pad both series to every day in the window so zero-traffic days still render.
   const visitorsByDay = new Map(dailyVisitorsRaw.map((r) => [r.day, r.c]));
@@ -137,12 +149,6 @@ async function getData(start: Date, end: Date) {
     const opened = w?.opened ?? 0;
     const submitted = w?.submitted ?? 0;
     return { day, opened, submitted, rate: opened ? Math.round((submitted / opened) * 100) : 0 };
-  });
-
-  const leads = await db.instantDemoLead.findMany({
-    where: { createdAt: { gte: start, lte: end } },
-    orderBy: { createdAt: "desc" },
-    take: 200,
   });
 
   return {
@@ -159,6 +165,10 @@ async function getData(start: Date, end: Date) {
     dailyConversion,
     leads: leads.map((l) => ({ ...l, createdAt: l.createdAt.toISOString() })) as Lead[],
   };
+}
+
+async function Rankings({ from, to }: { from: string; to: string }) {
+  return <SearchRankings data={await getRankings(from, to)} />;
 }
 
 function Card({ label, value, sub }: { label: string; value: string; sub?: string }) {
@@ -330,7 +340,9 @@ export default async function AdminDashboard({
 
         {/* Search rankings (Google Search Console) */}
         <div className="mt-3">
-          <SearchRankings data={rankings} />
+          <Suspense fallback={<div className="h-40 animate-pulse rounded-2xl border border-line bg-bg" />}>
+            <Rankings from={range.from} to={range.to} />
+          </Suspense>
         </div>
 
         {/* Leads */}
