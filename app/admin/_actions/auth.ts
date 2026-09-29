@@ -3,6 +3,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { makeToken, SESSION_COOKIE, MAX_AGE_SEC } from "@/lib/auth";
+import { OWNER_FLAG } from "@/lib/owner";
 
 export async function login(
   _prev: { error?: string } | null,
@@ -19,6 +20,8 @@ export async function login(
     path: "/",
     maxAge: MAX_AGE_SEC,
   });
+  // Logging in marks this browser as the owner so its visits stay out of analytics.
+  (await cookies()).set(OWNER_FLAG, "true", { path: "/", sameSite: "lax", maxAge: 60 * 60 * 24 * 730 });
   redirect("/admin");
 }
 

@@ -33,7 +33,8 @@ export async function POST(req: NextRequest) {
     // Owner exclusion (server side): if the /owner-mode cookie is set, drop the
     // event without writing. Mirrors the client guard in lib/track-client.ts so
     // the developer's own visits never reach the analytics DB. See lib/owner.ts.
-    if (req.cookies.get("starvega_owner")?.value === "true") {
+    // Any browser holding an admin session cookie is the owner's too.
+    if (req.cookies.get("starvega_owner")?.value === "true" || req.cookies.get("sv_admin")?.value) {
       return NextResponse.json({ ok: true, skipped: "owner" });
     }
 
