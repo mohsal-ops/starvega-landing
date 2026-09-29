@@ -20,7 +20,12 @@ export default function Hook() {
           <p className="mb-5 font-mono text-[11px] uppercase tracking-[0.22em] text-ink-soft">For independent restaurants</p>
 
           <h1 className="font-display text-[clamp(2.4rem,7vw,4.5rem)] font-semibold uppercase leading-[0.95] tracking-[-0.015em] text-ink">
-            Stop giving DoorDash <span className="text-amber-deep">30%</span> of every order.
+            <span className="block">
+              DoorDash takes <span className="hero-strike text-loss">30%</span>.
+            </span>
+            <span className="block">
+              Your site takes <span className="hero-pop text-gain">0%</span>.
+            </span>
           </h1>
 
           <p className="mt-6 max-w-[46ch] text-[18px] leading-[1.5] text-ink-soft">

@@ -20,6 +20,13 @@
   --color-amber: #e8833a;      /* reserved for primary CTAs only */
   --color-amber-deep: #c96a26;
 
+  /* Money semantics: red = what they lose, green = what they gain. Only for
+     money/outcome figures, never decoration. *-bright variants are for ink. */
+  --color-loss: #d93a3a;
+  --color-loss-bright: #ff6b6b;
+  --color-gain: #1f9d55;
+  --color-gain-bright: #3ddc84;
+
   /* The one iridescent moment - hero sphere only, never a UI accent. */
   --gradient-sphere: linear-gradient(255deg, rgb(250, 203, 14), rgb(240, 107, 168) 30%, rgb(120, 186, 230) 65%, rgb(255, 255, 255));
 
@@ -164,3 +171,26 @@ html.custom-cursor select { cursor: auto; }
     scroll-behavior: auto !important;
   }
 }
+
+/* Hero headline: "30%" gets struck through in red, then the green "0%" lands.
+   Pure CSS, runs once on load; reduced-motion shows the end state. */
+@keyframes strike { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes pop-in { from { opacity: 0; transform: translateY(0.25em) scale(0.9); } to { opacity: 1; transform: none; } }
+.hero-strike { position: relative; display: inline-block; }
+.hero-strike::after {
+  content: ""; position: absolute; left: -0.04em; right: -0.04em; top: 50%; height: 0.09em;
+  background: currentColor; transform-origin: left; animation: strike 0.5s 0.6s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+.hero-pop { display: inline-block; animation: pop-in 0.5s 1.05s cubic-bezier(0.16, 1, 0.3, 1) both; }
+/* Gentle float for product mockups (phone). */
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+.float { animation: float 6s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .hero-strike::after, .hero-pop, .float { animation: none; }
+}
+
+/* Profit calculator slider: thick track, big thumb (easy on a phone). */
+.calc-range { -webkit-appearance: none; appearance: none; height: 10px; border-radius: 999px; background: rgb(255 255 255 / 0.15); outline: none; }
+.calc-range::-webkit-slider-thumb { -webkit-appearance: none; width: 30px; height: 30px; border-radius: 999px; background: var(--color-amber); border: 4px solid #fff; cursor: pointer; box-shadow: 0 4px 14px rgb(0 0 0 / 0.35); }
+.calc-range::-moz-range-thumb { width: 24px; height: 24px; border-radius: 999px; background: var(--color-amber); border: 4px solid #fff; cursor: pointer; }
+.calc-range:focus-visible::-webkit-slider-thumb { outline: 3px solid var(--color-amber); outline-offset: 2px; }

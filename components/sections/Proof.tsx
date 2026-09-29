@@ -1,101 +1,96 @@
-import { ArrowLink } from "@/components/ArrowLink";
-import { RevenueGraph } from "@/components/RevenueGraph";
-import { Figure } from "@/components/Figure";
+import Image from "next/image";
 import { SITE } from "@/lib/site";
 
-// SECTION 4 - PROOF (Southern Jerks). Real, current SEO/traffic numbers plus a
-// link to the live site so a visitor can verify independently. Nothing here is
-// generated or invented. Stats are gated on SITE.proof.verified.
-//
-// No screenshots: the admin dashboard is login-gated (not visitor-verifiable),
-// so proof is the real stat callouts + the clickable live-site link.
+// SECTION 3 - PROOF (Southern Jerks). The real live site (screenshot of
+// southernjerkshtx.com in a browser frame) next to its real Search Console /
+// GA4 numbers, in green because they are gains. No stock photos, no invented
+// charts; the visitor can click through and check it themselves.
+// SCOPE: SJ is cited for search/traffic only, never ordering or commission.
+
+// Headline stats (subset of SITE.proof.stats, same verified values).
+const HEADLINE = ["Search impressions (30d)", "Visitors (30d)", "Avg. Google position"];
 
 export default function Proof() {
   const { proof } = SITE;
-  const ready = proof.verified && proof.stats.length > 0;
+  const stats = proof.verified ? proof.stats.filter((s) => HEADLINE.includes(s.label)) : [];
+  const more = proof.verified ? proof.stats.filter((s) => !HEADLINE.includes(s.label)) : [];
 
   return (
-    <section id="proof" className="border-t border-line bg-paper px-6 py-24 sm:px-10 sm:py-32">
-      <div className="mx-auto w-full max-w-6xl">
+    <section id="proof" className="overflow-hidden bg-paper px-4 py-20 sm:px-10 sm:py-28">
+      <div className="mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
         <div>
-          <p
-            data-reveal
-            className="mb-5 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-ink-soft"
-          >
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-amber" />
-            Real restaurant. Real numbers.
+          <p data-reveal className="mb-5 font-mono text-xs uppercase tracking-[0.2em] text-ink-soft">
+            Real restaurant · Houston, TX
           </p>
-          <h2
-            data-reveal
-            className="max-w-3xl text-[clamp(2rem,6vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.02em]"
-          >
-            {proof.clientName} is live and ranking in Google search, and you can
-            check the numbers yourself.
+          <h2 data-reveal className="text-[clamp(2rem,5.5vw,3.25rem)] font-semibold leading-[1.05] tracking-[-0.02em]">
+            {proof.clientName} gets found on Google, on its own site.
           </h2>
-        </div>
+          <p data-reveal className="mt-4 max-w-md text-lg leading-relaxed text-ink-soft">
+            Customers searching for fried chicken in Houston land on {proof.clientName}&apos;s own website, not on an app
+            listing. Last 30 days:
+          </p>
 
-        <div className="mt-12 grid items-stretch gap-6 sm:mt-16 sm:grid-cols-2">
-          <div data-reveal className="flex flex-col justify-between border border-ash bg-bg p-5">
-            <RevenueGraph className="w-full" />
-            <p className="mt-4 text-sm text-ink-soft">
-              Real customers finding {proof.clientName} on Google. Traffic that used to go to a delivery
-              app’s listing instead of the restaurant’s own site.
-            </p>
-          </div>
-          <Figure
-            src="/demo/food-vibe.jpg"
-            alt="A real restaurant dish"
-            ratio="4 / 3"
-            caption="Real food. Real customers. Their own site."
-          />
-        </div>
-
-        {!ready && (
-          <div data-reveal>
-            <p className="mt-8 inline-block rounded-lg border border-amber/40 bg-amber/10 px-4 py-2 font-mono text-xs uppercase tracking-[0.15em] text-amber-deep">
-              Draft: real {proof.clientName} numbers pending before launch
-            </p>
-          </div>
-        )}
-
-        <div className="mt-12 grid grid-cols-2 gap-x-8 gap-y-10 sm:mt-16 sm:grid-cols-3">
-          {(ready
-            ? proof.stats
-            : [
-                { label: "Search impressions (30d)", value: "N/A" },
-                { label: "Visitors (30d)", value: "N/A" },
-                { label: "Keywords ranking", value: "N/A" },
-                { label: "Avg. Google position", value: "N/A" },
-              ]
-          ).map((s) => (
-              <div key={s.label} data-reveal>
-                <div className="border-t-2 border-ink pt-4">
-                  <div className="text-[clamp(2.25rem,7vw,3.5rem)] font-semibold leading-none tracking-[-0.03em] text-ink tabular-nums">
-                    {s.value}
-                  </div>
-                  <p className="mt-2 text-sm text-ink-soft">{s.label}</p>
-                </div>
+          <div data-reveal-stagger className="mt-8 grid grid-cols-3 gap-2 sm:gap-3">
+            {stats.map((s) => (
+              <div key={s.label} className="rounded-2xl border border-line bg-bg p-3 sm:p-4">
+                <p className="flex items-center gap-1 text-[clamp(1.2rem,5.2vw,2.25rem)] font-semibold leading-none tracking-[-0.02em] text-gain tabular-nums">
+                  <span aria-hidden className="text-[0.55em]">▲</span>
+                  {s.value}
+                </p>
+                <p className="mt-2 text-xs leading-snug text-ink-soft">{s.label.replace(" (30d)", "")}</p>
               </div>
             ))}
+          </div>
+          {more.length > 0 && (
+            <p className="mt-4 text-sm text-ink-soft">
+              {more.map((s) => `${s.value} ${s.label.replace(" (30d)", "").toLowerCase()}`).join(" · ")}
+            </p>
+          )}
+
+          {proof.liveUrl && (
+            <a
+              href={proof.liveUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-8 inline-flex min-h-[48px] items-center gap-2 rounded-xl border border-ink/20 bg-bg px-5 font-semibold text-ink transition-colors hover:border-ink"
+            >
+              Visit {proof.clientName} live ↗
+            </a>
+          )}
         </div>
 
-        <div data-reveal>
-          <div className="mt-14 sm:mt-20">
-            {proof.liveUrl ? (
-              <ArrowLink
-                href={proof.liveUrl}
-                target="_blank"
-                rel="noreferrer"
-                arrow="↗"
-                className="text-lg font-semibold text-ink"
-              >
-                See {proof.clientName} live and check it yourself
-              </ArrowLink>
-            ) : (
-              <span className="font-mono text-xs uppercase tracking-[0.15em] text-ink-soft/60">
-                Live link added before launch
-              </span>
-            )}
+        {/* the real site, framed */}
+        <div data-reveal className="relative">
+          <div
+            aria-hidden
+            className="absolute -inset-8 -z-10 rounded-[40px] opacity-25 blur-3xl"
+            style={{ backgroundImage: "var(--gradient-sphere)" }}
+          />
+          <a
+            href={proof.liveUrl}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={`${proof.clientName} live website`}
+            className="block overflow-hidden rounded-[14px] border border-ash bg-surface shadow-[0_30px_80px_-30px_rgba(0,0,0,0.4)] transition-transform duration-500 hover:-translate-y-1"
+          >
+            <div className="flex items-center gap-2 border-b border-line px-4 py-2.5">
+              <span className="h-2.5 w-2.5 rounded-full bg-ash" />
+              <span className="h-2.5 w-2.5 rounded-full bg-ash" />
+              <span className="h-2.5 w-2.5 rounded-full bg-ash" />
+              <span className="ml-3 truncate font-mono text-xs text-ink-soft">{proof.liveUrl?.replace(/^https?:\/\//, "")}</span>
+            </div>
+            <Image
+              src="/proof/sj-desktop.jpg"
+              alt={`${proof.clientName}'s website homepage`}
+              width={1200}
+              height={750}
+              sizes="(min-width: 1024px) 640px, 100vw"
+              className="h-auto w-full"
+            />
+          </a>
+          <div className="absolute -bottom-6 left-4 flex items-center gap-2 rounded-full border border-line bg-bg px-4 py-2 text-sm font-medium shadow-lg sm:left-8">
+            <span className="h-2 w-2 rounded-full bg-gain" />
+            Live now · built by Starvega
           </div>
         </div>
       </div>

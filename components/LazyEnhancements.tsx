@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 const MotionLayer = dynamic(() => import("./MotionLayer"), { ssr: false });
 const PreviewHost = dynamic(() => import("./PreviewHost"), { ssr: false });
 const PackModalHost = dynamic(() => import("./packs/PackModalHost").then((m) => m.PackModalHost), { ssr: false });
+const StickyCta = dynamic(() => import("./StickyCta"), { ssr: false });
 const ContactHost = dynamic(() => import("./ContactHost").then((m) => m.ContactHost), { ssr: false });
 
 export default function LazyEnhancements() {
@@ -36,6 +37,7 @@ export default function LazyEnhancements() {
       <PreviewHost />
       <PackModalHost />
       <ContactHost />
+      <StickyCta />
     </>
   );
 }

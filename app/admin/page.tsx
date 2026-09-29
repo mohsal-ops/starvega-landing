@@ -42,12 +42,14 @@ const notOwnerCountry = OWNER_COUNTRIES.length
 // show little here - that's expected, not missing data.
 const SECTION_ORDER: [string, string][] = [
   ["hook", "Hero + form"],
-  ["problem", "Problem & fix"],
+  ["problem", "Calculator"],
   ["proof", "Proof"],
-  ["offer", "Offer + loyalty"],
+  ["loyalty", "Loyalty club"],
+  ["offer", "Offer + prices"],
   ["signup", "FAQ + form"],
 ];
 const WIDGET_STEPS: [string, string][] = [
+  ["calc_used", "Used the calculator"],
   ["widget_opened", "Started the form"],
   ["widget_submitted", "Sent a request"],
   ["preview_opened", "Opened live demo"],

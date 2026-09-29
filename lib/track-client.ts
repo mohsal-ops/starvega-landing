@@ -21,10 +21,26 @@ export function sessionId(): string {
   return id;
 }
 
+// Returning visitor = this browser has been here before. Decided once per
+// session (a long-lived localStorage flag, snapshotted in sessionStorage) so the
+// server never has to look it up.
+function isReturning(): boolean {
+  try {
+    const snap = sessionStorage.getItem("sv_ret");
+    if (snap !== null) return snap === "1";
+    const ret = localStorage.getItem("sv_seen") === "1";
+    localStorage.setItem("sv_seen", "1");
+    sessionStorage.setItem("sv_ret", ret ? "1" : "0");
+    return ret;
+  } catch {
+    return false;
+  }
+}
+
 export type TrackEvent =
   | "pageview" | "section_view" | "widget_opened"
   | "widget_submitted" | "preview_generated" | "onboarding_clicked"
-  | "text_cta_clicked" | "preview_opened" | "preview_dashboard_opened";
+  | "text_cta_clicked" | "preview_opened" | "preview_dashboard_opened" | "calc_used";
 
 export function track(eventType: TrackEvent, extra?: { sectionId?: string; entryPoint?: string }) {
   if (isOwner()) return; // don't log the owner's own visits
@@ -36,6 +52,7 @@ export function track(eventType: TrackEvent, extra?: { sectionId?: string; entry
       // Which door into the widget was used (only set on widget_opened).
       entryPoint: extra?.entryPoint,
       path: location.pathname,
+      isReturning: isReturning(),
       // First-touch source: real referrer, or a "utm:<source>:<medium>" tag when
       // the landing URL carries UTM params (so outreach links are attributable).
       referrer: sourceSignal() || undefined,

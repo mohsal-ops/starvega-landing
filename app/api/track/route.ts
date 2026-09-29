@@ -12,7 +12,7 @@ const EVENTS = new Set([
   "pageview", "section_view", "widget_opened",
   "widget_submitted", "preview_generated", "onboarding_clicked",
   "text_cta_clicked", "preview_opened", "preview_dashboard_opened",
-  "pack_selected",
+  "pack_selected", "calc_used",
 ]);
 
 // Which entry point sent the visitor to the widget (only meaningful on
@@ -56,7 +56,9 @@ export async function POST(req: NextRequest) {
     if (!sessionId || !EVENTS.has(eventType)) return NextResponse.json({ ok: false }, { status: 200 });
 
     const geo = geolocation(req);
-    const isReturning = (await db.pageEvent.count({ where: { sessionId } })) > 0;
+    // Returning = this browser had visited before (flag computed client-side in
+    // lib/track-client). No per-event DB read, so ad traffic costs one small insert.
+    const isReturning = b.isReturning === true;
     const device = deviceFromUA(req.headers.get("user-agent") || "");
 
     await db.pageEvent.create({

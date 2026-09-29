@@ -11,7 +11,7 @@ import db from "@/lib/db";
 export const runtime = "nodejs";
 export const maxDuration = 60;
 
-const SECTION_ORDER = ["hook", "problem", "proof", "offer", "signup"];
+const SECTION_ORDER = ["hook", "problem", "proof", "loyalty", "offer", "signup"];
 
 function fmtDur(secs: number): string {
   const m = Math.floor(secs / 60);
@@ -50,7 +50,7 @@ export async function GET(req: NextRequest) {
 
     const widget = (await db.$queryRawUnsafe(
       `SELECT "eventType" t, COUNT(DISTINCT "sessionId")::int c FROM "PageEvent"
-       WHERE "eventType" IN ('widget_opened','widget_submitted','preview_generated','preview_opened','pack_selected','text_cta_clicked') AND ${W} GROUP BY 1`,
+       WHERE "eventType" IN ('calc_used','widget_opened','widget_submitted','preview_opened','pack_selected','text_cta_clicked') AND ${W} GROUP BY 1`,
     )) as { t: string; c: number }[];
     const wMap = new Map(widget.map((w) => [w.t, w.c]));
 
@@ -86,6 +86,7 @@ export async function GET(req: NextRequest) {
       ...SECTION_ORDER.map((s) => `  ${s.padEnd(11)} ${secMap.get(s) ?? 0}`),
       ``,
       `Mockup form & demo:`,
+      `  calculator ${wMap.get("calc_used") ?? 0}`,
       `  opened     ${wMap.get("widget_opened") ?? 0}`,
       `  requested  ${wMap.get("widget_submitted") ?? 0}`,
       `  live demo  ${wMap.get("preview_opened") ?? 0}`,

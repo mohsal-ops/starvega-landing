@@ -12,6 +12,7 @@ const SECTIONS: [domId: string, sectionId: string][] = [
   ["hook", "hook"],
   ["problem", "problem"],
   ["proof", "proof"],
+  ["loyalty", "loyalty"],
   ["offer", "offer"],
   ["signup", "signup"],
 ];
