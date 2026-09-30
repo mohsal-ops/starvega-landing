@@ -185,8 +185,19 @@ html.custom-cursor select { cursor: auto; }
 /* Gentle float for product mockups (phone). */
 @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 .float { animation: float 6s ease-in-out infinite; }
+/* Showcase: slow push-in on the active site, caption rise, chip progress fill. */
+@keyframes sc-pan { from { transform: scale(1.001); } to { transform: scale(1.06) translateY(-1.5%); } }
+@keyframes sc-rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes sc-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.sc-pan { animation: sc-pan 6s ease-out both; }
+.sc-rise { animation: sc-rise 0.6s 0.15s cubic-bezier(0.16, 1, 0.3, 1) both; }
+/* Proof: the whole homepage scrolls through the frame, pausing top and bottom.
+   --sc-end = how far to travel (share of the tall image hidden below the frame). */
+@keyframes sc-scroll { 0%, 8% { transform: translateY(0); } 46%, 58% { transform: translateY(var(--sc-end)); } 96%, 100% { transform: translateY(0); } }
+.sc-scroll { animation: sc-scroll 30s ease-in-out infinite; }
+.sc-scroll-wrap:hover .sc-scroll { animation-play-state: paused; }
 @media (prefers-reduced-motion: reduce) {
-  .hero-strike::after, .hero-pop, .float { animation: none; }
+  .hero-strike::after, .hero-pop, .float, .sc-pan, .sc-rise, .sc-scroll { animation: none; }
 }
 
 /* Profit calculator slider: thick track, big thumb (easy on a phone). */

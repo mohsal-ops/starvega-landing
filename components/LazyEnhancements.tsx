@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 // and the browser is idle, so none of it competes with first paint or input.
 const MotionLayer = dynamic(() => import("./MotionLayer"), { ssr: false });
 const PreviewHost = dynamic(() => import("./PreviewHost"), { ssr: false });
+const ShowcaseHost = dynamic(() => import("./ShowcaseHost"), { ssr: false });
 const PackModalHost = dynamic(() => import("./packs/PackModalHost").then((m) => m.PackModalHost), { ssr: false });
 const StickyCta = dynamic(() => import("./StickyCta"), { ssr: false });
 const ContactHost = dynamic(() => import("./ContactHost").then((m) => m.ContactHost), { ssr: false });
@@ -35,6 +36,7 @@ export default function LazyEnhancements() {
     <>
       <MotionLayer />
       <PreviewHost />
+      <ShowcaseHost />
       <PackModalHost />
       <ContactHost />
       <StickyCta />

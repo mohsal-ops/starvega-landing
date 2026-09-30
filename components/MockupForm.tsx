@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { track, sessionId } from "@/lib/track-client";
 import { takeEntryPoint, type EntryPoint } from "@/lib/widget-cta";
+import { getPickedStyle } from "@/lib/showcase";
+import { openPackModal } from "@/lib/pack-modal";
 
 // The landing's one real ask: "Get your free mockup". Name, restaurant and a
 // WhatsApp/phone number; email is optional and tucked behind a link so the form
@@ -38,6 +40,7 @@ export function MockupForm({ placement, onInk = false }: { placement: EntryPoint
           company: f.get("company") || "",
           sessionId: sessionId(),
           entryPoint: placement,
+          design: getPickedStyle(),
         }),
       });
       const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
@@ -66,6 +69,24 @@ export function MockupForm({ placement, onInk = false }: { placement: EntryPoint
         <p className={`mt-2 leading-relaxed ${onInk ? "text-white/75" : "text-ink-soft"}`}>
           I&apos;ll build your mockup and message you within 24 hours. Nothing to pay, nothing to sign.
         </p>
+        <ol className={`mt-4 space-y-1.5 text-sm ${onInk ? "text-white/75" : "text-ink-soft"}`}>
+          <li>
+            <span className="font-semibold text-amber">1.</span> I message you with your mockup link
+          </li>
+          <li>
+            <span className="font-semibold text-amber">2.</span> You pick a plan and pay once, only if you love it
+          </li>
+          <li>
+            <span className="font-semibold text-amber">3.</span> Send your logo, menu &amp; photos, and I take it live
+          </li>
+        </ol>
+        <button
+          type="button"
+          onClick={openPackModal}
+          className={`mt-4 min-h-[44px] text-sm font-semibold underline underline-offset-4 ${onInk ? "text-white" : "text-ink"}`}
+        >
+          Ready now? See plans →
+        </button>
       </div>
     );
   }

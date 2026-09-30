@@ -38,6 +38,7 @@ export async function POST(req: NextRequest) {
   const email = clean(b.email, 120);
   const sessionId = clean(b.sessionId, 80) || null;
   const entryPoint = clean(b.entryPoint, 20) || null;
+  const design = clean(b.design, 30); // last design looked at in the showcase (email only)
 
   if (!ownerName || !businessName) {
     return NextResponse.json({ ok: false, error: "Add your name and your restaurant's name." }, { status: 400 });
@@ -90,6 +91,7 @@ export async function POST(req: NextRequest) {
           `Restaurant: ${businessName}`,
           `Phone / WhatsApp: ${phone}`,
           `Email: ${email || "-"}`,
+          `Design they liked: ${design || "-"}`,
           `Location: ${[city, geo.country].filter(Boolean).join(", ") || "unknown"}`,
           ``,
           `Promised a reply within 24h. Leads inbox: https://www.starvega.site/admin`,

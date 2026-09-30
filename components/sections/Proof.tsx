@@ -1,9 +1,9 @@
 import Image from "next/image";
 import { SITE } from "@/lib/site";
 
-// SECTION 3 - PROOF (Southern Jerks). The real live site (screenshot of
-// southernjerkshtx.com in a browser frame) next to its real Search Console /
-// GA4 numbers, in green because they are gains. No stock photos, no invented
+// SECTION 3 - PROOF (Southern Jerks). The real live site (a full-page capture
+// of southernjerkshtx.com scrolling in a browser frame, plus its phone view)
+// next to its real Search Console / GA4 numbers, in green because they are gains. No stock photos, no invented
 // charts; the visitor can click through and check it themselves.
 // SCOPE: SJ is cited for search/traffic only, never ordering or commission.
 
@@ -14,6 +14,7 @@ export default function Proof() {
   const { proof } = SITE;
   const stats = proof.verified ? proof.stats.filter((s) => HEADLINE.includes(s.label)) : [];
   const more = proof.verified ? proof.stats.filter((s) => !HEADLINE.includes(s.label)) : [];
+  const clicks = proof.verified ? proof.stats.find((s) => s.label === "Search clicks (30d)")?.value : undefined;
 
   return (
     <section id="proof" className="overflow-hidden bg-paper px-4 py-20 sm:px-10 sm:py-28">
@@ -59,8 +60,10 @@ export default function Proof() {
           )}
         </div>
 
-        {/* the real site, framed */}
-        <div data-reveal className="relative">
+        {/* the real site, framed: the whole homepage slowly scrolls through the
+            window (hover pauses), its phone version in front, and the real
+            search number pinned on top. */}
+        <div data-reveal className="relative pb-10 pl-6 pt-8 sm:pl-10">
           <div
             aria-hidden
             className="absolute -inset-8 -z-10 rounded-[40px] opacity-25 blur-3xl"
@@ -71,7 +74,7 @@ export default function Proof() {
             target="_blank"
             rel="noreferrer"
             aria-label={`${proof.clientName} live website`}
-            className="block overflow-hidden rounded-[14px] border border-ash bg-surface shadow-[0_30px_80px_-30px_rgba(0,0,0,0.4)] transition-transform duration-500 hover:-translate-y-1"
+            className="sc-scroll-wrap block overflow-hidden rounded-[14px] border border-ash bg-surface shadow-[0_30px_80px_-30px_rgba(0,0,0,0.4)] transition-transform duration-500 hover:-translate-y-1"
           >
             <div className="flex items-center gap-2 border-b border-line px-4 py-2.5">
               <span className="h-2.5 w-2.5 rounded-full bg-ash" />
@@ -79,17 +82,46 @@ export default function Proof() {
               <span className="h-2.5 w-2.5 rounded-full bg-ash" />
               <span className="ml-3 truncate font-mono text-xs text-ink-soft">{proof.liveUrl?.replace(/^https?:\/\//, "")}</span>
             </div>
-            <Image
-              src="/proof/sj-desktop.jpg"
-              alt={`${proof.clientName}'s website homepage`}
-              width={1200}
-              height={750}
-              sizes="(min-width: 1024px) 640px, 100vw"
-              className="h-auto w-full"
-            />
+            <div className="relative aspect-[16/10] overflow-hidden bg-bg">
+              {/* 1000x5000 capture in a 16:10 window: 12.5% visible, so travel 87.5% */}
+              <div className="sc-scroll" style={{ ["--sc-end" as string]: "-87.5%" }}>
+                <Image
+                  src="/showcase/sj-full.webp"
+                  alt={`${proof.clientName}'s website, top to bottom`}
+                  width={1000}
+                  height={5000}
+                  sizes="(min-width: 1024px) 640px, 100vw"
+                  className="h-auto w-full"
+                />
+              </div>
+            </div>
           </a>
-          <div className="absolute -bottom-6 left-4 flex items-center gap-2 rounded-full border border-line bg-bg px-4 py-2 text-sm font-medium shadow-lg sm:left-8">
-            <span className="h-2 w-2 rounded-full bg-gain" />
+
+          {/* phone version */}
+          <div
+            aria-hidden
+            className="float absolute bottom-0 left-0 w-[24%] overflow-hidden rounded-[18px] border-[5px] border-ink bg-ink shadow-[0_24px_50px_-18px_rgba(0,0,0,0.6)]"
+          >
+            <div className="relative aspect-[360/740]">
+              <Image src="/showcase/sj-m.webp" alt="" fill sizes="150px" className="object-cover object-top" />
+            </div>
+          </div>
+
+          {/* the real search number, pinned */}
+          {clicks && (
+            <div className="absolute right-2 top-0 flex items-center gap-3 rounded-2xl border border-line bg-bg px-4 py-3 shadow-xl sm:right-4">
+              <span aria-hidden className="grid h-9 w-9 place-items-center rounded-full bg-paper text-lg font-bold">
+                <span className="bg-[conic-gradient(#ea4335_0_25%,#fbbc05_0_50%,#34a853_0_75%,#4285f4_0)] bg-clip-text text-transparent">G</span>
+              </span>
+              <span>
+                <span className="block text-lg font-semibold leading-none text-gain tabular-nums">▲ {clicks}</span>
+                <span className="text-xs text-ink-soft">clicks from Google, last 30 days</span>
+              </span>
+            </div>
+          )}
+
+          <div className="absolute -bottom-2 right-4 flex items-center gap-2 rounded-full border border-line bg-bg px-4 py-2 text-sm font-medium shadow-lg sm:right-8">
+            <span className="h-2 w-2 animate-pulse rounded-full bg-gain" />
             Live now · built by Starvega
           </div>
         </div>

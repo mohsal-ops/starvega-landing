@@ -1,10 +1,11 @@
 import { MockupForm } from "@/components/MockupForm";
-import { PreviewWindow, PreviewLink } from "@/components/PreviewWindow";
+import { PreviewLink } from "@/components/PreviewWindow";
+import { Showcase, ShowcaseStrip } from "@/components/Showcase";
 
 // SECTION 1 - HERO. Most real visitors never scroll past this screen, so the
 // whole pitch AND the ask live here: headline, the two-part promise (orders
-// without commission + regulars who come back), the 3-field mockup form, and a
-// window onto the live demo. Server-rendered and paint-ready: no scroll/JS
+// without commission + regulars who come back), the 3-field mockup form, and four real client
+// sites (one per design) cycling beside it. Server-rendered and paint-ready: no scroll/JS
 // reveals gate the headline, so it is the fast LCP element.
 export default function Hook() {
   return (
@@ -21,7 +22,10 @@ export default function Hook() {
 
           <h1 className="font-display text-[clamp(2.4rem,7vw,4.5rem)] font-semibold uppercase leading-[0.95] tracking-[-0.015em] text-ink">
             <span className="block">
-              DoorDash takes <span className="hero-strike text-loss">30%</span>.
+              DoorDash takes <span className="hero-strike text-loss">30%</span>
+              <span className="mb-2 mt-1 block font-sans text-[max(15px,0.3em)] font-semibold normal-case leading-none tracking-normal text-ink-soft">
+                of every order. Every single one.
+              </span>
             </span>
             <span className="block">
               Your site takes <span className="hero-pop text-gain">0%</span>.
@@ -41,13 +45,14 @@ export default function Hook() {
             <MockupForm placement="hero" />
           </div>
 
-          <PreviewLink className="mt-4 lg:hidden" />
+          <ShowcaseStrip className="mt-8 lg:hidden" />
+          <PreviewLink className="mt-2 lg:hidden" />
         </div>
 
         <div className="hidden lg:block">
-          <PreviewWindow />
+          <Showcase />
           <p className="mt-4 text-center text-sm text-ink-soft">
-            A real, working site. Tap it: menu, ordering, loyalty and the owner dashboard.
+            Real restaurants, live now. Same system, 4 designs. Yours can wear any of them.
           </p>
         </div>
       </div>
