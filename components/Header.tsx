@@ -31,6 +31,8 @@ export default function Header() {
   }, []);
 
   if (pathname?.startsWith("/admin")) return null;
+  // Paying customers (checkout + launch wizard) get the logo only - no sales CTA.
+  const buying = pathname?.startsWith("/checkout") || pathname?.startsWith("/onboard");
 
   return (
     <header
@@ -49,9 +51,11 @@ export default function Header() {
             className="h-8 w-auto sm:h-10"
           />
         </a>
-        <WidgetCtaButton entryPoint="sticky_nav" small>
-          Get my free mockup
-        </WidgetCtaButton>
+        {!buying && (
+          <WidgetCtaButton entryPoint="sticky_nav" small>
+            Get my free mockup
+          </WidgetCtaButton>
+        )}
       </div>
     </header>
   );

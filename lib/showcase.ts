@@ -11,13 +11,14 @@ export type ShowcaseSite = {
   vibe: string; // one line: who this design suits
   url: string;
   accent: string; // tint for chips / progress
+  theme: string; // template design slug (builder THEME_SLUGS) - the launch wizard's design pick
 };
 
 export const SHOWCASE: ShowcaseSite[] = [
-  { key: "sj", name: "Southern Jerks", city: "Houston, TX", style: "Classic", vibe: "Clean and bright, fits almost any kitchen", url: "https://southernjerkshtx.com", accent: "#e8a70c" },
-  { key: "bases", name: "Bases Burgers", city: "Houston, TX", style: "Smash & Bold", vibe: "Loud launch-drop energy for burgers & street food", url: "https://bases-nine.vercel.app", accent: "#0aa6e8" },
-  { key: "doubledip", name: "Double Dip", city: "Washington, DC", style: "Diner Classic", vibe: "Warm, retro and menu-first", url: "https://double-dip.vercel.app", accent: "#e0574a" },
-  { key: "astoria", name: "Astoria BBQ", city: "Queens, NY", style: "Refined", vibe: "Dark, editorial, photo-led", url: "https://astoria-bbq.vercel.app", accent: "#b88a3e" },
+  { key: "sj", name: "Southern Jerks", city: "Houston, TX", style: "Classic", vibe: "Clean and bright, fits almost any kitchen", url: "https://southernjerkshtx.com", accent: "#e8a70c", theme: "classic-starvega" },
+  { key: "bases", name: "Bases Burgers", city: "Houston, TX", style: "Smash & Bold", vibe: "Loud launch-drop energy for burgers & street food", url: "https://bases-nine.vercel.app", accent: "#0aa6e8", theme: "smash-bold" },
+  { key: "doubledip", name: "Double Dip", city: "Washington, DC", style: "Diner Classic", vibe: "Warm, retro and menu-first", url: "https://double-dip.vercel.app", accent: "#e0574a", theme: "diner-classic" },
+  { key: "astoria", name: "Astoria BBQ", city: "Queens, NY", style: "Refined", vibe: "Dark, editorial, photo-led", url: "https://astoria-bbq.vercel.app", accent: "#b88a3e", theme: "refined-elegant" },
 ];
 
 // Same tiny pub/sub as lib/preview: any trigger opens the one fullscreen viewer

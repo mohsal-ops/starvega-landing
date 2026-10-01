@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 // Everything that isn't needed to read the page or use the hero form: the
 // scroll-reveal layer, the pricing popup, the contact picker
@@ -16,6 +17,9 @@ const ContactHost = dynamic(() => import("./ContactHost").then((m) => m.ContactH
 
 export default function LazyEnhancements() {
   const [ready, setReady] = useState(false);
+  const pathname = usePathname();
+  // Checkout + launch wizard: a paying customer gets no sticky CTA / demo button.
+  const buying = pathname?.startsWith("/checkout") || pathname?.startsWith("/onboard");
 
   useEffect(() => {
     const go = () => {
@@ -31,7 +35,7 @@ export default function LazyEnhancements() {
     return () => window.removeEventListener("pointerdown", now);
   }, []);
 
-  if (!ready) return null;
+  if (!ready || buying) return null;
   return (
     <>
       <MotionLayer />
