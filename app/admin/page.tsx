@@ -71,8 +71,12 @@ async function getData(start: Date, end: Date) {
     db.$queryRaw`
       SELECT
         (SELECT COUNT(DISTINCT "sessionId")::int FROM "PageEvent" WHERE ${inRange}) AS total,
-        (SELECT COUNT(DISTINCT "sessionId")::int FROM "PageEvent" WHERE "isReturning" AND ${inRange}) AS "returning"
-    ` as Promise<{ total: number; returning: number }[]>,
+        (SELECT COUNT(DISTINCT "sessionId")::int FROM "PageEvent" WHERE "isReturning" AND ${inRange}) AS "returning",
+        -- Owner-country visits are hidden from every panel; count them so a "0"
+        -- is never mistaken for broken tracking.
+        (SELECT COUNT(DISTINCT "sessionId")::int FROM "PageEvent" WHERE "createdAt" >= ${start} AND "createdAt" <= ${end} ${notDataCenter}
+           AND COALESCE("country", '') = ANY(ARRAY[${Prisma.join(OWNER_COUNTRIES.length ? OWNER_COUNTRIES : ["-"])}]::text[])) AS hidden
+    ` as Promise<{ total: number; returning: number; hidden: number }[]>,
     db.$queryRaw`
       SELECT COALESCE(AVG(EXTRACT(EPOCH FROM (mx - mn))), 0)::float AS secs
       FROM (SELECT "sessionId", MIN("createdAt") mn, MAX("createdAt") mx FROM "PageEvent" WHERE ${inRange} GROUP BY "sessionId") s
@@ -163,6 +167,7 @@ async function getData(start: Date, end: Date) {
 
   return {
     total: overview?.total ?? 0,
+    hidden: overview?.hidden ?? 0,
     returning: overview?.returning ?? 0,
     avgSecs: dur?.secs ?? 0,
     referrers,
@@ -262,7 +267,11 @@ export default async function AdminDashboard({
 
         {/* Overview */}
         <section className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
-          <Card label="Visitors" value={String(d.total)} sub="unique sessions" />
+          <Card
+            label="Visitors"
+            value={String(d.total)}
+            sub={d.hidden ? `unique sessions · +${d.hidden} from ${OWNER_COUNTRIES.join("/")} hidden (you)` : "unique sessions"}
+          />
           <Card label="New" value={`${pct(newV)}%`} sub={`${newV} sessions`} />
           <Card label="Returning" value={`${pct(d.returning)}%`} sub={`${d.returning} sessions`} />
           <Card label="Avg session" value={fmtDuration(d.avgSecs)} sub="first to last event" />
