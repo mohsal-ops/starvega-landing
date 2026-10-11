@@ -40,7 +40,8 @@ function isReturning(): boolean {
 export type TrackEvent =
   | "pageview" | "section_view" | "widget_opened"
   | "widget_submitted" | "preview_generated" | "onboarding_clicked"
-  | "text_cta_clicked" | "preview_opened" | "preview_dashboard_opened" | "calc_used";
+  | "text_cta_clicked" | "preview_opened" | "preview_dashboard_opened" | "calc_used"
+  | "calc_platform_used" | "learn_source_clicked";
 
 export function track(eventType: TrackEvent, extra?: { sectionId?: string; entryPoint?: string }) {
   if (isOwner()) return; // don't log the owner's own visits

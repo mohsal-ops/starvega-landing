@@ -5,7 +5,12 @@
 // `href`/`linkText` are optional: when present, the accordion UI renders a small
 // secondary link into /learn under the answer. The FAQPage schema only uses `a`,
 // so the answer text stays self-contained and crawlable on its own.
-export const FAQS: { q: string; a: string; href?: string; linkText?: string }[] = [
+import { isVisible, type FeatureKey } from "./features";
+
+// `feature`: the entry only shows while that feature isn't hidden in lib/features.ts.
+type Faq = { q: string; a: string; href?: string; linkText?: string; feature?: FeatureKey };
+
+const ALL_FAQS: Faq[] = [
   {
     q: "Is the free mockup actually free?",
     a: "Yes. You give me your name, your restaurant and a number to message, and I design a mockup of your site with your name and menu. No payment, no card. You only pay if you have seen it and want it live.",
@@ -25,6 +30,7 @@ export const FAQS: { q: string; a: string; href?: string; linkText?: string }[] 
     linkText: "See the full commission breakdown",
   },
   {
+    feature: "loyalty_sms",
     q: "How does the loyalty club work?",
     a: "Customers opt in at checkout or by scanning a QR code in your restaurant. From your dashboard you can text or email them a special in one tap, birthday offers go out automatically, and every promo code is tracked so you see what it brought in. It is a small monthly add-on that covers the real cost of sending messages, and you can add it to any plan.",
   },
@@ -41,3 +47,25 @@ export const FAQS: { q: string; a: string; href?: string; linkText?: string }[] 
     a: "That's fine. Most restaurant sites can't take an order without handing a commission to an app. This gives you ordering you actually own, and I'll work from whatever you already have.",
   },
 ];
+
+// Hidden until the matching feature is live (see lib/features.ts).
+ALL_FAQS.push(
+  {
+    feature: "pos_square",
+    q: "Do website orders go into my Square POS?",
+    a: "Yes. Once you connect Square, every paid website order lands in Square as a paid ticket, and your menu and sold-out items come from Square.",
+    href: "/learn/online-ordering-for-square-restaurants",
+    linkText: "How it works with Square",
+  },
+  {
+    feature: "pos_clover",
+    q: "Do website orders print on my Clover?",
+    a: "Yes. Once you connect Clover, every paid website order is created in Clover and prints in your kitchen.",
+    href: "/learn/online-ordering-for-clover-restaurants",
+    linkText: "How it works with Clover",
+  },
+);
+
+/** What the page and the FAQPage schema show: only entries whose feature is visible. */
+export const FAQS: Faq[] = ALL_FAQS.filter((f) => !f.feature || isVisible(f.feature));
+

@@ -1,3 +1,5 @@
+import { featureStatus, type FeatureKey } from "./features";
+
 // Pricing + commission-savings math, copied verbatim from the client template's
 // src/lib/outreach.ts so the numbers on this public page can never drift from
 // the trial popups shown inside client sites. Same formula, same defaults.
@@ -133,4 +135,63 @@ export function savingsBreakdown() {
     monthlySavings,
     annualSavings,
   };
+}
+
+// ── Add-ons (NOT PUBLISHED) ──────────────────────────────────────────────────
+// Structured add-ons for the platform build. Hidden behind SHOW_ADD_ONS = false
+// AND each add-on's feature status in lib/features.ts, so nothing appears on the
+// live page until Mohsal confirms the prices and flips both.
+// Every price below is a SUGGESTED default: TO CONFIRM BY MOHSAL.
+
+export const SHOW_ADD_ONS = false;
+
+export type AddOn = {
+  id: "pos" | "native_app" | "care_plan";
+  feature: FeatureKey | FeatureKey[];
+  label: string;
+  blurb: string;
+  /** One-time price range in USD (setup). */
+  oneTime?: { min: number; max: number };
+  /** Monthly price range in USD. */
+  monthly?: { min: number; max: number };
+  note: string;
+};
+
+export const ADD_ONS: AddOn[] = [
+  {
+    id: "pos",
+    feature: ["pos_square", "pos_clover"],
+    label: "POS connection",
+    blurb: "Website orders print in your kitchen like any other ticket, and your menu stays in sync.",
+    oneTime: { min: 400, max: 800 }, // TO CONFIRM BY MOHSAL (depends on the POS)
+    note: "Setup per restaurant. Price depends on your POS.",
+  },
+  {
+    id: "native_app",
+    feature: "native_app",
+    label: "Your own app",
+    blurb: "An App Store and Google Play app with your name and logo, published under your own accounts.",
+    oneTime: { min: 1800, max: 3500 }, // TO CONFIRM BY MOHSAL
+    monthly: { min: 49, max: 79 }, // TO CONFIRM BY MOHSAL
+    note: "One-time build plus a small monthly fee for updates.",
+  },
+  {
+    id: "care_plan",
+    feature: "care_plan",
+    label: "Care plan",
+    blurb: "We watch your site every day, fix problems, and make small changes for you.",
+    monthly: { min: 49, max: 99 }, // TO CONFIRM BY MOHSAL
+    note: "Month to month. Cancel any time.",
+  },
+];
+
+/** Add-ons that may be shown: the master switch is on AND the feature isn't hidden. */
+export function visibleAddOns(): (AddOn & { status: "live" | "soon" })[] {
+  if (!SHOW_ADD_ONS) return [];
+  return ADD_ONS.flatMap((a) => {
+    const keys = Array.isArray(a.feature) ? a.feature : [a.feature];
+    const statuses = keys.map(featureStatus);
+    const status = statuses.includes("live") ? "live" : statuses.includes("soon") ? "soon" : null;
+    return status ? [{ ...a, status }] : [];
+  });
 }

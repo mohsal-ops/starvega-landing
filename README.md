@@ -64,3 +64,12 @@ not crawled or indexed. It relies on IP-independent per-browser flags on purpose
   captures it as a first-touch source (`lib/source.ts` `sourceSignal()`), stores
   it in the `referrer` field, and the dashboard shows it as **Outreach (IG DM)**.
   Untagged IG visits still land in *Social*; organic search is always its own row.
+
+## What the page may claim: `lib/features.ts`
+Every feature has a status: `live` (shipped and running for a real client, may be claimed), `soon` (badge only), or `hidden` (not shown anywhere; the default for everything new). The FAQ (`lib/faq.ts`), the add-on cards, the Product JSON-LD and feature-gated `/learn` pages (e.g. the Square/Clover POS pages) all read it. **Don't flip a POS feature to `live` until a real restaurant has used it end to end.**
+
+## Add-ons (not published)
+`lib/pricing.ts` → `ADD_ONS` (POS connection, native app, care plan) with suggested prices marked **TO CONFIRM BY MOHSAL**. Nothing shows until `SHOW_ADD_ONS = true` AND the add-on's feature isn't hidden. JSON-LD only lists add-ons whose feature is `live`.
+
+## Calculator
+`components/ProfitCalculator.tsx` also has a 3-year "monthly platform vs your own site" view. Presets are public pricing with an "as of" date; every input is editable. Tracked as `calc_platform_used`.

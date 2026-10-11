@@ -1,5 +1,5 @@
 import { SITE } from "@/lib/site";
-import { PACKAGES } from "@/lib/pricing";
+import { PACKAGES, visibleAddOns } from "@/lib/pricing";
 
 // Structured data (JSON-LD). Two schemas live here:
 //   • OrganizationJsonLd - site-wide identity (rendered once in the root layout).
@@ -52,15 +52,33 @@ export function ProductJsonLd() {
         url: BASE,
         image: `${BASE}/starvega.png`,
         // One Offer per pack tier - priced straight from lib/pricing.ts.
-        offers: PACKAGES.map((p) => ({
-          "@type": "Offer",
-          name: `${p.label} package`,
-          description: p.audience,
-          price: p.price,
-          priceCurrency: "USD",
-          availability: "https://schema.org/InStock",
-          url: `${BASE}/#offer`,
-        })),
+        offers: [
+          ...PACKAGES.map((p) => ({
+            "@type": "Offer",
+            name: `${p.label} package`,
+            description: p.audience,
+            price: p.price,
+            priceCurrency: "USD",
+            availability: "https://schema.org/InStock",
+            url: `${BASE}/#offer`,
+          })),
+          // Add-ons appear only when SHOW_ADD_ONS is on AND the feature is LIVE
+          // (a "soon" add-on is never advertised as purchasable).
+          ...visibleAddOns()
+            .filter((a) => a.status === "live")
+            .map((a) => ({
+              "@type": "Offer",
+              name: a.label,
+              description: a.blurb,
+              priceSpecification: {
+                "@type": "PriceSpecification",
+                priceCurrency: "USD",
+                minPrice: (a.oneTime ?? a.monthly)!.min,
+                maxPrice: (a.oneTime ?? a.monthly)!.max,
+              },
+              url: `${BASE}/#offer`,
+            })),
+        ],
       }}
     />
   );

@@ -8,6 +8,8 @@
 //   Pillar "leaving"       -> how to get off them (step-by-step)
 //   Pillar "alternatives"  -> comparison hub      (+ one page per named competitor)
 
+import { isVisible, type FeatureKey } from "./features";
+
 export type LearnGroup = "commissions" | "leaving" | "alternatives";
 export type LearnKind = "pillar" | "cluster";
 
@@ -19,6 +21,10 @@ export type LearnPage = {
   description: string; // meta description + index blurb
   // Cluster pages point at their pillar's slug; pillars point at themselves.
   pillarSlug: string;
+  // Pages about a feature are only published while that feature isn't "hidden"
+  // in lib/features.ts (e.g. Square/Clover POS pages stay hidden until a real
+  // client has run the integration end to end).
+  feature?: FeatureKey;
 };
 
 // ── Pillar 1: delivery-app commissions ───────────────────────────────────────
@@ -92,7 +98,7 @@ export const LEARN_PAGES: LearnPage[] = [
     group: "alternatives",
     title: "A Toast Online Ordering Alternative Without the Per-Order Fee",
     description:
-      "Toast adds a $0.99 guest fee (or eats it) on online orders and ties ordering to its hardware and monthly plans. Here's an owned alternative with no per-order fee.",
+      "Toast's online ordering is part of its POS plans and hardware. Here's what that means for cost and ownership, and an owned alternative with no per-order fee.",
     pillarSlug: PILLAR_ALTERNATIVES,
   },
   {
@@ -158,7 +164,58 @@ export const LEARN_PAGES: LearnPage[] = [
       "App2Food runs commission-free online ordering funded by a $0.49 convenience fee charged to your diner on each order, on its platform. Here's an owned alternative with no per-order fee and a site you keep.",
     pillarSlug: PILLAR_ALTERNATIVES,
   },
+  // ── Platform-build pages (2026-10) ────────────────────────────────────────
+  {
+    slug: "how-much-do-delivery-apps-cost-a-restaurant",
+    kind: "cluster",
+    group: "commissions",
+    title: "How Much Do Delivery Apps Really Cost a Restaurant?",
+    description:
+      "A worked example with real 2026 rates: what DoorDash, Uber Eats and Grubhub take from $10,000 a month in delivery sales, and how to check your own number.",
+    pillarSlug: PILLAR_COMMISSIONS,
+  },
+  {
+    slug: "toast-online-ordering-vs-own-website",
+    kind: "cluster",
+    group: "alternatives",
+    title: "Toast Online Ordering vs. Your Own Website",
+    description:
+      "What Toast's online ordering costs and who owns it, compared with a website you own outright. Facts with sources, no hype.",
+    pillarSlug: PILLAR_ALTERNATIVES,
+  },
+  {
+    slug: "owner-com-alternatives",
+    kind: "cluster",
+    group: "alternatives",
+    title: "Owner.com Alternatives: What It Costs and What Else Is Out There",
+    description:
+      "Owner.com's public pricing, what it includes, and how a one-time-price website compares over three years. With sources and dates.",
+    pillarSlug: PILLAR_ALTERNATIVES,
+  },
+  {
+    slug: "online-ordering-for-square-restaurants",
+    kind: "cluster",
+    group: "alternatives",
+    title: "Online Ordering for Square Restaurants",
+    description:
+      "Take orders on your own website and have them land in your Square POS as paid tickets, with your menu kept in sync.",
+    pillarSlug: PILLAR_ALTERNATIVES,
+    feature: "pos_square",
+  },
+  {
+    slug: "online-ordering-for-clover-restaurants",
+    kind: "cluster",
+    group: "alternatives",
+    title: "Online Ordering for Clover Restaurants",
+    description:
+      "Take orders on your own website and have them print on your Clover devices, with your menu kept in sync.",
+    pillarSlug: PILLAR_ALTERNATIVES,
+    feature: "pos_clover",
+  },
 ];
+
+/** Published pages only (feature-gated pages drop out while their feature is hidden). */
+export const PUBLISHED_PAGES: LearnPage[] = LEARN_PAGES.filter((p) => !p.feature || isVisible(p.feature));
 
 export const LEARN_BASE = "/learn";
 
@@ -167,13 +224,14 @@ export function learnHref(slug: string): string {
 }
 
 export function pillarPages(): LearnPage[] {
-  return LEARN_PAGES.filter((p) => p.kind === "pillar");
+  return PUBLISHED_PAGES.filter((p) => p.kind === "pillar");
 }
 
 export function clustersOf(pillarSlug: string): LearnPage[] {
-  return LEARN_PAGES.filter((p) => p.kind === "cluster" && p.pillarSlug === pillarSlug);
+  return PUBLISHED_PAGES.filter((p) => p.kind === "cluster" && p.pillarSlug === pillarSlug);
 }
 
+/** Only published pages resolve, so a hidden page 404s even if linked. */
 export function getLearnPage(slug: string): LearnPage | undefined {
-  return LEARN_PAGES.find((p) => p.slug === slug);
+  return PUBLISHED_PAGES.find((p) => p.slug === slug);
 }

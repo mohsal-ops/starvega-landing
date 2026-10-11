@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/site";
-import { LEARN_PAGES, learnHref } from "@/lib/learn";
+import { PUBLISHED_PAGES, learnHref } from "@/lib/learn";
 
 // /sitemap.xml - the funnel page plus every /learn article. Public, indexable
 // routes only; admin / owner-mode / checkout / onboard / api are excluded here
@@ -17,7 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 1,
   };
 
-  const learn: MetadataRoute.Sitemap = LEARN_PAGES.map((p) => ({
+  const learn: MetadataRoute.Sitemap = PUBLISHED_PAGES.map((p) => ({
     url: `${base}${learnHref(p.slug)}`,
     lastModified: now,
     changeFrequency: "monthly",

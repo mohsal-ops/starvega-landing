@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { PACKAGES, CUSTOM_PACK, LOYALTY_ADDON_NOTE, formatUsd, type PackTier } from "@/lib/pricing";
+import { PACKAGES, CUSTOM_PACK, LOYALTY_ADDON_NOTE, formatUsd, visibleAddOns, type PackTier } from "@/lib/pricing";
 import { startPackCheckout } from "@/lib/pack-checkout";
 import { SITE } from "@/lib/site";
 
@@ -117,6 +117,31 @@ export function PackCards({ onInk = false }: { onInk?: boolean }) {
           Let&apos;s talk
         </a>
       </div>
+
+      {/* Add-ons: render nothing until SHOW_ADD_ONS is on and the feature isn't hidden (lib/features.ts). */}
+      {visibleAddOns().length > 0 && (
+        <div className="mt-5 grid gap-3 sm:grid-cols-3">
+          {visibleAddOns().map((a) => (
+            <div key={a.id} className={`rounded-[10px] border p-5 ${border} ${panel}`}>
+              <div className="flex items-center justify-between gap-2">
+                <p className={`text-sm font-semibold ${onInk ? "text-white" : "text-ink"}`}>{a.label}</p>
+                {a.status === "soon" && (
+                  <span className={`rounded-full border px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em] ${subtle} ${border}`}>
+                    Coming soon
+                  </span>
+                )}
+              </div>
+              <p className={`mt-1.5 text-sm leading-snug ${subtle}`}>{a.blurb}</p>
+              <p className={`mt-3 text-sm font-semibold ${onInk ? "text-white" : "text-ink"}`}>
+                {a.oneTime && `${formatUsd(a.oneTime.min)}–${formatUsd(a.oneTime.max)} one-time`}
+                {a.oneTime && a.monthly && " + "}
+                {a.monthly && `${formatUsd(a.monthly.min)}–${formatUsd(a.monthly.max)}/mo`}
+              </p>
+              <p className={`mt-1 text-xs ${subtle}`}>{a.note}</p>
+            </div>
+          ))}
+        </div>
+      )}
 
       <p className={`mt-6 text-center text-xs leading-relaxed ${subtle}`}>{LOYALTY_ADDON_NOTE}</p>
       {error && <p className="mt-3 text-center text-sm text-amber">{error}</p>}

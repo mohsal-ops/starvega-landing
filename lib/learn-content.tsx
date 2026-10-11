@@ -39,12 +39,17 @@ export type LearnHero = {
   alt: string;
 };
 
+export type LearnSource = { label: string; url: string };
+
 export type LearnArticle = {
   // One-paragraph direct answer, rendered as the standfirst under the H1.
   lead: string;
   hero?: LearnHero;
   sections: LearnSection[];
   updated: string; // ISO date, shown + used for Article schema
+  // Facts pages: where each number came from and the date we checked it.
+  sources?: LearnSource[];
+  asOf?: string; // ISO date the sources were checked
 };
 
 const UPDATED = "2026-08-31";
@@ -278,7 +283,7 @@ export const LEARN_CONTENT: Record<string, LearnArticle> = {
           caption: "How the common platforms actually charge",
           head: ["Platform", "Model", "Recurring cost"],
           rows: [
-            ["Toast", "POS-tied online ordering", "Monthly SaaS + hardware + $0.99/order"],
+            ["Toast", "POS-tied online ordering", "Monthly POS plan + hardware + online ordering add-on"],
             ["Square", "POS + free online store", "Processing per order; features thin out"],
             ["Clover", "POS-tied, app-market add-ons", "Monthly plans + hardware"],
             ["Menufy", "Hosted order page", "~$1.75 diner fee per order"],
@@ -307,21 +312,20 @@ export const LEARN_CONTENT: Record<string, LearnArticle> = {
 
   // ── PILLAR 3 clusters (comparisons) ───────────────────────────────────────────
   "toast-alternative": {
-    lead: "Toast is a full restaurant POS with online ordering attached. It's capable, but ordering is tied to Toast's hardware and monthly software plans, and Toast adds a $0.99 fee per online order (charged to the guest, or absorbed by you). If you want online ordering without the per-order fee and the hardware lock-in, an owned site is the cleaner fit.",
+    lead: "Toast is a full restaurant POS with online ordering attached. It's capable, but ordering is tied to Toast's hardware and monthly software plans, and the ordering lives inside Toast's platform. If you want online ordering you own, without a monthly platform bill, an owned site is the cleaner fit.",
     hero: { src: "/diners.jpg", alt: "Guests dining at a restaurant" },
     updated: UPDATED,
     sections: [
       {
         h: "What Toast actually charges",
         body: [
-          "Toast's online ordering rides on its POS: monthly software fees, payment processing, and in most configurations that $0.99-per-order guest fee. It's a strong all-in-one if you also want Toast's terminals and want everything under one roof - but you're buying an ecosystem, on a monthly bill, with a fee on each online order.",
+          "Toast's online ordering rides on its POS: a monthly software plan, an online ordering add-on, and payment processing on each order. (Toast tested a $0.99 guest fee on online orders in July 2023 and removed it within weeks after restaurants pushed back.) It's a strong all-in-one if you also want Toast's terminals and want everything under one roof - but you're buying an ecosystem, on a monthly bill.",
         ],
-        stats: [{ value: 0.99, prefix: "$", decimals: 2, label: "guest fee added to every online order" }],
       },
       {
         h: "The honest gap",
         body: [
-          "The $0.99 fee is small per order and large over a year of volume, and it's not really the point - the point is that the ordering, the site, and the customer data live inside Toast's platform on a recurring plan. Leave Toast and you leave the ordering behind.",
+          "The point isn't one fee - it's that the ordering, the site, and the customer data live inside Toast's platform on a recurring plan. Leave Toast and you leave the ordering behind.",
         ],
       },
       OWNED_ALT("It handles pickup and delivery ordering the same way Toast's online ordering does, without tying you to a POS."),
@@ -484,6 +488,214 @@ export const LEARN_CONTENT: Record<string, LearnArticle> = {
       },
       OWNED_ALT("There's no convenience fee in front of your diner at checkout, and the ordering page is your own site rather than a hosted page on someone else's platform."),
     ],
+  },
+
+  // ── Platform-build pages (2026-10). Facts only, sources + "as of" date. ─────
+  "how-much-do-delivery-apps-cost-a-restaurant": {
+    lead: "Most delivery apps take 15% to 30% of every delivery order, before card fees and ads. On $10,000 a month of delivery sales, that is about $1,500 to $3,000 a month, or $18,000 to $36,000 a year. Your exact number depends on your plan, so check your own statement.",
+    updated: "2026-10-11",
+    asOf: "2026-10-11",
+    sections: [
+      {
+        h: "The published rates",
+        table: {
+          caption: "Commission on delivery orders, as published (checked 2026-10-11)",
+          head: ["App", "Delivery commission", "Pickup"],
+          rows: [
+            ["DoorDash", "15% Basic, 25% Plus, 30% Premier", "6% on every plan"],
+            ["Uber Eats", "15% to 30%, by plan", "Lower rate, by plan"],
+            ["Grubhub", "Varies by plan and contract", "Varies"],
+          ],
+        },
+        body: [
+          "Grubhub's rates are not on a public page we could check. Third-party summaries list numbers from 5% to 25%. Look at your own contract.",
+        ],
+      },
+      {
+        h: "A worked example: $10,000 a month",
+        table: {
+          head: ["Plan rate", "Per month", "Per year"],
+          rows: [
+            ["15%", "$1,500", "$18,000"],
+            ["25%", "$2,500", "$30,000"],
+            ["30%", "$3,000", "$36,000"],
+          ],
+        },
+        body: [
+          "These numbers are commission only. Card processing, paid ads inside the app, and promotions you fund come on top.",
+        ],
+      },
+      {
+        h: "How to find your real number",
+        bullets: [
+          "Open last month's payout statement from each app.",
+          "Add up the commission, marketing and promotion lines.",
+          "Divide by your total sales on that app. That is your real rate.",
+        ],
+      },
+      {
+        h: "What changes on your own website",
+        body: [
+          "On your own site there's no commission. You still pay card processing (about 3% on most card processors), and couriers if you deliver. The rest stays with you. Use the calculator on our home page to try your own numbers.",
+        ],
+      },
+    ],
+    sources: [
+      { label: "DoorDash: Commission rates and pricing", url: "https://merchants.doordash.com/en-us/products/pricing" },
+      { label: "Uber Eats: Pricing for restaurants", url: "https://merchants.ubereats.com/us/en/pricing/" },
+      { label: "Grubhub fees summary (third party)", url: "https://www.restolabs.com/blog/how-much-does-grubhub-charge-restaurants" },
+    ],
+  },
+
+  "toast-online-ordering-vs-own-website": {
+    lead: "Toast online ordering is part of the Toast POS world: a monthly plan, an online ordering add-on, and card processing on each order. It works well if you run your whole restaurant on Toast. Your own website works differently: you pay once, you own the site, and there is no platform fee to keep it running.",
+    updated: "2026-10-11",
+    asOf: "2026-10-11",
+    sections: [
+      {
+        h: "What Toast online ordering costs",
+        bullets: [
+          "A Toast POS plan and Toast hardware.",
+          "Online ordering as an add-on. Toast sets the price in your quote. One third-party guide estimates about $75 a month. Ask Toast for yours.",
+          "Card processing on each online order, set in your Toast contract.",
+          "In July 2023 Toast added a $0.99 fee to online orders, then removed it within weeks after restaurants pushed back.",
+        ],
+      },
+      {
+        h: "Who owns what",
+        table: {
+          head: ["", "Toast online ordering", "Your own website"],
+          rows: [
+            ["Ordering page", "Inside Toast's platform", "Yours"],
+            ["Customer list", "In your Toast account", "In your own dashboard"],
+            ["If you stop paying", "Ordering stops", "The site keeps working"],
+            ["Monthly platform fee", "Yes", "No"],
+          ],
+        },
+      },
+      {
+        h: "Can a website send orders into Toast?",
+        body: [
+          "Toast only lets approved partners create orders in its POS. We are not a Toast partner. Orders from a Starvega site reach you by email, text alert, and a kitchen alarm screen, not as Toast tickets.",
+        ],
+      },
+      {
+        h: "When Toast is the better fit",
+        body: [
+          "If you want one company for terminals, payroll, the kitchen screen, and online orders, Toast's all-in-one setup makes sense. If you mainly want commission-free online orders you own, a website is the simpler and cheaper path.",
+        ],
+      },
+    ],
+    sources: [
+      { label: "Restaurant Dive: Toast adds 99-cent online ordering fee (2023)", url: "https://www.restaurantdive.com/news/toast-adds-99-cent-customer-online-ordering-fee/653707/" },
+      { label: "Restaurant Business: Toast to remove 99-cent fee after backlash (2023)", url: "https://www.restaurantbusinessonline.com/technology/toast-remove-99-cent-fee-after-widespread-backlash" },
+      { label: "Toast online ordering pricing estimate (third party)", url: "https://www.getsauce.com/post/toast-online-ordering-pricing-fees" },
+    ],
+  },
+
+  "owner-com-alternatives": {
+    lead: "Owner.com is a monthly platform for restaurant websites, online ordering, an app, and marketing. As of October 2026, third-party reviews list it at about $249 a month plus a 5% fee per order (Flex), or about $499 a month (Flat), and guests pay a 5% fee too. If you want those marketing tools, it can be a good fit. If you mainly want your own ordering site with no monthly bill, a one-time-price website costs far less over three years.",
+    updated: "2026-10-11",
+    asOf: "2026-10-11",
+    sections: [
+      {
+        h: "Owner.com's public pricing",
+        table: {
+          caption: "As reported publicly, checked 2026-10-11. Confirm on owner.com before deciding.",
+          head: ["Plan", "Monthly", "Per-order fee to you", "Fee to your guest"],
+          rows: [
+            ["Flex", "$249", "5%", "5%"],
+            ["Flat", "about $449 to $499", "None reported", "5%"],
+          ],
+        },
+        body: [
+          "Owner.com runs month to month. Delivery uses third-party couriers at about $7 per delivery, passed through.",
+        ],
+      },
+      {
+        h: "What it includes",
+        body: [
+          "Owner.com bundles a website, online ordering, a branded app, email and text marketing, loyalty, and support. Those are real tools. You pay for them every month for as long as you use them.",
+        ],
+      },
+      {
+        h: "Three years, side by side",
+        body: [
+          "Example: 300 online orders a month at $30 each ($9,000 a month in online sales). Every number is from the public prices above; change them in our calculator.",
+        ],
+        table: {
+          head: ["Option", "3-year cost to you"],
+          rows: [
+            ["Owner.com Flex ($249/mo + 5% of $9,000)", "$25,164"],
+            ["Owner.com Flat (about $499/mo)", "about $17,964"],
+            ["Starvega Standard (one-time)", "$999"],
+          ],
+        },
+        bullets: [
+          "Card processing is extra on every option, so it is left out of all three.",
+          "Starvega's optional add-ons, like loyalty texts, are small monthly costs and are not included above.",
+        ],
+      },
+      {
+        h: "Other options people compare",
+        body: [
+          "ChowNow, BentoBox, Menufy and Toast or Square online ordering are the usual alternatives. Each has its own comparison page in our learn hub.",
+        ],
+      },
+    ],
+    sources: [
+      { label: "Owner.com pricing (official, Canada page)", url: "https://www.owner.com/ca/pricing" },
+      { label: "Owner.com pricing and fees (third party)", url: "https://www.getsauce.com/post/owner-com-pricing-fees" },
+      { label: "Owner review (third party)", url: "https://dupple.com/reviews/owner" },
+    ],
+  },
+
+  "online-ordering-for-square-restaurants": {
+    lead: "If you use Square, orders from your own website can land in your Square POS as paid tickets, so the kitchen sees them like any other order. Your menu, prices and sold-out items come from Square, so you only update them in one place.",
+    updated: "2026-10-11",
+    asOf: "2026-10-11",
+    sections: [
+      {
+        h: "How it works",
+        bullets: [
+          "You connect Square once from your dashboard (a normal Square sign-in screen).",
+          "A customer pays on your website. The order goes to Square as a paid order, marked as paid online.",
+          "Delivery orders show the address in the ticket note, so the kitchen knows a courier is coming.",
+          "If Square can't be reached, we try again, then tell you right away so no order is lost.",
+        ],
+      },
+      {
+        h: "Your menu stays in sync",
+        body: [
+          "Prices and sold-out items come from Square. Before anything changes on your site, you see a preview of what will change.",
+        ],
+      },
+    ],
+    sources: [
+      { label: "Square Orders API", url: "https://developer.squareup.com/docs/orders-api/what-it-does" },
+      { label: "Square: record payments made outside Square", url: "https://developer.squareup.com/docs/payments-api/take-payments/external-payments" },
+    ],
+  },
+
+  "online-ordering-for-clover-restaurants": {
+    lead: "If you use Clover, orders from your own website can print on your Clover devices, marked as paid online. Your menu comes from Clover, so you update it in one place.",
+    updated: "2026-10-11",
+    asOf: "2026-10-11",
+    sections: [
+      {
+        h: "How it works",
+        bullets: [
+          "You connect Clover once from your dashboard.",
+          "A customer pays on your website. The order is created in Clover and the ticket prints in the kitchen.",
+          "If Clover can't be reached, we try again, then tell you right away so no order is lost.",
+        ],
+      },
+      {
+        h: "Your menu stays in sync",
+        body: ["Items, prices and modifiers come from Clover. You see a preview before anything changes on your site."],
+      },
+    ],
+    sources: [{ label: "Clover REST API: orders", url: "https://docs.clover.com/dev/docs/working-with-orders" }],
   },
 };
 

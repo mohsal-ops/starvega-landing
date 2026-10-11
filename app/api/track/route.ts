@@ -12,7 +12,7 @@ const EVENTS = new Set([
   "pageview", "section_view", "widget_opened",
   "widget_submitted", "preview_generated", "onboarding_clicked",
   "text_cta_clicked", "preview_opened", "preview_dashboard_opened",
-  "pack_selected", "calc_used",
+  "pack_selected", "calc_used", "calc_platform_used", "learn_source_clicked",
 ]);
 
 // Which entry point sent the visitor to the widget (only meaningful on

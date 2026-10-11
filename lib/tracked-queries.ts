@@ -6,7 +6,7 @@
 // Each page's slug is already the clean phrase seed ("doordash-fees" ->
 // "doordash fees", "toast-alternative" -> "toast alternative").
 
-import { LEARN_PAGES } from "./learn";
+import { PUBLISHED_PAGES } from "./learn";
 
 export type TrackedQuery = {
   phrase: string; // the watched phrase, e.g. "doordash fees"
@@ -23,7 +23,7 @@ function slugToPhrase(slug: string): string {
 }
 
 export function trackedQueries(): TrackedQuery[] {
-  return LEARN_PAGES.map((p) => ({
+  return PUBLISHED_PAGES.map((p) => ({
     phrase: slugToPhrase(p.slug),
     slug: p.slug,
     title: p.title,

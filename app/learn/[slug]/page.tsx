@@ -8,7 +8,7 @@ import { Breadcrumb, DataTable, OfferCta, StatCallout } from "@/components/learn
 import { buildMetadata } from "@/lib/seo";
 import { SITE } from "@/lib/site";
 import {
-  LEARN_PAGES,
+  PUBLISHED_PAGES,
   getLearnPage,
   clustersOf,
   learnHref,
@@ -19,7 +19,7 @@ import { getArticle } from "@/lib/learn-content";
 // One static page per /learn article. Content comes from lib/learn-content.tsx,
 // metadata from lib/learn.ts - both keyed by the same slug, so nothing drifts.
 export function generateStaticParams() {
-  return LEARN_PAGES.map((p) => ({ slug: p.slug }));
+  return PUBLISHED_PAGES.map((p) => ({ slug: p.slug }));
 }
 
 export const dynamicParams = false; // only the registered slugs; anything else 404s
@@ -187,6 +187,24 @@ export default async function LearnArticlePage({
               </section>
             </Reveal>
           ))}
+
+          {article.sources && article.sources.length > 0 && (
+            <section className="mt-12 border-t border-line pt-6" aria-label="Sources">
+              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-ink-soft">
+                Sources{article.asOf ? `, checked ${new Date(article.asOf).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}` : ""}
+              </p>
+              <ul className="mt-3 space-y-1.5">
+                {article.sources.map((src) => (
+                  <li key={src.url} className="text-[14px] leading-[1.5]">
+                    <a href={src.url} target="_blank" rel="noopener noreferrer nofollow" className="text-ink-soft underline hover:text-ink">
+                      {src.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-3 text-[13px] text-ink-soft">Prices change. Always confirm with the company before you decide.</p>
+            </section>
+          )}
 
           <OfferCta />
           <RelatedLinks page={page} />

@@ -169,6 +169,8 @@ export function ProfitCalculator() {
         </button>
       </div>
 
+      <PlatformCompare />
+
       <p className="mt-4 text-xs leading-relaxed text-white/45">
         Estimates, not a guarantee. Assumes those orders move to your own site, with about 3% card processing. Regulars: if 1 in 5
         customers join your loyalty club and visit about 20% more often (industry average for loyalty members). The site is a
@@ -197,6 +199,120 @@ function Bar({ label, keep, cut, cutLabel, tone }: { label: string; keep: number
           style={{ width: `${cut}%` }}
         />
       </div>
+    </div>
+  );
+}
+
+// ── 3-year view: monthly platform (fee + per-order cut) vs a one-time site ────
+// Competitor numbers are PRESETS from public pricing, dated and editable. Card
+// processing is left out of both sides because you pay it either way.
+const PRICES_AS_OF = "October 11, 2026";
+const PRESETS = [
+  { id: "owner_flex", label: "Owner.com Flex", monthly: 249, pct: 5 },
+  { id: "owner_flat", label: "Owner.com Flat", monthly: 499, pct: 0 },
+  { id: "custom", label: "Other", monthly: 199, pct: 0 },
+] as const;
+
+function PlatformCompare() {
+  const [open, setOpen] = useState(false);
+  const [preset, setPreset] = useState<(typeof PRESETS)[number]["id"]>("owner_flex");
+  const [monthly, setMonthly] = useState<number>(PRESETS[0].monthly);
+  const [pct, setPct] = useState<number>(PRESETS[0].pct);
+  const [orders, setOrders] = useState(300);
+  const [avg, setAvg] = useState(30);
+  const [used, setUsed] = useState(false);
+  const touch = () => {
+    if (used) return;
+    setUsed(true);
+    track("calc_platform_used");
+  };
+
+  const monthlySales = orders * avg;
+  const platform3y = 36 * (monthly + (monthlySales * pct) / 100);
+  const site3y = SITE_PRICE;
+  const diff = platform3y - site3y;
+
+  const num = (label: string, value: number, set: (n: number) => void, prefix = "", suffix = "") => (
+    <label className="block text-sm text-white/70">
+      {label}
+      <span className="mt-1 flex items-center gap-1 rounded-lg border border-white/15 bg-white/[0.04] px-3 py-2">
+        {prefix && <span className="text-white/50">{prefix}</span>}
+        <input
+          type="number"
+          min={0}
+          value={value}
+          onChange={(e) => {
+            touch();
+            set(Math.max(0, Number(e.target.value) || 0));
+          }}
+          className="w-full bg-transparent tabular-nums text-white outline-none"
+        />
+        {suffix && <span className="text-white/50">{suffix}</span>}
+      </span>
+    </label>
+  );
+
+  if (!open)
+    return (
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="mt-4 w-full rounded-2xl border border-white/15 px-5 py-4 text-left text-white/80 hover:border-white/35"
+      >
+        Paying a monthly platform instead? <span className="font-semibold text-white">Compare 3 years →</span>
+      </button>
+    );
+
+  return (
+    <div className="mt-4 rounded-2xl border border-white/15 p-5">
+      <p className="font-semibold text-white">3 years: monthly platform vs. your own site</p>
+      <div className="mt-3 flex flex-wrap gap-2">
+        {PRESETS.map((p) => (
+          <button
+            key={p.id}
+            type="button"
+            aria-pressed={preset === p.id}
+            onClick={() => {
+              touch();
+              setPreset(p.id);
+              setMonthly(p.monthly);
+              setPct(p.pct);
+            }}
+            className={`min-h-[40px] rounded-full border px-4 text-sm font-semibold ${
+              preset === p.id ? "border-white bg-white text-ink" : "border-white/20 text-white/70 hover:border-white/50"
+            }`}
+          >
+            {p.label}
+          </button>
+        ))}
+      </div>
+      <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {num("Monthly fee", monthly, setMonthly, "$")}
+        {num("Fee per order", pct, setPct, "", "%")}
+        {num("Orders a month", orders, setOrders)}
+        {num("Average order", avg, setAvg, "$")}
+      </div>
+      <div className="mt-5 grid gap-3 sm:grid-cols-2">
+        <div className="rounded-xl border border-loss-bright/30 bg-loss-bright/[0.08] p-4">
+          <p className="text-sm text-loss-bright">Monthly platform, 3 years</p>
+          <p className="mt-1 text-3xl font-semibold tabular-nums text-loss-bright">{usd(platform3y)}</p>
+        </div>
+        <div className="rounded-xl border border-gain-bright/30 bg-gain-bright/[0.08] p-4">
+          <p className="text-sm text-gain-bright">Your own site, 3 years</p>
+          <p className="mt-1 text-3xl font-semibold tabular-nums text-gain-bright">{usd(site3y)}</p>
+          <p className="mt-1 text-xs text-white/60">one-time price, no monthly platform fee</p>
+        </div>
+      </div>
+      {diff > 0 && (
+        <p className="mt-3 text-white/80">
+          That&apos;s <span className="font-semibold text-gain-bright">{usd(diff)}</span> more on the platform over 3 years.
+        </p>
+      )}
+      <p className="mt-3 text-xs leading-relaxed text-white/45">
+        Presets use public pricing as of {PRICES_AS_OF}. Please check before you decide, and change any number above. Card
+        fees are left out of both sides because you pay them either way. Guest fees some platforms add are not counted here.
+        Optional add-ons like our loyalty texts are extra.
+      </p>
     </div>
   );
 }
