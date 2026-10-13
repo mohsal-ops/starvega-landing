@@ -126,7 +126,7 @@ export function OfferCta() {
       </h2>
       <p className="mt-3 max-w-[52ch] text-[17px] leading-[1.5] text-ink-soft">
         Starvega builds restaurants a fast website with their own online ordering and dashboard -
-        a one-time price, zero commission, and you own it. See the packages and pricing.
+        one build price, hosting & care free for the first year then $39/month, zero commission, and you own it. See the packages and pricing.
       </p>
       <div className="mt-6">
         <ArrowLink href="/#offer" className="text-[15px] text-ink">

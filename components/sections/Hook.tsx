@@ -33,9 +33,9 @@ export default function Hook() {
           </h1>
 
           <p className="mt-6 max-w-[46ch] text-[18px] leading-[1.5] text-ink-soft">
-            Your own website with <strong className="font-semibold text-ink">commission-free online ordering</strong>, and an optional{" "}
-            <strong className="font-semibold text-ink">loyalty club that brings customers back</strong>. The site is a one-time
-            price, yours forever.
+            Your own website with <strong className="font-semibold text-ink">commission-free online ordering</strong> that customers
+            can <strong className="font-semibold text-ink">add to their phone like an app</strong>, plus a loyalty club that brings them
+            back. One build price, hosting &amp; care free for the first year. No commission, ever.
           </p>
 
           <div className="mt-8 rounded-2xl border border-line bg-paper p-4 sm:p-6">

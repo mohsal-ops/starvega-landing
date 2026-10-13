@@ -47,7 +47,7 @@ export function ProductJsonLd() {
         "@type": "Product",
         name: "Restaurant website with zero-commission online ordering",
         description:
-          "A fast restaurant website with its own online ordering and dashboard, built for a one-time price. No commission on orders, no monthly platform fee - the restaurant owns it.",
+          "A fast restaurant website with its own online ordering and dashboard, built for a one-time price, with hosting & care free for the first year, then $39/month. No commission on orders - the restaurant owns it.",
         brand: { "@type": "Brand", name: "Starvega" },
         url: BASE,
         image: `${BASE}/starvega.png`,

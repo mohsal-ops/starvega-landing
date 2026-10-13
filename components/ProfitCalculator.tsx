@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { track } from "@/lib/track-client";
 import { openWidget } from "@/lib/widget-cta";
-import { PACKAGES } from "@/lib/pricing";
+import { PACKAGES, CARE_MONTHLY_USD, CARE_FREE_MONTHS } from "@/lib/pricing";
 
 // The page's "see your own number" moment. The owner drags their monthly
 // delivery-app sales and picks their DoorDash tier; RED shows what the apps take,
@@ -174,7 +174,7 @@ export function ProfitCalculator() {
       <p className="mt-4 text-xs leading-relaxed text-white/45">
         Estimates, not a guarantee. Assumes those orders move to your own site, with about 3% card processing. Regulars: if 1 in 5
         customers join your loyalty club and visit about 20% more often (industry average for loyalty members). The site is a
-        one-time price; the loyalty club is a small monthly add-on.
+        one-time build; hosting & care is free for the first year, then $39/month; the loyalty club is a small monthly add-on.
       </p>
     </div>
   );
@@ -229,7 +229,7 @@ function PlatformCompare() {
 
   const monthlySales = orders * avg;
   const platform3y = 36 * (monthly + (monthlySales * pct) / 100);
-  const site3y = SITE_PRICE;
+  const site3y = SITE_PRICE + (36 - CARE_FREE_MONTHS) * CARE_MONTHLY_USD;
   const diff = platform3y - site3y;
 
   const num = (label: string, value: number, set: (n: number) => void, prefix = "", suffix = "") => (
@@ -300,7 +300,7 @@ function PlatformCompare() {
         <div className="rounded-xl border border-gain-bright/30 bg-gain-bright/[0.08] p-4">
           <p className="text-sm text-gain-bright">Your own site, 3 years</p>
           <p className="mt-1 text-3xl font-semibold tabular-nums text-gain-bright">{usd(site3y)}</p>
-          <p className="mt-1 text-xs text-white/60">one-time price, no monthly platform fee</p>
+          <p className="mt-1 text-xs text-white/60">build price + care ($39/mo after the free first year), no commission</p>
         </div>
       </div>
       {diff > 0 && (

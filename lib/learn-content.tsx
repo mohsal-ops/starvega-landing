@@ -60,7 +60,7 @@ const UPDATED = "2026-08-31";
 const OWNED_ALT = (whatTheyDo: string): LearnSection => ({
   h: "The owned alternative",
   body: [
-    `Starvega builds the same thing a different way: a fast website with its own online ordering and a dashboard you log into, for a one-time price. ${whatTheyDo} There's no commission on orders and no monthly platform fee to keep it running - once it's live, the site, the ordering, and the customer data are yours.`,
+    `Starvega builds the same thing a different way: a fast website with its own online ordering and a dashboard you log into, for a one-time price, with hosting & care free for the first year, then $39/month. ${whatTheyDo} There's no commission on orders and no per-order cut - the site, the ordering, and the customer data are yours.`,
     "That's the whole difference: you pay once for something you own, instead of renting it (or paying per order) for as long as you're in business.",
   ],
 });
@@ -628,7 +628,7 @@ export const LEARN_CONTENT: Record<string, LearnArticle> = {
           rows: [
             ["Owner.com Flex ($249/mo + 5% of $9,000)", "$25,164"],
             ["Owner.com Flat (about $499/mo)", "about $17,964"],
-            ["Starvega Standard (one-time)", "$999"],
+            ["Starvega Standard ($1,999 once, care free year 1, then $39/mo)", "$2,935"],
           ],
         },
         bullets: [

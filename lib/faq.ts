@@ -5,7 +5,7 @@
 // `href`/`linkText` are optional: when present, the accordion UI renders a small
 // secondary link into /learn under the answer. The FAQPage schema only uses `a`,
 // so the answer text stays self-contained and crawlable on its own.
-import { isVisible, type FeatureKey } from "./features";
+import { isLive, type FeatureKey } from "./features";
 
 // `feature`: the entry only shows while that feature isn't hidden in lib/features.ts.
 type Faq = { q: string; a: string; href?: string; linkText?: string; feature?: FeatureKey };
@@ -21,7 +21,7 @@ const ALL_FAQS: Faq[] = [
   },
   {
     q: "Why is this cheaper than a typical agency or Toast/Square?",
-    a: "Agencies price in overhead and account managers; Toast and Square charge you every month forever. I build each site personally, once, for a one-time price, so there's no monthly middleman to fund.",
+    a: "Agencies price in overhead and account managers; Toast and Square charge you every month forever. I build each site personally for a one-time price, hosting & care is free for the first year, then $39/month (cancel anytime, you keep the site). No commission and no per-order cut, so there's no platform middleman to fund.",
   },
   {
     q: "How do you know these commission numbers are accurate?",
@@ -67,5 +67,7 @@ ALL_FAQS.push(
 );
 
 /** What the page and the FAQPage schema show: only entries whose feature is visible. */
-export const FAQS: Faq[] = ALL_FAQS.filter((f) => !f.feature || isVisible(f.feature));
+// FAQ answers state facts ("yes, it does X"), so they need a LIVE feature;
+// "soon" (early access) is not enough to answer yes.
+export const FAQS: Faq[] = ALL_FAQS.filter((f) => !f.feature || isLive(f.feature));
 

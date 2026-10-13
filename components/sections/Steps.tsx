@@ -16,7 +16,7 @@ const STEPS: { title: string; blurb: string; you: string[]; me: string[] }[] = [
   },
   {
     title: "Pick a plan, pay once",
-    blurb: "Only if you love it. One price, no monthly fee, no commission on orders.",
+    blurb: "Only if you love it. One build price, first year of hosting & care free, no commission on orders.",
     you: ["Choose Starter, Standard or Pro", "Pay securely, one time"],
     me: ["Send you a short onboarding form"],
   },

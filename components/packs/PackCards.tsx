@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { PACKAGES, CUSTOM_PACK, LOYALTY_ADDON_NOTE, formatUsd, visibleAddOns, type PackTier } from "@/lib/pricing";
+import { PACKAGES, CUSTOM_PACK, LOYALTY_ADDON_NOTE, CARE_NOTE, formatUsd, visibleAddOns, type PackTier } from "@/lib/pricing";
 import { startPackCheckout } from "@/lib/pack-checkout";
 import { SITE } from "@/lib/site";
 
@@ -143,7 +143,8 @@ export function PackCards({ onInk = false }: { onInk?: boolean }) {
         </div>
       )}
 
-      <p className={`mt-6 text-center text-xs leading-relaxed ${subtle}`}>{LOYALTY_ADDON_NOTE}</p>
+      <p className={`mt-6 text-center text-sm leading-relaxed ${onInk ? "text-white/80" : "text-ink"}`}>{CARE_NOTE}</p>
+      <p className={`mt-2 text-center text-xs leading-relaxed ${subtle}`}>{LOYALTY_ADDON_NOTE}</p>
       {error && <p className="mt-3 text-center text-sm text-amber">{error}</p>}
     </div>
   );

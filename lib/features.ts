@@ -44,15 +44,15 @@ export const FEATURES: Record<FeatureKey, Feature> = {
   catering: { status: "live", label: "Catering requests" },
   gift_cards: { status: "live", label: "Gift cards" },
 
-  pos_square: { status: "hidden", label: "Orders sent to your Square POS" },
-  pos_clover: { status: "hidden", label: "Orders sent to your Clover POS" },
+  pos_square: { status: "soon", label: "Orders sent to your Square POS" },
+  pos_clover: { status: "soon", label: "Orders sent to your Clover POS" },
   pos_toast: { status: "hidden", label: "Toast POS connection" },
   delivery_doordash: { status: "hidden", label: "DoorDash couriers" },
-  installable_app: { status: "hidden", label: "Add-to-home-screen app" },
-  order_push: { status: "hidden", label: "Order-ready notifications" },
-  monthly_report: { status: "hidden", label: "Monthly results email" },
+  installable_app: { status: "live", label: "Add-to-home-screen app" },
+  order_push: { status: "live", label: "Order-ready notifications" },
+  monthly_report: { status: "soon", label: "Monthly results email" },
   native_app: { status: "hidden", label: "Your own App Store app" },
-  care_plan: { status: "hidden", label: "Care plan" },
+  care_plan: { status: "live", label: "Care plan" },
 };
 
 export const featureStatus = (k: FeatureKey): FeatureStatus => FEATURES[k].status;

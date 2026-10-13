@@ -8,7 +8,7 @@
 //   Pillar "leaving"       -> how to get off them (step-by-step)
 //   Pillar "alternatives"  -> comparison hub      (+ one page per named competitor)
 
-import { isVisible, type FeatureKey } from "./features";
+import { isLive, type FeatureKey } from "./features";
 
 export type LearnGroup = "commissions" | "leaving" | "alternatives";
 export type LearnKind = "pillar" | "cluster";
@@ -143,7 +143,7 @@ export const LEARN_PAGES: LearnPage[] = [
     group: "alternatives",
     title: "A BentoBox Alternative at a Fraction of the Monthly Cost",
     description:
-      "BentoBox makes beautiful restaurant sites on a premium monthly subscription. Here's a comparable owned site for a one-time price instead of an ongoing bill.",
+      "BentoBox makes beautiful restaurant sites on a premium monthly subscription. Here's a comparable owned site for a one-time build (care free for a year, then $39/month) instead of a big monthly bill.",
     pillarSlug: PILLAR_ALTERNATIVES,
   },
   {
@@ -215,7 +215,8 @@ export const LEARN_PAGES: LearnPage[] = [
 ];
 
 /** Published pages only (feature-gated pages drop out while their feature is hidden). */
-export const PUBLISHED_PAGES: LearnPage[] = LEARN_PAGES.filter((p) => !p.feature || isVisible(p.feature));
+// Guides describe how a feature works today, so they need it LIVE.
+export const PUBLISHED_PAGES: LearnPage[] = LEARN_PAGES.filter((p) => !p.feature || isLive(p.feature));
 
 export const LEARN_BASE = "/learn";
 

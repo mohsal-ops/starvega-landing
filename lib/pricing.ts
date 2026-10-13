@@ -7,16 +7,35 @@ import { featureStatus, type FeatureKey } from "./features";
 // Public DEFAULT pricing only. Per-lead quotes happen in DMs, never here.
 
 export const PRICING = {
-  // Struck-through anchor shown next to the live price in the Offer section.
-  // The actual go-live price is BUILD_PRICE_USD below (single source of truth).
-  fullPrice: 2600,
+  // Struck-through anchor shown next to the live price in the Offer section
+  // (what a US agency charges for a custom site with ordering: $5k-$15k).
+  fullPrice: 4999,
 };
 
+// Hosting & care: free for the first 12 months on every plan, then monthly. Covers hosting,
+// the database, security updates, fixes and small changes - so the site keeps
+// working for years instead of rotting after launch.
+export const CARE_MONTHLY_USD = 39;
+export const CARE_FREE_MONTHS = 12;
+export const CARE_NOTE =
+  "Hosting & care included free for the first year, then $39/month (cancel anytime, you keep the site). It covers hosting, security updates, fixes and small changes. No commission, ever.";
+
+// POS is included on every plan. Until a real restaurant is live on it, the
+// claim carries "early access" (feature status in lib/features.ts).
+const POS_LINE =
+  featureStatus("pos_square") === "live"
+    ? "Orders go straight into your Square or Clover POS"
+    : "Square or Clover POS connection (early access)";
+const APP_LINE =
+  featureStatus("installable_app") === "live"
+    ? "Your restaurant as an app on customers' phones (no App Store)"
+    : "Add-to-home-screen app (coming soon)";
+
 // ── Product ladder (the 3 packs) ─────────────────────────────────────────────
-// One-time prices, mirroring src/lib/packages.ts in the builder panel + client
-// template. This is the ONLY place the landing defines pack prices - the pricing
-// popup, the Offer section, and the server-side checkout amount all read it, so a
-// price can never drift. Standard/Pro are a starting point and safe to adjust.
+// One-time build prices, mirroring src/lib/packages.ts in the builder panel +
+// client template. This is the ONLY place the landing defines pack prices - the
+// pricing popup, the Offer section, and the server-side checkout amount all read
+// it, so a price can never drift.
 export type PackTier = "STARTER" | "STANDARD" | "PRO";
 
 export type Pack = {
@@ -32,11 +51,12 @@ export const PACKAGES: Pack[] = [
   {
     tier: "STARTER",
     label: "Starter",
-    price: 399,
+    price: 999,
     audience: "Food trucks & counter-service, first website ever.",
     features: [
       "Home, Story, Menu & Location pages",
-      "Online ordering - pickup",
+      "Commission-free online ordering - pickup",
+      POS_LINE,
       "Edit your menu, prices, categories & hours",
       "Indexable pages + standard SEO",
     ],
@@ -44,28 +64,32 @@ export const PACKAGES: Pack[] = [
   {
     tier: "STANDARD",
     label: "Standard",
-    price: 999,
+    price: 1999,
     popular: true,
     audience: "Most sit-down independents who want the real toolkit.",
     features: [
       "Everything in Starter, plus:",
-      "Catering, photo gallery, gift cards & blog",
+      APP_LINE,
+      "New-order alerts on your phone",
       "Ordering - pickup + delivery + time-slot scheduling",
-      "Gallery/branding controls, reviews & content editor",
-      "Structured-data SEO on an indexable menu",
+      "Catering, photo gallery, gift cards & blog",
+      "Reviews, branding & content editor",
     ],
   },
   {
     tier: "PRO",
     label: "Pro",
-    price: 1999,
+    price: 3499,
     audience: "Multi-location owners, or anyone who wants everything.",
     features: [
       "Everything in Standard, plus:",
-      "Kids Zone + a full Rewards program",
-      "Multi-location aware ordering",
-      "Full analytics, team & multi-location management",
-      "AI onboarding tools + priority setup",
+      "Full Rewards program + Kids Zone",
+      "Multi-location ordering & management",
+      featureStatus("monthly_report") === "live"
+        ? "Monthly email: what you saved vs. the delivery apps"
+        : "Monthly savings email (coming soon)",
+      "Full analytics & team accounts",
+      "Priority setup & support",
     ],
   },
 ];
@@ -104,8 +128,8 @@ export function isPackTier(v: unknown): v is PackTier {
 
 // Legacy single build price. Retained only as a fallback for any pre-packs lead
 // that reaches checkout without a packTier; the public offer is now the 3 packs.
-export const BUILD_PRICE_USD = 899;
-export const BUILD_PRICE_LABEL = formatUsd(BUILD_PRICE_USD); // "$899"
+export const BUILD_PRICE_USD = 1999;
+export const BUILD_PRICE_LABEL = formatUsd(BUILD_PRICE_USD); // "$1,999"
 
 // Same default savings inputs as outreach.ts DEFAULTS.savings.
 const SAVINGS = {
@@ -159,29 +183,13 @@ export type AddOn = {
 
 export const ADD_ONS: AddOn[] = [
   {
-    id: "pos",
-    feature: ["pos_square", "pos_clover"],
-    label: "POS connection",
-    blurb: "Website orders print in your kitchen like any other ticket, and your menu stays in sync.",
-    oneTime: { min: 400, max: 800 }, // TO CONFIRM BY MOHSAL (depends on the POS)
-    note: "Setup per restaurant. Price depends on your POS.",
-  },
-  {
     id: "native_app",
     feature: "native_app",
-    label: "Your own app",
+    label: "Your own App Store app",
     blurb: "An App Store and Google Play app with your name and logo, published under your own accounts.",
-    oneTime: { min: 1800, max: 3500 }, // TO CONFIRM BY MOHSAL
-    monthly: { min: 49, max: 79 }, // TO CONFIRM BY MOHSAL
-    note: "One-time build plus a small monthly fee for updates.",
-  },
-  {
-    id: "care_plan",
-    feature: "care_plan",
-    label: "Care plan",
-    blurb: "We watch your site every day, fix problems, and make small changes for you.",
-    monthly: { min: 49, max: 99 }, // TO CONFIRM BY MOHSAL
-    note: "Month to month. Cancel any time.",
+    oneTime: { min: 2500, max: 2500 },
+    monthly: { min: 49, max: 49 },
+    note: "One-time build plus $49/month for store updates. Apple charges you $99/year directly.",
   },
 ];
 

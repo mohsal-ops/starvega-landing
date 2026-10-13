@@ -1,5 +1,5 @@
 import { ChoosePlanButton } from "@/components/packs/ChoosePlanButton";
-import { PACKAGES, LOYALTY_ADDON_NOTE, formatUsd } from "@/lib/pricing";
+import { PACKAGES, LOYALTY_ADDON_NOTE, CARE_NOTE, formatUsd } from "@/lib/pricing";
 import { WidgetCtaButton } from "@/components/WidgetCta";
 
 // SECTION 5 - THE OFFER. What they get, and what it costs against the usual
@@ -73,7 +73,7 @@ export default function Offer() {
         {/* Prices stay visible for trust, as one compact strip; the full cards
             (features + checkout) live in the pricing popup. */}
         <div className="mt-8 rounded-2xl border border-white/15 p-6 sm:p-8">
-          <p className="font-mono text-xs uppercase tracking-[0.18em] text-white/50">Prices · one-time, no monthly fee</p>
+          <p className="font-mono text-xs uppercase tracking-[0.18em] text-white/50">Prices · one-time build · first year of care free</p>
           <div className="mt-5 grid grid-cols-3 gap-3">
             {PACKAGES.map((p) => (
               <div key={p.tier} className={`rounded-xl border p-3 sm:p-4 ${p.popular ? "border-amber" : "border-white/15"}`}>
@@ -83,7 +83,7 @@ export default function Offer() {
             ))}
           </div>
           <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm leading-relaxed text-white/60">{LOYALTY_ADDON_NOTE}</p>
+            <p className="text-sm leading-relaxed text-white/60">{CARE_NOTE} {LOYALTY_ADDON_NOTE}</p>
             <ChoosePlanButton variant="outlineOnInk" small className="shrink-0">
               Compare plans
             </ChoosePlanButton>
