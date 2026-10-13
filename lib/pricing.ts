@@ -28,7 +28,7 @@ const POS_LINE =
     : "Orders go into your Square or Clover (early access)";
 const APP_LINE =
   featureStatus("installable_app") === "live"
-    ? "Customers put your restaurant on their phone like an app"
+    ? "Instant phone app: customers add you with one tap"
     : "Add-to-home-screen app (coming soon)";
 
 // ── Product ladder (the 3 packs) ─────────────────────────────────────────────
@@ -101,6 +101,12 @@ export const LOYALTY_ADDON_NOTE =
 
 // Custom / bespoke option. No fixed price and no self-serve checkout: it starts
 // a conversation. Rendered as a fourth card that opens a contact CTA.
+// The store app as a choice next to the included instant app.
+export const APP_ADDON_NOTE =
+  featureStatus("native_app") === "hidden"
+    ? ""
+    : `Want your own App Store & Google Play app? $2,500 once + $49 a month${featureStatus("native_app") === "soon" ? " (coming soon)" : ""}.`;
+
 export const CUSTOM_PACK = {
   label: "Custom",
   audience: "Want something bespoke: a custom design, extra features, integrations, or a bigger build.",
@@ -167,7 +173,7 @@ export function savingsBreakdown() {
 // live page until Mohsal confirms the prices and flips both.
 // Every price below is a SUGGESTED default: TO CONFIRM BY MOHSAL.
 
-export const SHOW_ADD_ONS = false;
+export const SHOW_ADD_ONS = true;
 
 export type AddOn = {
   id: "pos" | "native_app" | "care_plan";
@@ -185,11 +191,11 @@ export const ADD_ONS: AddOn[] = [
   {
     id: "native_app",
     feature: "native_app",
-    label: "Your own App Store app",
-    blurb: "An App Store and Google Play app with your name and logo, published under your own accounts.",
+    label: "App Store & Google Play app",
+    blurb: "Want a real app in the stores too? Your own app with your name and logo, in the App Store and Google Play.",
     oneTime: { min: 2500, max: 2500 },
     monthly: { min: 49, max: 49 },
-    note: "One-time build plus $49/month for store updates. Apple charges you $99/year directly.",
+    note: "Add it to any plan. The monthly fee keeps it updated in the stores. Apple also charges you $99 a year.",
   },
 ];
 

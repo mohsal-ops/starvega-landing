@@ -38,9 +38,9 @@ const SLIDES: Slide[] = [
   {
     id: "app",
     feature: "installable_app",
-    kicker: "Your app, no App Store",
+    kicker: "Instant phone app",
     title: "Your restaurant on their home screen.",
-    body: "Regulars put you on their phone with one tap. Your logo. Your colors. One tap to order again. No app store.",
+    body: "Customers tap one button and you are on their phone. Your logo. Your colors. One tap to order again. Comes with Standard. Want a real App Store app too? Add it.",
     money: "When ordering again is easy, people order again more.",
     screen: () => <AppScreen />,
   },

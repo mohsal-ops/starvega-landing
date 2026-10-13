@@ -51,7 +51,7 @@ export const FEATURES: Record<FeatureKey, Feature> = {
   installable_app: { status: "live", label: "Add-to-home-screen app" },
   order_push: { status: "live", label: "Order-ready notifications" },
   monthly_report: { status: "soon", label: "Monthly results email" },
-  native_app: { status: "hidden", label: "Your own App Store app" },
+  native_app: { status: "soon", label: "Your own App Store app" },
   care_plan: { status: "live", label: "Care plan" },
 };
 

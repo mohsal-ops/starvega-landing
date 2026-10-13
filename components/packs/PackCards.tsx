@@ -133,9 +133,9 @@ export function PackCards({ onInk = false }: { onInk?: boolean }) {
               </div>
               <p className={`mt-1.5 text-sm leading-snug ${subtle}`}>{a.blurb}</p>
               <p className={`mt-3 text-sm font-semibold ${onInk ? "text-white" : "text-ink"}`}>
-                {a.oneTime && `${formatUsd(a.oneTime.min)}–${formatUsd(a.oneTime.max)} one-time`}
+                {a.oneTime && `${a.oneTime.min === a.oneTime.max ? formatUsd(a.oneTime.min) : `${formatUsd(a.oneTime.min)}–${formatUsd(a.oneTime.max)}`} once`}
                 {a.oneTime && a.monthly && " + "}
-                {a.monthly && `${formatUsd(a.monthly.min)}–${formatUsd(a.monthly.max)}/mo`}
+                {a.monthly && `${a.monthly.min === a.monthly.max ? formatUsd(a.monthly.min) : `${formatUsd(a.monthly.min)}–${formatUsd(a.monthly.max)}`}/mo`}
               </p>
               <p className={`mt-1 text-xs ${subtle}`}>{a.note}</p>
             </div>

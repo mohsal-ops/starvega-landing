@@ -1,5 +1,5 @@
 import { ChoosePlanButton } from "@/components/packs/ChoosePlanButton";
-import { PACKAGES, LOYALTY_ADDON_NOTE, CARE_NOTE, formatUsd } from "@/lib/pricing";
+import { PACKAGES, LOYALTY_ADDON_NOTE, CARE_NOTE, APP_ADDON_NOTE, formatUsd } from "@/lib/pricing";
 import { WidgetCtaButton } from "@/components/WidgetCta";
 
 // SECTION 5 - THE OFFER. What they get, and what it costs against the usual
@@ -83,7 +83,7 @@ export default function Offer() {
             ))}
           </div>
           <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm leading-relaxed text-white/60">{CARE_NOTE} {LOYALTY_ADDON_NOTE}</p>
+            <p className="text-sm leading-relaxed text-white/60">{CARE_NOTE} {LOYALTY_ADDON_NOTE} {APP_ADDON_NOTE}</p>
             <ChoosePlanButton variant="outlineOnInk" small className="shrink-0">
               Compare plans
             </ChoosePlanButton>
