@@ -48,11 +48,11 @@ export const SITE = {
     // Curated SEO/traffic subset (6 of the confirmed metrics). Values verbatim -
     // "16K+" stays as-is (real 30d Search Console figure, not a fake precise digit).
     stats: [
-      { label: "Search impressions (30d)", value: "16K+" },
+      { label: "Times seen on Google (30d)", value: "16K+" },
       { label: "Visitors (30d)", value: "1,840" },
       { label: "Pageviews (30d)", value: "6,896" },
       { label: "Search clicks (30d)", value: "717" },
-      { label: "Avg. Google position", value: "#8.4" },
+      { label: "Spot on Google (avg.)", value: "#8.4" },
       { label: "Avg. CTR", value: "8.7%" },
     ] as { label: string; value: string }[],
   },

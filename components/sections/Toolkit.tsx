@@ -31,8 +31,8 @@ const SLIDES: Slide[] = [
     feature: "online_ordering",
     kicker: "Commission-free ordering",
     title: "Keep the 30%.",
-    body: "Customers order on your own site. You keep every dollar and every customer's details, instead of renting them from an app.",
-    money: `At ${s.estimatedOrdersPerDay} orders a day, that's about ${formatUsd(s.monthlySavings)} a month you stop handing over.`,
+    body: "People order on your site. You keep all the money and all your customers. No app in the middle.",
+    money: `At ${s.estimatedOrdersPerDay} orders a day, that's about ${formatUsd(s.monthlySavings)} a month you keep.`,
     screen: () => <OrderScreen />,
   },
   {
@@ -40,8 +40,8 @@ const SLIDES: Slide[] = [
     feature: "installable_app",
     kicker: "Your app, no App Store",
     title: "Your restaurant on their home screen.",
-    body: "Regulars add you to their phone in one tap. Your logo, your colors, a one-tap reorder. No download fees.",
-    money: "Make reordering the easiest thing on their phone, and they reorder more often.",
+    body: "Regulars put you on their phone with one tap. Your logo. Your colors. One tap to order again. No app store.",
+    money: "When ordering again is easy, people order again more.",
     screen: () => <AppScreen />,
   },
   {
@@ -49,8 +49,8 @@ const SLIDES: Slide[] = [
     feature: "order_push",
     kicker: "Never miss an order",
     title: "Every order pings your phone.",
-    body: "New order? Your phone buzzes and the kitchen screen rings until someone taps it. Nothing slips during a rush.",
-    money: "One missed order a night is about $750 a month gone. Not anymore.",
+    body: "A new order? Your phone buzzes. The kitchen screen rings until someone taps it. No order gets lost in a rush.",
+    money: "Missing one order a night costs about $750 a month. Not anymore.",
     screen: () => <AlertScreen />,
   },
   {
@@ -58,8 +58,8 @@ const SLIDES: Slide[] = [
     feature: "pos_square",
     kicker: "Square & Clover",
     title: "Orders land in your POS.",
-    body: "Paid website orders go straight into Square or Clover and print in the kitchen. No retyping tickets.",
-    money: "Less staff time, fewer mistakes, and one screen for everything.",
+    body: "Paid orders go right into Square or Clover and print in the kitchen. No typing them in again.",
+    money: "Less work for your staff. Fewer mistakes.",
     screen: () => <PosScreen />,
   },
 ];
@@ -249,7 +249,7 @@ export default function Toolkit() {
         ))}
       </div>
       <p className="mx-auto mt-2 max-w-6xl px-5 text-xs text-white/40">
-        Estimates use {s.estimatedOrdersPerDay} orders a day at {formatUsd(s.avgOrderValue)} and a {s.commissionPct}% app commission. Your numbers will differ.
+        These are guesses: {s.estimatedOrdersPerDay} orders a day, {formatUsd(s.avgOrderValue)} each, and a {s.commissionPct}% app fee. Yours will be different.
       </p>
     </section>
   );

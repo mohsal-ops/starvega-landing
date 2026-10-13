@@ -144,7 +144,7 @@ export function MockupForm({ placement, onInk = false }: { placement: EntryPoint
       >
         {state === "sending" ? "Sending..." : "Get my free mockup"}
       </button>
-      <p className={`text-center text-[13px] ${soft}`}>I&apos;ll message you within 24h. No payment, no obligation.</p>
+      <p className={`text-center text-[13px] ${soft}`}>I&apos;ll text you within 24 hours. No payment. No strings.</p>
     </form>
   );
 }

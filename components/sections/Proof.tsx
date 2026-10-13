@@ -8,7 +8,7 @@ import { SITE } from "@/lib/site";
 // SCOPE: SJ is cited for search/traffic only, never ordering or commission.
 
 // Headline stats (subset of SITE.proof.stats, same verified values).
-const HEADLINE = ["Search impressions (30d)", "Visitors (30d)", "Avg. Google position"];
+const HEADLINE = ["Times seen on Google (30d)", "Visitors (30d)", "Spot on Google (avg.)"];
 
 export default function Proof() {
   const { proof } = SITE;
@@ -24,11 +24,10 @@ export default function Proof() {
             Real restaurant · Houston, TX
           </p>
           <h2 data-reveal className="text-[clamp(2rem,5.5vw,3.25rem)] font-semibold leading-[1.05] tracking-[-0.02em]">
-            {proof.clientName} gets found on Google, on its own site.
+            {proof.clientName} shows up on Google. On its own site.
           </h2>
           <p data-reveal className="mt-4 max-w-md text-lg leading-relaxed text-ink-soft">
-            Customers searching for fried chicken in Houston land on {proof.clientName}&apos;s own website, not on an app
-            listing. Last 30 days:
+            When people in Houston look up fried chicken, they find {proof.clientName}&apos;s own site. Not an app. Last 30 days:
           </p>
 
           <div data-reveal-stagger className="mt-8 grid grid-cols-3 gap-2 sm:gap-3">

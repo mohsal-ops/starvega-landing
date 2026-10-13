@@ -172,9 +172,7 @@ export function ProfitCalculator() {
       <PlatformCompare />
 
       <p className="mt-4 text-xs leading-relaxed text-white/45">
-        Estimates, not a guarantee. Assumes those orders move to your own site, with about 3% card processing. Regulars: if 1 in 5
-        customers join your loyalty club and visit about 20% more often (industry average for loyalty members). The site is a
-        one-time build; hosting & care is free for the first year, then $39/month; the loyalty club is a small monthly add-on.
+        This is a guess, not a promise. It assumes those orders move to your site, with about a 3% card fee. Regulars: if 1 in 5 customers join your club and come about 20% more often (the normal number for club members). You pay once to build the site. Care is free the first year, then $39 a month. The club costs a little each month.
       </p>
     </div>
   );
@@ -259,7 +257,7 @@ function PlatformCompare() {
         onClick={() => setOpen(true)}
         className="mt-4 w-full rounded-2xl border border-white/15 px-5 py-4 text-left text-white/80 hover:border-white/35"
       >
-        Paying a monthly platform instead? <span className="font-semibold text-white">Compare 3 years →</span>
+        Paying a monthly fee for your site now? <span className="font-semibold text-white">Compare 3 years →</span>
       </button>
     );
 

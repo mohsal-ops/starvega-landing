@@ -16,7 +16,7 @@ export default function Problem() {
           <span className="text-gain-bright">keep</span>.
         </h2>
         <p data-reveal className="mt-4 max-w-2xl text-lg leading-relaxed text-white/70">
-          Drag the slider to your real numbers. It takes five seconds.
+          Move the slider to your numbers. It takes 5 seconds.
         </p>
 
         <div data-reveal className="mt-10">

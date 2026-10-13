@@ -18,17 +18,17 @@ export const PRICING = {
 export const CARE_MONTHLY_USD = 39;
 export const CARE_FREE_MONTHS = 12;
 export const CARE_NOTE =
-  "Hosting & care included free for the first year, then $39/month (cancel anytime, you keep the site). It covers hosting, security updates, fixes and small changes. No commission, ever.";
+  "Hosting & care is free for the first year. Then it's $39 a month. Cancel any time and keep your site. It covers hosting, updates, fixes and small changes. No commission, ever.";
 
 // POS is included on every plan. Until a real restaurant is live on it, the
 // claim carries "early access" (feature status in lib/features.ts).
 const POS_LINE =
   featureStatus("pos_square") === "live"
     ? "Orders go straight into your Square or Clover POS"
-    : "Square or Clover POS connection (early access)";
+    : "Orders go into your Square or Clover (early access)";
 const APP_LINE =
   featureStatus("installable_app") === "live"
-    ? "Your restaurant as an app on customers' phones (no App Store)"
+    ? "Customers put your restaurant on their phone like an app"
     : "Add-to-home-screen app (coming soon)";
 
 // ── Product ladder (the 3 packs) ─────────────────────────────────────────────
@@ -52,13 +52,13 @@ export const PACKAGES: Pack[] = [
     tier: "STARTER",
     label: "Starter",
     price: 999,
-    audience: "Food trucks & counter-service, first website ever.",
+    audience: "Food trucks and small counters. Your first website.",
     features: [
       "Home, Story, Menu & Location pages",
-      "Commission-free online ordering - pickup",
+      "Online orders for pickup. No commission.",
       POS_LINE,
-      "Edit your menu, prices, categories & hours",
-      "Indexable pages + standard SEO",
+      "Change your menu, prices and hours any time",
+      "Set up to show up on Google",
     ],
   },
   {
@@ -66,30 +66,30 @@ export const PACKAGES: Pack[] = [
     label: "Standard",
     price: 1999,
     popular: true,
-    audience: "Most sit-down independents who want the real toolkit.",
+    audience: "Most sit-down restaurants. Every tool you need.",
     features: [
       "Everything in Starter, plus:",
       APP_LINE,
-      "New-order alerts on your phone",
-      "Ordering - pickup + delivery + time-slot scheduling",
+      "Your phone buzzes for every new order",
+      "Pickup, delivery, and order-ahead times",
       "Catering, photo gallery, gift cards & blog",
-      "Reviews, branding & content editor",
+      "Edit your reviews, colors and words",
     ],
   },
   {
     tier: "PRO",
     label: "Pro",
     price: 3499,
-    audience: "Multi-location owners, or anyone who wants everything.",
+    audience: "More than one location, or you want it all.",
     features: [
       "Everything in Standard, plus:",
       "Full Rewards program + Kids Zone",
-      "Multi-location ordering & management",
+      "Run more than one location",
       featureStatus("monthly_report") === "live"
         ? "Monthly email: what you saved vs. the delivery apps"
         : "Monthly savings email (coming soon)",
-      "Full analytics & team accounts",
-      "Priority setup & support",
+      "See your numbers and add your team",
+      "You go first for setup and help",
     ],
   },
 ];
@@ -97,7 +97,7 @@ export const PACKAGES: Pack[] = [
 // Loyalty/SMS is a separate small monthly add-on on every pack (real per-message
 // cost) - the one honest recurring line. Never bundled into a pack's one-time price.
 export const LOYALTY_ADDON_NOTE =
-  "Add Loyalty & SMS to any plan - a small monthly add-on that only covers the real cost of sending texts.";
+  "Want the loyalty club? Add it to any plan for a small monthly fee. It just covers the cost of the texts.";
 
 // Custom / bespoke option. No fixed price and no self-serve checkout: it starts
 // a conversation. Rendered as a fourth card that opens a contact CTA.

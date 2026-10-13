@@ -6,10 +6,10 @@ import { PhoneMockup } from "@/components/PhoneMockup";
 // green. Truthful capability only; the stats are industry benchmarks (linked).
 
 const FEATURES = [
-  { t: "They join in one tap", d: "At checkout or by scanning a QR code on the table. Opt-in only, so it stays legal and welcome." },
-  { t: "Birthday offers go out on their own", d: "Set it once. Every member gets a treat before their birthday, every year." },
-  { t: "Slow Tuesday? Send a special", d: "Text or email every regular in one tap from your dashboard." },
-  { t: "See what each promo earned", d: "Every offer carries a code, so you see exactly how many came back and spent." },
+  { t: "They join in one tap", d: "At checkout, or by scanning a code on the table. Only people who say yes join." },
+  { t: "Birthday offers go out on their own", d: "Set it once. Each member gets a treat before their birthday, every year." },
+  { t: "Slow Tuesday? Send a special", d: "Text or email all your regulars with one tap." },
+  { t: "See what each deal made", d: "Each deal has a code. You see how many came back and how much they spent." },
 ];
 
 export default function Loyalty() {

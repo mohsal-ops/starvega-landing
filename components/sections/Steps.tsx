@@ -10,13 +10,13 @@ import { ChoosePlanButton } from "@/components/packs/ChoosePlanButton";
 const STEPS: { title: string; blurb: string; you: string[]; me: string[] }[] = [
   {
     title: "Get your free mockup",
-    blurb: "Three fields, no payment. I design a mockup with your name, menu and look.",
+    blurb: "Fill in 3 boxes. No payment. I make a sample site with your name and menu.",
     you: ["Your name, restaurant, and a number I can text"],
     me: ["Build the mockup in the design you liked", "Message you the link within 24h"],
   },
   {
     title: "Pick a plan, pay once",
-    blurb: "Only if you love it. One build price, first year of hosting & care free, no commission on orders.",
+    blurb: "Only if you love it. Pay once to build. The first year of care is free.",
     you: ["Choose Starter, Standard or Pro", "Pay securely, one time"],
     me: ["Send you a short onboarding form"],
   },
@@ -28,13 +28,13 @@ const STEPS: { title: string; blurb: string; you: string[]; me: string[] }[] = [
   },
   {
     title: "Connect payments & extras",
-    blurb: "The money goes straight to your own account. I walk you through every click.",
+    blurb: "The money goes right to your own account. I help you with every click.",
     you: ["Connect your Stripe (or create one)", "Your domain, or I help you get one"],
     me: ["Wire up online ordering and receipts", "Optional: loyalty club, courier delivery, Google Business Profile"],
   },
   {
     title: "Review & go live",
-    blurb: "You check everything, ask for changes, then we flip it on.",
+    blurb: "You check it all and ask for changes. Then we turn it on.",
     you: ["Place a test order", "Share the link: Instagram bio, Google, table QR codes"],
     me: ["Make your changes", "Launch, and stay on call if anything comes up"],
   },
@@ -52,7 +52,7 @@ export default function Steps() {
             From free mockup to taking orders, in 5 steps.
           </h2>
           <p data-reveal className="mt-4 max-w-md text-lg leading-relaxed text-ink-soft">
-            You send what only you have. I do the rest: design, menu, ordering, payments, Google.
+            You send the things only you have. I do the rest.
           </p>
           <div data-reveal className="mt-8 flex flex-wrap items-center gap-3">
             <WidgetCtaButton entryPoint="offer">Start with a free mockup</WidgetCtaButton>

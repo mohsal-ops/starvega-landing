@@ -33,14 +33,14 @@ export default function Hook() {
           </h1>
 
           <p className="mt-6 max-w-[46ch] text-[18px] leading-[1.5] text-ink-soft">
-            Your own website with <strong className="font-semibold text-ink">commission-free online ordering</strong> that customers
-            can <strong className="font-semibold text-ink">add to their phone like an app</strong>, plus a loyalty club that brings them
-            back. One build price, hosting &amp; care free for the first year. No commission, ever.
+            Get your own website. Customers <strong className="font-semibold text-ink">order on it, and you keep all the money</strong>.
+            They can even <strong className="font-semibold text-ink">put it on their phone like an app</strong>. Pay once to build it,
+            and the first year of care is free.
           </p>
 
           <div className="mt-8 rounded-2xl border border-line bg-paper p-4 sm:p-6">
             <p className="mb-4 text-[17px] font-semibold tracking-tight text-ink">
-              I&apos;ll design a free mockup of <span className="text-amber-deep">your</span> restaurant&apos;s site.
+              I&apos;ll make a free sample of <span className="text-amber-deep">your</span> restaurant&apos;s site.
             </p>
             <MockupForm placement="hero" />
           </div>

@@ -15,7 +15,7 @@ export default function Signup() {
             See your restaurant&apos;s site before you spend a dollar.
           </h2>
           <p className="mt-4 text-lg leading-relaxed text-white/70">
-            Tell me who you are and I&apos;ll design a mockup with your name and menu, then message you within 24 hours.
+            Tell me who you are. I&apos;ll make a free sample of your site with your name and menu, and text you within 24 hours.
           </p>
           <div className="mt-8">
             <MockupForm placement="final_cta" onInk />

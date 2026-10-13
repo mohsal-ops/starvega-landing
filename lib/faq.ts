@@ -13,38 +13,38 @@ type Faq = { q: string; a: string; href?: string; linkText?: string; feature?: F
 const ALL_FAQS: Faq[] = [
   {
     q: "Is the free mockup actually free?",
-    a: "Yes. You give me your name, your restaurant and a number to message, and I design a mockup of your site with your name and menu. No payment, no card. You only pay if you have seen it and want it live.",
+    a: "Yes. Give me your name, your restaurant and a phone number. I make a sample of your site with your name and menu. No payment. No card. You only pay if you see it and want it.",
   },
   {
     q: "What happens if I don't go ahead?",
-    a: "Nothing. The mockup simply comes down and I won't keep messaging you. Your menu, photos and number are never sold or shared.",
+    a: "Nothing. I take the sample down and stop messaging you. I never sell or share your menu, photos or number.",
   },
   {
-    q: "Why is this cheaper than a typical agency or Toast/Square?",
-    a: "Agencies price in overhead and account managers; Toast and Square charge you every month forever. I build each site personally for a one-time price, hosting & care is free for the first year, then $39/month (cancel anytime, you keep the site). No commission and no per-order cut, so there's no platform middleman to fund.",
+    q: "Why does this cost less than an agency or Toast/Square?",
+    a: "Agencies pay for big offices and lots of staff. Toast and Square charge you every month, forever. I build each site myself and you pay once. Care is free the first year, then $39 a month. Cancel any time and keep your site. No commission. No cut of each order.",
   },
   {
-    q: "How do you know these commission numbers are accurate?",
-    a: "They're the platforms' own published 2026 rates, not estimates. DoorDash charges 15-30% on delivery, Uber Eats 15-30%, and Grubhub 5-20% plus an optional delivery cut. I lay out each one tier by tier, with the real per-order math, in the delivery-app commissions breakdown.",
+    q: "Are these app fees real?",
+    a: "Yes. They are the apps' own 2026 prices. DoorDash takes 15-30% for delivery. Uber Eats takes 15-30%. Grubhub takes 5-20%, plus more for delivery. I show each one, with the real math, in the full list.",
     href: "/learn/delivery-app-commissions",
     linkText: "See the full commission breakdown",
   },
   {
     feature: "loyalty_sms",
     q: "How does the loyalty club work?",
-    a: "Customers opt in at checkout or by scanning a QR code in your restaurant. From your dashboard you can text or email them a special in one tap, birthday offers go out automatically, and every promo code is tracked so you see what it brought in. It is a small monthly add-on that covers the real cost of sending messages, and you can add it to any plan.",
+    a: "Customers join at checkout, or by scanning a code in your restaurant. From your dashboard, you text or email them a deal with one tap. Birthday treats go out on their own. Each deal has a code, so you see what it made. It costs a little each month, just to cover the texts. You can add it to any plan.",
   },
   {
-    q: "Do I actually own it after?",
-    a: "Yes. Once you're live it's your site and your ordering system. No revenue share, no per-order fee, and you're not locked into my platform to keep it running.",
+    q: "Is it really mine?",
+    a: "Yes. Once it's live, it's your site and your ordering. No cut of your sales. No fee per order. You are not locked in.",
   },
   {
     q: "How long does it take?",
-    a: "The mockup is usually ready within a day or two. Going live after you approve it is quick, and I handle the technical setup with you step by step.",
+    a: "The sample is ready in a day or two. After you say yes, going live is quick. I do the tech work with you, step by step.",
   },
   {
     q: "What if I already have a website?",
-    a: "That's fine. Most restaurant sites can't take an order without handing a commission to an app. This gives you ordering you actually own, and I'll work from whatever you already have.",
+    a: "That's fine. Most restaurant sites can't take an order without sending it to an app that takes a cut. This gives you ordering that is yours. I'll start from what you have.",
   },
 ];
 

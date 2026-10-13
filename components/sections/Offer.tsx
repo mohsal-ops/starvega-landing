@@ -9,9 +9,9 @@ import { WidgetCtaButton } from "@/components/WidgetCta";
 
 const SITE_POINTS = [
   "Your own website, built from your real menu and photos",
-  "Online ordering: pickup, delivery and catering, zero commission",
-  "Owner dashboard: every order and every dollar",
-  "Set up to rank on Google, like Southern Jerks",
+  "Online orders: pickup, delivery and catering. No commission.",
+  "Your dashboard: see every order and every dollar",
+  "Set up to show up on Google, like Southern Jerks",
 ];
 
 const lowest = Math.min(...PACKAGES.map((p) => p.price));
@@ -24,7 +24,7 @@ export default function Offer() {
           The offer
         </p>
         <h2 data-reveal className="max-w-3xl text-[clamp(2rem,6vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.02em]">
-          Everything you need to sell direct. Paid once.
+          Everything you need to sell on your own. Pay once to build it.
         </h2>
 
         <div className="mt-12 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
@@ -51,19 +51,19 @@ export default function Offer() {
                 <div className="mt-2 h-3 rounded-full bg-loss-bright/80" />
               </div>
               <div>
-                <span className="text-white/80">Starvega, one time</span>
+                <span className="text-white/80">Starvega, built once</span>
                 <p className="mt-1 text-2xl font-semibold tabular-nums text-gain-bright">from {formatUsd(lowest)}</p>
                 <div className="mt-2 h-3 w-[8%] min-w-[14px] rounded-full bg-gain-bright" />
               </div>
             </div>
-            <p className="mt-5 text-xs text-white/45">Platform fees only, before any commission.</p>
+            <p className="mt-5 text-xs text-white/45">Monthly fees only. App commissions not counted. Starvega care is free the first year.</p>
           </div>
         </div>
 
         <div data-reveal className="mt-12 flex flex-col items-start gap-3 rounded-2xl bg-white p-6 text-ink sm:flex-row sm:items-center sm:justify-between sm:p-8">
           <div>
             <p className="text-xl font-semibold tracking-tight">See yours before you pay anything.</p>
-            <p className="mt-1 text-ink-soft">I&apos;ll design a free mockup of your site and message you within 24h.</p>
+            <p className="mt-1 text-ink-soft">I&apos;ll make a free sample of your site and text you within 24 hours.</p>
           </div>
           <WidgetCtaButton entryPoint="offer" className="w-full shrink-0 sm:w-auto">
             Get my free mockup
@@ -91,8 +91,7 @@ export default function Offer() {
         </div>
 
         <p className="mt-10 max-w-xl text-sm leading-relaxed text-white/60">
-          I build and manage each site personally, so I only take on a handful of restaurants at a time. No fake countdown, no
-          expiring deal.
+          I build and run each site myself. So I only take a few restaurants at a time. No fake timer. No deal that runs out.
         </p>
       </div>
     </section>
