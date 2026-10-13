@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { motion } from "motion/react";
 import { featureStatus, type FeatureKey } from "@/lib/features";
 import { savingsBreakdown, formatUsd } from "@/lib/pricing";
 
@@ -69,23 +69,51 @@ export default function Toolkit() {
   const [active, setActive] = useState(0);
   const track = useRef<HTMLDivElement>(null);
 
-  // Follow the swipe: the slide whose center is nearest the track's center.
-  const onScroll = useCallback(() => {
+  const cards = useRef<(HTMLElement | null)[]>([]);
+  const phones = useRef<(HTMLDivElement | null)[]>([]);
+  const texts = useRef<(HTMLDivElement | null)[]>([]);
+  const nums = useRef<(HTMLSpanElement | null)[]>([]);
+  const bar = useRef<HTMLDivElement>(null);
+  const raf = useRef(0);
+
+  // Swipe-linked motion: every frame of the drag, each slide gets an offset
+  // o (0 = centered, +-1 = one slide away). Phones turn in 3D like a carousel,
+  // text slides at a different speed, the big number drifts the other way.
+  // Pure style writes on refs (no React re-render per frame).
+  const paint = useCallback(() => {
+    raf.current = 0;
     const el = track.current;
     if (!el) return;
     const mid = el.scrollLeft + el.clientWidth / 2;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let best = 0;
     let bestD = Infinity;
-    [...el.children].forEach((c, i) => {
-      const n = c as HTMLElement;
-      const d = Math.abs(n.offsetLeft + n.offsetWidth / 2 - mid);
-      if (d < bestD) {
-        bestD = d;
+    cards.current.forEach((n, i) => {
+      if (!n) return;
+      const d = n.offsetLeft + n.offsetWidth / 2 - mid;
+      const o = Math.max(-1.6, Math.min(1.6, d / n.offsetWidth));
+      const a = Math.min(Math.abs(o), 1);
+      if (Math.abs(d) < bestD) {
+        bestD = Math.abs(d);
         best = i;
       }
+      n.style.opacity = String(1 - a * 0.55);
+      n.style.transform = reduce ? "" : `scale(${1 - a * 0.06})`;
+      const ph = phones.current[i];
+      if (ph && !reduce)
+        ph.style.transform = `perspective(1000px) rotateY(${o * -32}deg) translateX(${o * -46}px) translateZ(${-a * 90}px) rotateZ(${o * 3}deg)`;
+      const tx = texts.current[i];
+      if (tx && !reduce) tx.style.transform = `translateX(${o * 70}px)`;
+      const nm = nums.current[i];
+      if (nm && !reduce) nm.style.transform = `translateX(${o * -140}px)`;
     });
-    setActive(best);
+    const max = el.scrollWidth - el.clientWidth;
+    if (bar.current) bar.current.style.transform = `scaleX(${max > 0 ? Math.max(0.04, el.scrollLeft / max) : 1})`;
+    setActive((p) => (p === best ? p : best));
   }, []);
+  const onScroll = useCallback(() => {
+    if (!raf.current) raf.current = requestAnimationFrame(paint);
+  }, [paint]);
 
   const go = (i: number) => {
     const el = track.current;
@@ -97,8 +125,14 @@ export default function Toolkit() {
   useEffect(() => {
     const el = track.current;
     el?.addEventListener("scroll", onScroll, { passive: true });
-    return () => el?.removeEventListener("scroll", onScroll);
-  }, [onScroll]);
+    window.addEventListener("resize", onScroll);
+    paint();
+    return () => {
+      el?.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      cancelAnimationFrame(raf.current);
+    };
+  }, [onScroll, paint]);
 
   return (
     <section id="toolkit" className="overflow-hidden bg-ink py-20 text-white sm:py-28">
@@ -139,38 +173,67 @@ export default function Toolkit() {
           const on = i === active;
           const soon = featureStatus(sl.feature) === "soon";
           return (
-            <motion.article
+            <article
               key={sl.id}
+              ref={(n) => {
+                cards.current[i] = n;
+              }}
               onClick={() => !on && go(i)}
-              animate={{ opacity: on ? 1 : 0.45, scale: on ? 1 : 0.96 }}
-              transition={{ type: "spring", stiffness: 260, damping: 28 }}
-              className="flex w-[86vw] max-w-[920px] shrink-0 snap-center flex-col gap-8 rounded-[28px] border border-white/10 bg-white/[0.04] p-6 sm:p-10 md:flex-row md:items-center"
+              className="relative flex w-[84vw] max-w-[920px] shrink-0 snap-center flex-col items-center gap-5 overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.04] p-5 will-change-transform sm:p-10 md:flex-row-reverse md:items-center md:gap-10"
             >
-              <div className="flex-1">
+              <span
+                aria-hidden
+                ref={(n) => {
+                  nums.current[i] = n;
+                }}
+                className="pointer-events-none absolute -right-4 -top-6 select-none font-display text-[150px] font-semibold leading-none text-white/[0.05] will-change-transform md:text-[220px]"
+              >
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <div className="relative shrink-0">
+                <div
+                  aria-hidden
+                  className={`absolute left-1/2 top-1/2 h-[260px] w-[260px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber/30 blur-[70px] transition-opacity duration-500 ${on ? "opacity-100" : "opacity-0"}`}
+                />
+                <div
+                  ref={(n) => {
+                    phones.current[i] = n;
+                  }}
+                  className="relative origin-center will-change-transform"
+                >
+                  <Phone active={on}>{sl.screen()}</Phone>
+                </div>
+              </div>
+              <div
+                ref={(n) => {
+                  texts.current[i] = n;
+                }}
+                className="relative w-full flex-1 will-change-transform"
+              >
                 <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs uppercase tracking-[0.16em] text-amber">{sl.kicker}</span>
+                  <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-amber sm:text-xs">{sl.kicker}</span>
                   {soon && (
                     <span className="rounded-full border border-white/25 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em] text-white/70">
                       Early access
                     </span>
                   )}
                 </div>
-                <h3 className="mt-3 font-display text-3xl font-semibold leading-[1.05] tracking-[-0.02em] sm:text-4xl">{sl.title}</h3>
-                <p className="mt-4 max-w-[46ch] text-[17px] leading-[1.55] text-white/70">{sl.body}</p>
-                <p className="mt-6 flex max-w-[46ch] items-start gap-3 rounded-2xl bg-gain-bright/[0.1] px-4 py-3 text-[15px] font-medium leading-snug text-gain-bright">
+                <h3 className="mt-2 font-display text-[26px] font-semibold leading-[1.05] tracking-[-0.02em] sm:mt-3 sm:text-4xl">{sl.title}</h3>
+                <p className="mt-4 hidden max-w-[46ch] text-[17px] leading-[1.55] text-white/70 sm:block">{sl.body}</p>
+                <p className="mt-3 flex max-w-[46ch] items-start gap-2.5 rounded-2xl bg-gain-bright/[0.1] px-3.5 py-2.5 text-[14px] font-medium leading-snug text-gain-bright sm:mt-6 sm:px-4 sm:py-3 sm:text-[15px]">
                   <span aria-hidden className="mt-0.5">↗</span>
                   {sl.money}
                 </p>
               </div>
-              <div className="mx-auto shrink-0">
-                <Phone active={on}>{sl.screen()}</Phone>
-              </div>
-            </motion.article>
+            </article>
           );
         })}
       </div>
 
-      <div className="mt-6 flex justify-center gap-2" role="tablist" aria-label="Slides">
+      <div className="mx-auto mt-6 h-[3px] w-40 overflow-hidden rounded-full bg-white/10">
+        <div ref={bar} className="h-full w-full origin-left rounded-full bg-amber" style={{ transform: "scaleX(0.04)" }} />
+      </div>
+      <div className="mt-2 flex justify-center gap-2" role="tablist" aria-label="Slides">
         {slides.map((sl, i) => (
           <button
             key={sl.id}
@@ -203,10 +266,13 @@ function Arrow({ dir }: { dir: "left" | "right" }) {
 // ── Phone frame + screens ────────────────────────────────────────────────────
 function Phone({ active, children }: { active: boolean; children: React.ReactNode }) {
   return (
-    <div className="relative h-[480px] w-[236px] rounded-[44px] bg-[#0b0b0b] p-[9px] shadow-[0_30px_80px_rgba(0,0,0,0.55)] ring-1 ring-white/15">
-      <div className="absolute left-1/2 top-[16px] z-20 h-[22px] w-[78px] -translate-x-1/2 rounded-full bg-black" />
-      <div className="relative h-full w-full overflow-hidden rounded-[36px] bg-[#120d0b] text-[#fbf4ee]">
-        <AnimatePresence mode="wait">{active && <motion.div key="s" className="h-full" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>{children}</motion.div>}</AnimatePresence>
+    <div className="relative h-[380px] w-[187px] rounded-[38px] sm:h-[480px] sm:w-[236px] sm:rounded-[44px] bg-[#0b0b0b] p-[9px] shadow-[0_30px_80px_rgba(0,0,0,0.55)] ring-1 ring-white/15">
+      <div className="absolute left-1/2 top-[13px] z-20 h-[18px] w-[62px] -translate-x-1/2 rounded-full bg-black sm:top-[16px] sm:h-[22px] sm:w-[78px]" />
+      <div className="relative h-full w-full overflow-hidden rounded-[30px] bg-[#120d0b] text-[#fbf4ee] sm:rounded-[36px]">
+        <div className="h-[462px] w-[218px] origin-top-left scale-[0.776] sm:scale-100">
+        {/* Always rendered (visible mid-swipe); re-keyed on arrival so its entrance animation replays. */}
+          <div key={active ? "on" : "off"} className="h-full">{children}</div>
+        </div>
       </div>
     </div>
   );
