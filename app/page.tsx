@@ -2,6 +2,7 @@ import Hook from "@/components/sections/Hook";
 import Problem from "@/components/sections/Problem";
 import Proof from "@/components/sections/Proof";
 import Loyalty from "@/components/sections/Loyalty";
+import Toolkit from "@/components/sections/Toolkit";
 import Offer from "@/components/sections/Offer";
 import Steps from "@/components/sections/Steps";
 import Signup from "@/components/sections/Signup";
@@ -20,6 +21,7 @@ export default function Home() {
       <Hook />
       <Problem />
       <Proof />
+      <Toolkit />
       <Loyalty />
       <Offer />
       <Steps />
