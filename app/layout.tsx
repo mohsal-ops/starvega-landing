@@ -50,7 +50,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             */}
             <script
               dangerouslySetInnerHTML={{
-                __html: `try{if(localStorage.getItem('starvega_owner')==='true'||document.cookie.indexOf('starvega_owner=true')>-1){window['ga-disable-${gaId}']=true;}}catch(e){}
+                __html: `try{if(/^\\/(checkout|onboard)\\//.test(location.pathname)||localStorage.getItem('starvega_owner')==='true'||document.cookie.indexOf('starvega_owner=true')>-1){window['ga-disable-${gaId}']=true;}}catch(e){}
 window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(arguments);};gtag('js',new Date());gtag('config','${gaId}');`,
               }}
             />

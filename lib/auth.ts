@@ -1,20 +1,29 @@
-import { createHmac, timingSafeEqual } from "crypto";
+import { createHash, createHmac, timingSafeEqual } from "crypto";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 // Single-admin signed-cookie auth, ported from the builder panel's pattern.
 export const SESSION_COOKIE = "sv_admin";
-const SECRET = process.env.ADMIN_SECRET || "insecure-dev-secret-change-me";
+// Never a public default (anyone could forge an admin cookie with it). Without
+// ADMIN_SECRET, derive the key from the admin password, which only you know.
+const SECRET =
+  process.env.ADMIN_SECRET ||
+  (process.env.ADMIN_PASSWORD
+    ? createHash("sha256").update(`admin-session:${process.env.ADMIN_PASSWORD}`).digest("hex")
+    : process.env.NODE_ENV === "production"
+      ? ""
+      : "insecure-dev-secret-change-me");
 export const MAX_AGE_SEC = 60 * 60 * 24 * 7; // 7 days
 
 export function makeToken(): string {
+  if (!SECRET) throw new Error("ADMIN_SECRET is not set");
   const exp = String(Date.now() + MAX_AGE_SEC * 1000);
   const sig = createHmac("sha256", SECRET).update(exp).digest("hex");
   return `${exp}.${sig}`;
 }
 
 export function verifyToken(token?: string): boolean {
-  if (!token) return false;
+  if (!token || !SECRET) return false;
   const [exp, sig] = token.split(".");
   if (!exp || !sig) return false;
   if (Date.now() > Number(exp)) return false;

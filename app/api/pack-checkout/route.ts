@@ -3,6 +3,7 @@ import { geolocation } from "@vercel/functions";
 import db from "@/lib/db";
 import { sendOwnerMail } from "@/lib/mail";
 import { isPackTier, PACKS_BY_TIER, formatUsd } from "@/lib/pricing";
+import { clientIp, rateLimit } from "@/lib/rateLimit";
 
 // POST /api/pack-checkout  { tier, businessName?, contact?, sessionId? }
 // A prospect chose a pack. We create a lead carrying the chosen tier, record a
@@ -23,9 +24,15 @@ export async function POST(req: NextRequest) {
   if (!isPackTier(b.tier)) {
     return NextResponse.json({ error: "Unknown plan." }, { status: 400 });
   }
+  // Spam guard: 10 plan clicks per IP per hour (each one emails the owner).
+  if (!(await rateLimit(`pack:${clientIp(req.headers)}`, 10, 3600))) {
+    return NextResponse.json({ error: "Too many tries. Please wait a bit." }, { status: 429 });
+  }
   const pack = PACKS_BY_TIER[b.tier];
-  const businessName = (b.businessName || "").trim() || `${pack.label} plan`;
-  const contact = (b.contact || "").trim() || null;
+  const cap = (v: unknown, n: number) => (typeof v === "string" ? v.trim().slice(0, n) : "");
+  const businessName = cap(b.businessName, 80) || `${pack.label} plan`;
+  const contact = cap(b.contact, 60) || null;
+  b.sessionId = cap(b.sessionId, 80) || undefined;
   const geo = geolocation(req);
 
   try {
@@ -76,7 +83,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true, leadId: lead.id });
   } catch (e) {
     return NextResponse.json(
-      { error: (e as Error).message || "Could not start checkout." },
+      { error: (console.error("pack-checkout:", e), "Could not start checkout. Try again.") },
       { status: 500 },
     );
   }

@@ -50,8 +50,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true, skipped: "bot" });
     }
 
-    const b = (await req.json()) as Record<string, unknown>;
-    const sessionId = typeof b.sessionId === "string" ? b.sessionId : "";
+    // Size guard: a real event is a few hundred bytes; never store big junk.
+    const raw = await req.text();
+    if (raw.length > 4000) return NextResponse.json({ ok: false }, { status: 200 });
+    const b = JSON.parse(raw) as Record<string, unknown>;
+    const cap = (v: unknown, n: number) => (typeof v === "string" ? v.slice(0, n) : "");
+    b.sectionId = cap(b.sectionId, 60) || null;
+    b.path = cap(b.path, 300) || "/";
+    b.referrer = cap(b.referrer, 300) || null;
+    const sessionId = cap(b.sessionId, 80);
     const eventType = typeof b.eventType === "string" ? b.eventType : "";
     if (!sessionId || !EVENTS.has(eventType)) return NextResponse.json({ ok: false }, { status: 200 });
 

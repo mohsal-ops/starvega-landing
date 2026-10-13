@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import db from "@/lib/db";
 import { captureOrder } from "@/lib/paypal";
 import { sendOwnerMail } from "@/lib/mail";
+import { BUILD_PRICE_USD, packPriceUsd } from "@/lib/pricing";
 
 // POST /api/paypal/capture-order  { leadId, orderId }
 // Captures the order SERVER-SIDE and only marks the lead paid when PayPal
@@ -21,8 +22,9 @@ export async function POST(req: NextRequest) {
   const lead = await db.instantDemoLead.findUnique({ where: { id: leadId } });
   if (!lead) return NextResponse.json({ ok: false, error: "Lead not found." }, { status: 404 });
 
-  // The order being captured must be the one we created for this lead.
-  if (lead.paypalOrderId && lead.paypalOrderId !== orderId) {
+  // The order being captured must be the one WE created for this lead (via
+  // create-order, at the server-side price). No stored order = nothing to capture.
+  if (!lead.paypalOrderId || lead.paypalOrderId !== orderId) {
     return NextResponse.json({ ok: false, error: "Order does not match this checkout." }, { status: 409 });
   }
   if (lead.paymentStatus === "paid") {
@@ -39,8 +41,20 @@ export async function POST(req: NextRequest) {
         { status: 402 },
       );
     }
-    await db.instantDemoLead.update({
-      where: { id: lead.id },
+    // Never trust the order blindly: the captured money must be exactly this
+    // lead's price, in USD, on an order made for this lead. (A browser-made
+    // $0.01 order or another lead's cheaper order must never unlock a build.)
+    const expected = (lead.packTier ? packPriceUsd(lead.packTier) : null) ?? BUILD_PRICE_USD;
+    const ref = (result.raw as { purchase_units?: { reference_id?: string }[] })?.purchase_units?.[0]?.reference_id;
+    if (result.currency !== "USD" || Number(result.amount) !== expected || ref !== lead.id) {
+      sendOwnerMail(
+        `Starvega: PAYMENT MISMATCH - ${lead.businessName}`,
+        `Captured ${result.amount} ${result.currency} (ref ${ref}) for lead ${lead.id}, expected ${expected} USD. NOT marked paid - check PayPal and refund if needed.`,
+      ).catch(() => {});
+      return NextResponse.json({ ok: false, error: "Payment amount didn't match your plan. Contact us and we'll sort it out." }, { status: 409 });
+    }
+    await db.instantDemoLead.updateMany({
+      where: { id: lead.id, paymentStatus: { not: "paid" } },
       data: {
         paymentStatus: "paid",
         paidAt: new Date(),
@@ -66,7 +80,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true });
   } catch (e) {
     return NextResponse.json(
-      { ok: false, error: (e as Error).message || "Payment capture failed." },
+      { ok: false, error: "Payment capture failed. Try again, or contact us." },
       { status: 502 },
     );
   }

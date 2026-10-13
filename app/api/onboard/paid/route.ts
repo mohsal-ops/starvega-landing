@@ -26,6 +26,11 @@ export async function POST(req: NextRequest) {
   const lead = await db.instantDemoLead.findUnique({ where: { id: leadId } });
   if (!lead) return NextResponse.json({ error: "Lead not found." }, { status: 404 });
   if (lead.paymentStatus !== "paid") return NextResponse.json({ error: "Payment required." }, { status: 402 });
+  // One submission per purchase - later changes go through the review page / a message.
+  const prev = lead.onboarding as { version?: number } | null;
+  if (prev && typeof prev === "object" && prev.version === 1 && lead.projectId) {
+    return NextResponse.json({ error: "Already received - message us to change anything." }, { status: 409 });
+  }
 
   const launch = (b.launch && typeof b.launch === "object" ? b.launch : null) as Record<string, unknown> | null;
   if (!launch || launch.version !== 1) return NextResponse.json({ error: "Missing your details - refresh and try again." }, { status: 400 });

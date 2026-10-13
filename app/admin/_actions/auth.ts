@@ -1,16 +1,29 @@
 "use server";
 
-import { cookies } from "next/headers";
+import { createHash, timingSafeEqual } from "crypto";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { makeToken, SESSION_COOKIE, MAX_AGE_SEC } from "@/lib/auth";
 import { OWNER_FLAG } from "@/lib/owner";
+import { clientIp, rateLimit } from "@/lib/rateLimit";
+
+// Constant-time compare (hash both so lengths match and nothing leaks by timing).
+function samePassword(a: string, b: string) {
+  return timingSafeEqual(createHash("sha256").update(a).digest(), createHash("sha256").update(b).digest());
+}
 
 export async function login(
   _prev: { error?: string } | null,
   formData: FormData,
 ): Promise<{ error?: string }> {
+  // 5 tries per 15 minutes per IP - stops password guessing.
+  const ip = clientIp(await headers());
+  if (!(await rateLimit(`admin-login:${ip}`, 5, 15 * 60))) {
+    return { error: "Too many attempts. Wait 15 minutes and try again." };
+  }
   const password = String(formData.get("password") || "");
-  if (!process.env.ADMIN_PASSWORD || password !== process.env.ADMIN_PASSWORD) {
+  const real = process.env.ADMIN_PASSWORD || "";
+  if (!real || !samePassword(password, real)) {
     return { error: "Wrong password." };
   }
   (await cookies()).set(SESSION_COOKIE, makeToken(), {
