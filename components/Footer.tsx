@@ -28,7 +28,12 @@ export default function Footer() {
           Message me on Instagram
         </ArrowLink>
 
-        <p className="text-xs text-ink-soft">{SITE.footer.copyright}</p>
+        <p className="text-xs text-ink-soft">
+          {SITE.footer.copyright}{" "}
+          <Link href="/terms" className="underline underline-offset-2 hover:text-ink">Terms</Link>
+          {" · "}
+          <Link href="/privacy" className="underline underline-offset-2 hover:text-ink">Privacy</Link>
+        </p>
       </div>
     </footer>
   );

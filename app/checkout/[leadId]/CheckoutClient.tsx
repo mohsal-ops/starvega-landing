@@ -102,6 +102,13 @@ export function CheckoutClient({
       <p className="mt-3 text-center text-xs text-ink-soft">
         Paying {priceLabel} for {businessName}. Secure checkout via PayPal - card or PayPal balance.
       </p>
+      {/* Clickwrap: paying = agreeing to the terms (refund policy lives there). */}
+      <p className="mt-2 text-center text-xs text-ink-soft">
+        By paying you agree to our{" "}
+        <a href="/terms" target="_blank" rel="noreferrer" className="underline">Terms of Service</a> (including the refund
+        policy) and{" "}
+        <a href="/privacy" target="_blank" rel="noreferrer" className="underline">Privacy Policy</a>.
+      </p>
     </div>
   );
 }
