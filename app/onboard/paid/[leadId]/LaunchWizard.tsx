@@ -426,7 +426,7 @@ export function LaunchWizard(props: Props) {
         {step === 3 && (
           <div className="space-y-6">
             <StepTitle t="Your look" d="Pick a design - your logo, colour, photos and menu go into it. You can switch designs later." />
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
               {SHOWCASE.map((x) => (
                 <button
                   key={x.key}

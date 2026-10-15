@@ -1,6 +1,6 @@
 "use client";
 
-// The four REAL restaurant sites shown in the hero showcase - one per design, all
+// The REAL restaurant sites shown in the hero showcase - one per design, all
 // running on the same system. Captures live in public/showcase/<key>-{top,full,m}.webp
 // (taken from the live sites; re-capture when a site changes a lot).
 export type ShowcaseSite = {
@@ -19,6 +19,8 @@ export const SHOWCASE: ShowcaseSite[] = [
   { key: "bases", name: "Bases Burgers", city: "Houston, TX", style: "Smash & Bold", vibe: "Loud launch-drop energy for burgers & street food", url: "https://bases-nine.vercel.app", accent: "#0aa6e8", theme: "smash-bold" },
   { key: "doubledip", name: "Double Dip", city: "Washington, DC", style: "Diner Classic", vibe: "Warm, retro and menu-first", url: "https://double-dip.vercel.app", accent: "#e0574a", theme: "diner-classic" },
   { key: "astoria", name: "Astoria BBQ", city: "Queens, NY", style: "Refined", vibe: "Dark, editorial, photo-led", url: "https://astoria-bbq.vercel.app", accent: "#b88a3e", theme: "refined-elegant" },
+  // Burnin Bird's own site in the Pop Bento design (its live preview link).
+  { key: "burnin", name: "Burnin Bird", city: "Washington, DC", style: "Pop Bento", vibe: "Bright, playful bento cards that pop", url: "https://burnin-bird.vercel.app/api/theme-preview?t=pop-bento", accent: "#ff6a00", theme: "pop-bento" },
 ];
 
 // Same tiny pub/sub as lib/preview: any trigger opens the one fullscreen viewer
@@ -49,4 +51,9 @@ export function takePendingShowcase(): number | null {
 export function subscribeShowcase(l: Listener): () => void {
   listeners.add(l);
   return () => listeners.delete(l);
+}
+
+// What the fake address bar shows: just the host (preview links carry a query).
+export function displayUrl(url: string) {
+  return url.replace(/^https?:\/\//, "").replace(/[/?].*$/, "");
 }

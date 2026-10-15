@@ -52,7 +52,7 @@ export default function Hook() {
         <div className="hidden lg:block">
           <Showcase />
           <p className="mt-4 text-center text-sm text-ink-soft">
-            Real restaurants, live now. Same system, 4 designs. Yours can wear any of them.
+            Real restaurants, live now. Same system, 5 designs. Yours can wear any of them.
           </p>
         </div>
       </div>

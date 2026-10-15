@@ -2,13 +2,13 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { SHOWCASE, setPickedStyle, subscribeShowcase, takePendingShowcase } from "@/lib/showcase";
+import { SHOWCASE, displayUrl, setPickedStyle, subscribeShowcase, takePendingShowcase } from "@/lib/showcase";
 import { openPreview } from "@/lib/preview";
 import { openPackModal } from "@/lib/pack-modal";
 import { openWidget } from "@/lib/widget-cta";
 import { track } from "@/lib/track-client";
 
-// Fullscreen "look inside" viewer for the four real client sites. Shows the
+// Fullscreen "look inside" viewer for the real client sites. Shows the
 // whole homepage as a tall capture you scroll through (client sites refuse to be
 // iframed, and a capture never fires their visit alerts or skews their
 // analytics). Tabs / arrow keys switch site; "Open live" goes to the real thing.
@@ -112,7 +112,7 @@ export default function ShowcaseHost() {
               <span className="h-2.5 w-2.5 rounded-full bg-ash" />
               <span className="h-2.5 w-2.5 rounded-full bg-ash" />
               <span className="h-2.5 w-2.5 rounded-full bg-ash" />
-              <span className="ml-3 truncate font-mono text-xs text-ink-soft">{s.url.replace(/^https?:\/\//, "")}</span>
+              <span className="ml-3 truncate font-mono text-xs text-ink-soft">{displayUrl(s.url)}</span>
             </div>
             <Image
               key={s.key}
