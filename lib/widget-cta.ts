@@ -5,7 +5,7 @@
 // scrolls to whichever is nearest and focuses its first field, remembering which
 // door was used so the widget_opened event can be attributed.
 
-export type EntryPoint = "sticky_nav" | "hero" | "offer" | "preview" | "final_cta";
+export type EntryPoint = "sticky_nav" | "hero" | "offer" | "preview" | "final_cta" | "regulars" | "regulars_final";
 
 // Set by a CTA click, consumed by the next form focus. Null = the visitor went
 // straight to a form, which then reports its own placement.

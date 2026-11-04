@@ -1,5 +1,6 @@
 import { ChoosePlanButton } from "@/components/packs/ChoosePlanButton";
-import { PACKAGES, LOYALTY_ADDON_NOTE, CARE_NOTE, APP_ADDON_NOTE, formatUsd } from "@/lib/pricing";
+import { PACKAGES, LOYALTY_ADDON_NOTE, CARE_NOTE, APP_ADDON_NOTE, REGULARS, formatUsd } from "@/lib/pricing";
+import Link from "next/link";
 import { WidgetCtaButton } from "@/components/WidgetCta";
 
 // SECTION 5 - THE OFFER. What they get, and what it costs against the usual
@@ -89,6 +90,21 @@ export default function Offer() {
             </ChoosePlanButton>
           </div>
         </div>
+
+        {/* Offer v3: the monthly done-for-you option, with its own page. */}
+        <Link
+          href="/regulars"
+          className="group mt-8 flex flex-col gap-2 rounded-2xl border border-gain-bright/40 bg-gain-bright/[0.06] p-6 transition-colors hover:bg-gain-bright/[0.12] sm:flex-row sm:items-center sm:justify-between sm:p-8"
+        >
+          <div>
+            <p className="font-mono text-xs uppercase tracking-[0.18em] text-gain-bright">Rather have it done for you?</p>
+            <p className="mt-2 text-xl font-semibold tracking-tight">
+              The {REGULARS.name}: {formatUsd(REGULARS.monthly)}/mo, {REGULARS.guaranteeOrders} direct orders in {REGULARS.guaranteeDays} days or you don&apos;t pay.
+            </p>
+            <p className="mt-1 text-white/60">Bag cards, a text club and texts on slow nights, all done for you. Month to month.</p>
+          </div>
+          <span className="shrink-0 text-lg text-gain-bright transition-transform group-hover:translate-x-1">See how it works →</span>
+        </Link>
 
         <p className="mt-10 max-w-xl text-sm leading-relaxed text-white/60">
           I build and run each site myself. So I only take a few restaurants at a time. No fake timer. No deal that runs out.

@@ -137,6 +137,20 @@ export function isPackTier(v: unknown): v is PackTier {
 export const BUILD_PRICE_USD = 1999;
 export const BUILD_PRICE_LABEL = formatUsd(BUILD_PRICE_USD); // "$1,999"
 
+// ── Offer v3: the Regulars Engine (monthly, done for you) ────────────────────
+// SYNC: vegastar-builder-panel src/lib/offer.ts REGULARS (same numbers). The
+// one-time packs above stay as the "own it" option.
+export const REGULARS = {
+  name: "Regulars Engine",
+  setup: 497,
+  monthly: 197,
+  foundingSpots: 5,
+  foundingMonthly: 97,
+  guaranteeOrders: 100,
+  guaranteeDays: 90,
+  textCampaignsPerMonth: 2,
+} as const;
+
 // Same default savings inputs as outreach.ts DEFAULTS.savings.
 const SAVINGS = {
   estimatedOrdersPerDay: 20,
