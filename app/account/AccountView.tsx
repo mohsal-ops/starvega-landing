@@ -139,8 +139,13 @@ export function AccountView({
             )}
             {account.siteUrl && account.siteStatus === "live" && (
               <a href={`${account.siteUrl.replace(/\/$/, "")}/admin`} target="_blank" rel="noreferrer" className="ml-2 mt-5 inline-flex rounded-full border border-line px-4 py-2 text-sm">
-                Orders dashboard ↗
+                Restaurant dashboard ↗
               </a>
+            )}
+            {account.siteUrl && account.siteStatus === "live" && (
+              <p className="mt-3 text-xs leading-relaxed text-ink-soft">
+                Your restaurant dashboard is yours to use any time: orders, menu, prices, sold-out items, your text club.
+              </p>
             )}
           </section>
 
@@ -220,7 +225,9 @@ export function AccountView({
           <div className="space-y-4">
             <section className={card}>
               <h2 className="text-lg font-semibold">Ask for a change</h2>
-              <p className="mt-1 text-sm text-ink-soft">New dish, price change, a special to text out. I&apos;ll take care of it.</p>
+              <p className="mt-1 text-sm text-ink-soft">
+                Too busy to do it yourself? New dish, price change, a special to text out. Send one line and I&apos;ll take care of it.
+              </p>
               {demo ? <p className="mt-3 rounded-2xl border border-dashed border-line p-3 text-sm text-ink-soft">A box here lets you send a request any time.</p> : <RequestBox />}
               {requests.length > 0 && (
                 <ul className="mt-4 space-y-2">
