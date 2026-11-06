@@ -26,3 +26,28 @@ export async function sendOwnerMail(subject: string, text: string): Promise<bool
   });
   return true;
 }
+
+// Mail to a customer (login codes, receipts, replies). Same SMTP as the owner
+// mail. Returns false when SMTP isn't configured.
+export async function sendMail(to: string, subject: string, text: string, html?: string): Promise<boolean> {
+  const host = process.env.SMTP_HOST;
+  if (!host || !to) return false;
+  const port = Number(process.env.SMTP_PORT || 587);
+  const transport = nodemailer.createTransport({
+    host,
+    port,
+    secure: port === 465,
+    auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
+    connectionTimeout: 10_000,
+    greetingTimeout: 10_000,
+    socketTimeout: 15_000,
+  });
+  await transport.sendMail({
+    from: process.env.ACCOUNT_MAIL_FROM || process.env.TRACK_NOTIFY_FROM || process.env.SMTP_USER,
+    to,
+    subject,
+    text,
+    html,
+  });
+  return true;
+}

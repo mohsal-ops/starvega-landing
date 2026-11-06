@@ -124,12 +124,14 @@ export default function RegularsPage() {
                 <p className="mt-4 text-[15px] leading-relaxed text-white/70">
                   Everything in the Regulars Engine. In return: a short video about your results, and ok to share your numbers.
                 </p>
+                <Link href="/start?plan=founding" className="mt-5 block rounded-full bg-amber py-3 text-center font-semibold text-ink">Claim a founding spot</Link>
               </div>
               <div className="rounded-2xl border border-white/15 p-6">
                 <p className="text-sm text-white/60">{R.name}</p>
                 <p className="mt-2 text-4xl font-semibold tracking-tight">{formatUsd(R.monthly)}<span className="text-lg text-white/60">/mo</span></p>
                 <p className="mt-1 text-sm text-white/60">{formatUsd(R.setup)} setup · month to month</p>
                 <p className="mt-4 text-[15px] leading-relaxed text-white/70">Everything above, done for you, with the {R.guaranteeOrders}-order guarantee.</p>
+                <Link href="/start?plan=regulars" className="mt-5 block rounded-full bg-white py-3 text-center font-semibold text-ink">Start now</Link>
               </div>
               <div className="rounded-2xl border border-white/15 p-6">
                 <p className="text-sm text-white/60">Own it</p>
@@ -137,7 +139,7 @@ export default function RegularsPage() {
                 <p className="mt-1 text-sm text-white/60">paid once · you run it yourself</p>
                 <p className="mt-4 text-[15px] leading-relaxed text-white/70">
                   Rather not pay monthly? Get the site once.{" "}
-                  <Link href="/#offer" className="underline underline-offset-4 hover:text-amber">See the plans</Link>
+                  <Link href="/#plans" className="underline underline-offset-4 hover:text-amber">See the plans</Link>
                 </p>
               </div>
             </div>

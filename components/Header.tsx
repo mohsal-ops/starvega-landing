@@ -32,7 +32,8 @@ export default function Header() {
 
   if (pathname?.startsWith("/admin")) return null;
   // Paying customers (checkout + launch wizard) get the logo only - no sales CTA.
-  const buying = pathname?.startsWith("/checkout") || pathname?.startsWith("/onboard");
+  const buying =
+    pathname?.startsWith("/checkout") || pathname?.startsWith("/onboard") || pathname?.startsWith("/start") || pathname?.startsWith("/account");
 
   return (
     <header
@@ -52,9 +53,15 @@ export default function Header() {
           />
         </a>
         {!buying && (
-          <WidgetCtaButton entryPoint="sticky_nav" small>
-            Get my free mockup
-          </WidgetCtaButton>
+          <div className="flex items-center gap-4">
+            {/* Clients sign in to their dashboard (offer v3 client platform). */}
+            <a href="/account/login" className="hidden text-sm text-ink-soft hover:text-ink sm:inline">
+              Client sign in
+            </a>
+            <WidgetCtaButton entryPoint="sticky_nav" small>
+              Get my free mockup
+            </WidgetCtaButton>
+          </div>
         )}
       </div>
     </header>

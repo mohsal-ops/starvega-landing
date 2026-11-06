@@ -10,7 +10,7 @@ const ENV = (
   (process.env.NODE_ENV === "production" ? "live" : "sandbox")
 ).toLowerCase();
 
-const BASE =
+export const BASE =
   ENV === "live"
     ? "https://api-m.paypal.com"
     : "https://api-m.sandbox.paypal.com";
@@ -26,7 +26,7 @@ function creds(): { clientId: string; secret: string } {
   return { clientId, secret };
 }
 
-async function accessToken(): Promise<string> {
+export async function accessToken(): Promise<string> {
   const { clientId, secret } = creds();
   const res = await fetch(`${BASE}/v1/oauth2/token`, {
     method: "POST",

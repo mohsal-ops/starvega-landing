@@ -12,39 +12,74 @@ type Faq = { q: string; a: string; href?: string; linkText?: string; feature?: F
 
 const ALL_FAQS: Faq[] = [
   {
-    q: "Is the free mockup actually free?",
-    a: "Yes. Give me your name, your restaurant and a phone number. I make a sample of your site with your name and menu. No payment. No card. You only pay if you see it and want it.",
+    q: "Do I have to leave DoorDash or Uber Eats?",
+    a: "No. Keep them. They are good at finding you new customers. The card in the bag makes sure the next order from that customer comes straight to you instead.",
   },
   {
-    q: "What happens if I don't go ahead?",
-    a: "Nothing. I take the sample down and stop messaging you. I never sell or share your menu, photos or number.",
+    q: "What is a bag card?",
+    a: "A small card that goes in every delivery and takeout bag. It says \"Loved it? Next time, order straight from us,\" with a QR code and a thank-you offer, like a free drink. I design it with your logo and send you a file any print shop can print.",
   },
   {
-    q: "Why does this cost less than an agency or Toast/Square?",
-    a: "Agencies pay for big offices and lots of staff. Toast and Square charge you every month, forever. I build each site myself and you pay once. Care is free the first year, then $39 a month. Cancel any time and keep your site. No commission. No cut of each order.",
+    q: "Why would someone order from my site instead of the app?",
+    a: "They get your thank-you offer, and often a better price, because you don't pay the app's cut. The QR takes them right to your menu, so it's as easy as the app.",
+  },
+  {
+    q: "What exactly do you do every month?",
+    a: "I write and send 2 texts a month to your club, like a slow-night special or a birthday treat. You say ok first. I fix things you ask for, keep your site running, and post a short report in your account.",
+  },
+  {
+    q: "How does the 100-order guarantee work?",
+    a: "From the day your site goes live, you have 90 days. If your site doesn't bring you 100 direct orders, I refund your setup and keep working for free until it does. Your part: a card in every bag, the QR on your counter, and an ok on each text within a day.",
+  },
+  {
+    q: "Is there a contract?",
+    a: "No. The monthly plans are month to month. You can stop any month from your account. Your site stays up until the end of the month you paid for.",
+  },
+  {
+    q: "What's the difference between the plans?",
+    a: "Founding partner and the Regulars Engine are the same service, done for you: site, bag cards, text club and texts. Founding partner is a lower price for the first 5 restaurants. \"Own it\" is the site and ordering, paid once, and you run it yourself.",
+  },
+  {
+    q: "How do I pay, and when?",
+    a: "By card or PayPal. Monthly plans charge on the same day each month. You see every receipt in your Starvega account, and you can change your card in PayPal any time.",
+  },
+  {
+    q: "What is my Starvega account?",
+    a: "Your own page where you see your site, your plan and bills, how close you are to the 100 orders, every text and change I made, and a box to ask for anything. You sign in with your email. No password to remember.",
+  },
+  {
+    q: "Who gets the texts? Is it legal?",
+    a: "Only people who joined your club and said yes. Every text has a way to opt out. You never text anyone who didn't ask for it.",
+  },
+  {
+    q: "Where does the order money go?",
+    a: "Straight to your own payment account. I never touch your sales, and there's no fee per order.",
+  },
+  {
+    q: "I use Toast, Square or Clover. Does this work?",
+    a: "Yes, keep your register. Website orders ring on your phone and a tablet screen in your kitchen. A Square or Clover link is in early access. It doesn't go into Toast yet, so I'll be clear about that up front.",
+  },
+  {
+    q: "I already pay Owner.com or Popmenu. Why switch?",
+    a: "They give you good software that you still run yourself. I do the work for you: the cards, the texts, the Google listing, the changes. And it costs less. They're month to month too, so I move your menu and photos over for free when you're ready.",
+  },
+  {
+    q: "Is the free bag card and sample really free?",
+    a: "Yes. Give me your name, your restaurant and a phone number. I make your card and a sample of your site. No payment. No card. If you don't go ahead, I take the sample down and stop messaging you.",
+  },
+  {
+    q: "How long until I'm live?",
+    a: "The sample is ready in a day. After you send your basics, most sites go live in about a week. It depends on how fast you send your menu and photos.",
+  },
+  {
+    q: "Who are you?",
+    a: "I'm Ben. I build and run every site myself, so the person who builds yours is the same one who answers you every month. You won't get passed to a support team after launch.",
   },
   {
     q: "Are these app fees real?",
-    a: "Yes. They are the apps' own 2026 prices. DoorDash takes 15-30% for delivery. Uber Eats takes 15-30%. Grubhub takes 5-20%, plus more for delivery. I show each one, with the real math, in the full list.",
+    a: "Yes. DoorDash takes 15-30% for delivery. Uber Eats takes 15-30%. Grubhub takes 5-20%, plus more for delivery. I show each one, with the real math, in the full list.",
     href: "/learn/delivery-app-commissions",
     linkText: "See the full commission breakdown",
-  },
-  {
-    feature: "loyalty_sms",
-    q: "How does the loyalty club work?",
-    a: "Customers join at checkout, or by scanning a code in your restaurant. From your dashboard, you text or email them a deal with one tap. Birthday treats go out on their own. Each deal has a code, so you see what it made. It costs a little each month, just to cover the texts. You can add it to any plan.",
-  },
-  {
-    q: "Is it really mine?",
-    a: "Yes. Once it's live, it's your site and your ordering. No cut of your sales. No fee per order. You are not locked in.",
-  },
-  {
-    q: "How long does it take?",
-    a: "The sample is ready in a day or two. After you say yes, going live is quick. I do the tech work with you, step by step.",
-  },
-  {
-    q: "What if I already have a website?",
-    a: "That's fine. Most restaurant sites can't take an order without sending it to an app that takes a cut. This gives you ordering that is yours. I'll start from what you have.",
   },
 ];
 

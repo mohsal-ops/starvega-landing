@@ -240,6 +240,7 @@ export default async function AdminDashboard({
             <p className="text-sm text-ink-soft">Your marketing site, in numbers. · {range.label}</p>
           </div>
           <div className="flex items-center gap-2">
+            <a href="/admin/clients" className="rounded-lg bg-ink px-3 py-1.5 text-sm font-medium text-bg">Clients</a>
             <ReportButton markdown={reportMd} rangeLabel={range.label} />
             <form action={logout}>
               <button className="rounded-lg border border-line px-3 py-1.5 text-sm text-ink-soft hover:text-ink">Log out</button>

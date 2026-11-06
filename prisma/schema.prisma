@@ -71,3 +71,146 @@ model InstantDemoLead {
   // Project row was created there (Phase 4). status flips to "converted" too.
   projectId     String?
 }
+
+// ── Client platform (offer v3, 2026-11) ─────────────────────────────────────
+// A restaurant that signed up for a monthly plan gets an Account: a login (email
+// code, no password), their plan + PayPal subscription, invoices, the work Ben
+// did for them (ClientUpdate) and the changes they asked for (ClientRequest).
+// Managed by Ben in /admin/clients. See lib/billing.ts + lib/account-auth.ts.
+
+model Account {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  ownerName      String?
+  restaurantName String
+  phone          String?
+  city           String?
+  // Their site once it exists, and where it stands: "onboarding" (waiting for
+  // their basics) | "building" | "review" | "live".
+  siteUrl        String?
+  siteStatus     String    @default("onboarding")
+  // Builder panel project slug once handed off (links the two systems).
+  builderSlug    String?
+  // The InstantDemoLead row that holds their onboarding form (reuses
+  // /onboard/paid/[leadId]).
+  leadId         String?
+  // Guarantee tracking: direct orders counted so far (Ben updates it from the
+  // client site's dashboard each month) and when the 90 days started (go-live).
+  directOrders   Int       @default(0)
+  guaranteeStart DateTime?
+  bagCardCode    String?
+  notes          String?   @db.Text
+  createdAt      DateTime  @default(now())
+  lastLoginAt    DateTime?
+
+  subscriptions Subscription[]
+  invoices      Invoice[]
+  updates       ClientUpdate[]
+  requests      ClientRequest[]
+  loginCodes    LoginCode[]
+}
+
+// One-time sign-in codes emailed to the owner (hashed, 15 minutes, 5 tries).
+model LoginCode {
+  id        String   @id @default(cuid())
+  accountId String
+  codeHash  String
+  expiresAt DateTime
+  attempts  Int      @default(0)
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+  account   Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([accountId])
+}
+
+// A plan the restaurant pays monthly through PayPal Subscriptions.
+model Subscription {
+  id                String    @id @default(cuid())
+  accountId         String
+  // "founding" | "regulars" | "care" (see lib/billing.ts PLANS)
+  plan              String
+  provider          String    @default("paypal")
+  providerSubId     String    @unique
+  // PayPal status, lowercased: approval_pending | approved | active | suspended
+  // | cancelled | expired
+  status            String
+  monthlyCents      Int
+  setupCents        Int       @default(0)
+  startedAt         DateTime  @default(now())
+  nextBillingAt     DateTime?
+  lastPaymentAt     DateTime?
+  failedPayments    Int       @default(0)
+  cancelledAt       DateTime?
+  cancelReason      String?
+  updatedAt         DateTime  @updatedAt
+  account           Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([accountId])
+  @@index([plan, status])
+}
+
+model Invoice {
+  id             String   @id @default(cuid())
+  accountId      String
+  subscriptionId String?
+  // PayPal sale / capture id - unique so a webhook retry never double-counts.
+  providerTxnId  String   @unique
+  amountCents    Int
+  currency       String   @default("USD")
+  description    String
+  paidAt         DateTime
+  account        Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([accountId, paidAt])
+}
+
+// The work done for them, shown on their dashboard: "campaign" (a text went
+// out), "report" (monthly report), "site" (site change), "card" (bag cards),
+// "google" (Google listing), "note". metric = an optional number (orders, texts).
+model ClientUpdate {
+  id        String   @id @default(cuid())
+  accountId String
+  kind      String
+  title     String
+  body      String?  @db.Text
+  metric    String?
+  createdAt DateTime @default(now())
+  account   Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([accountId, createdAt])
+}
+
+// "Ask for a change" from their dashboard. status: open | done
+model ClientRequest {
+  id        String    @id @default(cuid())
+  accountId String
+  message   String    @db.Text
+  status    String    @default("open")
+  reply     String?   @db.Text
+  createdAt DateTime  @default(now())
+  doneAt    DateTime?
+  account   Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([accountId, status])
+}
+
+// PayPal product/plan ids created on first use, per environment (sandbox/live).
+model BillingPlan {
+  key          String   @id // "<env>:<plan>"  e.g. "live:regulars"
+  paypalPlanId String
+  createdAt    DateTime @default(now())
+}
+
+// A sign-up started on /start, before PayPal approves the subscription. Holds
+// what they typed so the account can be created from it once payment is real.
+model PendingSignup {
+  id             String   @id @default(cuid())
+  plan           String
+  email          String
+  ownerName      String?
+  restaurantName String
+  phone          String?
+  city           String?
+  createdAt      DateTime @default(now())
+}

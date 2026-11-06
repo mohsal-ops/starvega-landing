@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { SITE } from "@/lib/site";
 import { LegalDoc } from "@/components/LegalDoc";
+import { REGULARS } from "@/lib/pricing";
 
 export const metadata: Metadata = {
   title: "Terms of Service - Starvega",
-  description: "The terms for buying a restaurant website from Starvega.",
+  description: "The terms for buying a restaurant website or monthly plan from Starvega.",
   alternates: { canonical: "/terms" },
 };
 
@@ -47,6 +48,26 @@ export default function TermsPage() {
           <li>After building has started, we&apos;ll work with you on revisions first; a partial refund for work not yet done is at our discretion.</li>
           <li>No refund once you have approved the site or it has gone live.</li>
           <li>To ask for a refund, email {email}.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Monthly plans (Founding partner and Regulars Engine)</h2>
+        <ul>
+          <li>Monthly plans are billed through PayPal by card or PayPal balance, on the same day each month, until you cancel. A setup fee, if your plan has one, is charged with the first month.</li>
+          <li>There is no contract. You can cancel any time from your Starvega account (or by emailing us). Billing stops right away; your site and services stay on until the end of the month you already paid for. Months already paid are not refunded, except under the guarantee below.</li>
+          <li>Each month we write and send up to {REGULARS.textCampaignsPerMonth} text campaigns to your club, only after you approve them, and only to people who opted in. We also keep your site running and make reasonable small changes you ask for.</li>
+          <li>The founding partner price stays the same for as long as your plan stays active. If you cancel and come back later, the current price applies.</li>
+          <li>If a payment fails, PayPal tries again. After 2 failed tries the plan is paused until the payment goes through.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>The {REGULARS.guaranteeOrders}-order guarantee</h2>
+        <ul>
+          <li>If your site does not bring you {REGULARS.guaranteeOrders} paid direct orders within {REGULARS.guaranteeDays} days of going live, we refund your setup fee and keep providing the service at no monthly charge until it does.</li>
+          <li>It applies while you: put a bag card in every delivery and takeout bag, keep the QR code on your counter or tables, and approve or reply to each text campaign within 24 hours. A direct order is a paid order placed on your own Starvega site.</li>
+          <li>To use it, message us within 14 days after the {REGULARS.guaranteeDays} days end. Your order count is the one shown in your restaurant&apos;s order dashboard.</li>
         </ul>
       </section>
 

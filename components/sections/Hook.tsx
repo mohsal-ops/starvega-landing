@@ -1,8 +1,9 @@
 import { MockupForm } from "@/components/MockupForm";
 import { PreviewLink } from "@/components/PreviewWindow";
 import { Showcase, ShowcaseStrip } from "@/components/Showcase";
+import { REGULARS } from "@/lib/pricing";
 
-// SECTION 1 - HERO. Most real visitors never scroll past this screen, so the
+// SECTION 1 - HERO (offer v3: regulars, not commission). Most real visitors never scroll past this screen, so the
 // whole pitch AND the ask live here: headline, the two-part promise (orders
 // without commission + regulars who come back), the 3-field mockup form, and four real client
 // sites (one per design) cycling beside it. Server-rendered and paint-ready: no scroll/JS
@@ -18,30 +19,31 @@ export default function Hook() {
 
       <div className="mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-[1fr_1.05fr] lg:gap-14">
         <div>
-          <p className="mb-5 font-mono text-[11px] uppercase tracking-[0.22em] text-ink-soft">For independent restaurants</p>
+          <p className="mb-5 font-mono text-[11px] uppercase tracking-[0.22em] text-ink-soft">For restaurants on DoorDash, Uber Eats &amp; Grubhub</p>
 
-          <h1 className="font-display text-[clamp(2.4rem,7vw,4.5rem)] font-semibold uppercase leading-[0.95] tracking-[-0.015em] text-ink">
+          <h1 className="font-display text-[clamp(2.3rem,6.6vw,4.3rem)] font-semibold uppercase leading-[0.95] tracking-[-0.015em] text-ink">
             <span className="block">
-              DoorDash takes <span className="hero-strike text-loss">30%</span>
-              <span className="mb-2 mt-1 block font-sans text-[max(15px,0.3em)] font-semibold normal-case leading-none tracking-normal text-ink-soft">
-                of every order. Every single one.
-              </span>
+              The apps bring them <span className="text-loss">once</span>.
             </span>
             <span className="block">
-              Your site takes <span className="hero-pop text-gain">0%</span>.
+              We bring them <span className="hero-pop text-gain">back</span>.
             </span>
           </h1>
 
-          <p className="mt-6 max-w-[46ch] text-[18px] leading-[1.5] text-ink-soft">
-            Get your own website. Customers <strong className="font-semibold text-ink">order on it, and you keep all the money</strong>.
-            They can even <strong className="font-semibold text-ink">put it on their phone like an app</strong>. Pay once to build it,
-            and the first year of care is free.
+          <p className="mt-6 max-w-[48ch] text-[18px] leading-[1.5] text-ink-soft">
+            A card in every delivery bag turns app customers into <strong className="font-semibold text-ink">regulars who order straight from you</strong>.
+            Then I <strong className="font-semibold text-ink">text them on your slow nights</strong>. Your own site, no commission, all done for you.
           </p>
 
-          <div className="mt-8 rounded-2xl border border-line bg-paper p-4 sm:p-6">
-            <p className="mb-4 text-[17px] font-semibold tracking-tight text-ink">
-              I&apos;ll make a free sample of <span className="text-amber-deep">your</span> restaurant&apos;s site.
+          <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-gain/30 bg-gain/10 px-4 py-2 text-[15px] font-medium text-gain">
+            <span aria-hidden>✓</span> {REGULARS.guaranteeOrders} direct orders in {REGULARS.guaranteeDays} days, or you don&apos;t pay
+          </div>
+
+          <div className="mt-7 rounded-2xl border border-line bg-paper p-4 sm:p-6">
+            <p className="mb-1 text-[17px] font-semibold tracking-tight text-ink">
+              Get <span className="text-amber-deep">your</span> free bag card + site sample.
             </p>
+            <p className="mb-4 text-sm text-ink-soft">With your logo and menu. I text it to you within 24 hours. No card, no catch.</p>
             <MockupForm placement="hero" />
           </div>
 

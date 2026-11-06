@@ -1,5 +1,4 @@
 import { WidgetCtaButton } from "@/components/WidgetCta";
-import { ChoosePlanButton } from "@/components/packs/ChoosePlanButton";
 
 // SECTION - HOW IT WORKS. For the visitor who's already sold: the whole road
 // from "free mockup" to "taking orders", with what THEY do vs what I do at each
@@ -9,34 +8,40 @@ import { ChoosePlanButton } from "@/components/packs/ChoosePlanButton";
 
 const STEPS: { title: string; blurb: string; you: string[]; me: string[] }[] = [
   {
-    title: "Get your free mockup",
-    blurb: "Fill in 3 boxes. No payment. I make a sample site with your name and menu.",
+    title: "Get your free bag card + sample",
+    blurb: "Fill in 3 boxes. No payment. You see your card and your site before anything else.",
     you: ["Your name, restaurant, and a number I can text"],
-    me: ["Build the mockup in the design you liked", "Message you the link within 24h"],
+    me: ["Design your bag card with your logo", "Build a sample site with your name and menu", "Text you both within 24h"],
   },
   {
-    title: "Pick a plan, pay once",
-    blurb: "Only if you love it. Pay once to build. The first year of care is free.",
-    you: ["Choose Starter, Standard or Pro", "Pay securely, one time"],
-    me: ["Send you a short onboarding form"],
+    title: "Pick a plan",
+    blurb: "Two minutes. Card or PayPal. Month to month, or pay once to own it.",
+    you: ["Choose Founding partner, Regulars Engine, or Own it"],
+    me: ["Open your Starvega account", "Everything I do shows up there"],
   },
   {
-    title: "Send the basics",
+    title: "Send your basics",
     blurb: "A 10-minute form. Photos from your phone are fine.",
-    you: ["Your logo, if you have one", "Menu: a photo, PDF or link", "Food photos, hours, address", "A line or two about your story"],
-    me: ["Build your real menu with prices and options", "Write your pages and set up Google search basics"],
+    you: ["Your logo, if you have one", "Menu: a photo, PDF or link", "Food photos, hours, address"],
+    me: ["Build your real menu with prices and options", "Write your pages and set up Google basics"],
   },
   {
-    title: "Connect payments & extras",
-    blurb: "The money goes right to your own account. I help you with every click.",
-    you: ["Connect your Stripe (or create one)", "Your domain, or I help you get one"],
-    me: ["Wire up online ordering and receipts", "Optional: loyalty club, courier delivery, Google Business Profile"],
+    title: "Connect payments",
+    blurb: "Order money goes straight to your own account. I help with every click.",
+    you: ["Connect your Stripe (or I help you make one)", "Your domain, or I help you get one"],
+    me: ["Wire up ordering, receipts and order alerts", "Set up your text club and bag card code"],
   },
   {
-    title: "Review & go live",
-    blurb: "You check it all and ask for changes. Then we turn it on.",
-    you: ["Place a test order", "Share the link: Instagram bio, Google, table QR codes"],
-    me: ["Make your changes", "Launch, and stay on call if anything comes up"],
+    title: "Go live, cards in the bags",
+    blurb: "You check everything. Then we turn it on and the 90 days start.",
+    you: ["Place a test order", "Print the cards, put one in every bag", "QR on the counter"],
+    me: ["Launch and fix your Google listing", "Send you the print-ready card file"],
+  },
+  {
+    title: "Every month after",
+    blurb: "You run the kitchen. I bring the regulars back.",
+    you: ["Say ok to each text before it goes out"],
+    me: ["Write and send 2 texts a month", "A short report in your account", "Changes whenever you ask"],
   },
 ];
 
@@ -49,14 +54,14 @@ export default function Steps() {
             How it works
           </p>
           <h2 data-reveal className="text-[clamp(2rem,5.5vw,3.25rem)] font-semibold leading-[1.05] tracking-[-0.02em]">
-            From free mockup to taking orders, in 5 steps.
+            From free bag card to regulars coming back, in 6 steps.
           </h2>
           <p data-reveal className="mt-4 max-w-md text-lg leading-relaxed text-ink-soft">
             You send the things only you have. I do the rest.
           </p>
           <div data-reveal className="mt-8 flex flex-wrap items-center gap-3">
             <WidgetCtaButton entryPoint="offer">Start with a free mockup</WidgetCtaButton>
-            <ChoosePlanButton variant="outline">Skip it, see plans</ChoosePlanButton>
+            <a href="#plans" className="inline-flex min-h-[44px] items-center rounded-full border border-ink px-5 font-medium">Skip it, see plans</a>
           </div>
         </div>
 

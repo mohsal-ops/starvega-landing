@@ -12,10 +12,10 @@ export default function Signup() {
         <div className="mx-auto w-full max-w-2xl">
           <p className="mb-4 font-mono text-xs uppercase tracking-[0.2em] text-amber">Free, no obligation</p>
           <h2 className="text-[clamp(2rem,6vw,3.25rem)] font-semibold leading-[1.05] tracking-[-0.02em]">
-            See your restaurant&apos;s site before you spend a dollar.
+            See your bag card and your site before you spend a dollar.
           </h2>
           <p className="mt-4 text-lg leading-relaxed text-white/70">
-            Tell me who you are. I&apos;ll make a free sample of your site with your name and menu, and text you within 24 hours.
+            Tell me who you are. I&apos;ll make your bag card and a free sample of your site with your name and menu, and text you within 24 hours.
           </p>
           <div className="mt-8">
             <MockupForm placement="final_cta" onInk />

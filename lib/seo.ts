@@ -7,7 +7,7 @@ import { SITE } from "./site";
 
 const TITLE = "Restaurant websites with zero-commission online ordering | Starvega";
 const DESCRIPTION =
-  "Stop paying DoorDash 15-30% on every order. I build restaurants a fast website with their own online ordering and dashboard. One-time price, zero commission, you own it.";
+  "Turn DoorDash and Uber Eats customers into regulars who order straight from you. Your own ordering site, bag cards, a text club and texts on slow nights, done for you. Zero commission. 100 direct orders in 90 days or you don't pay.";
 
 // Social share image. The existing brand wordmark (2172x724). A dedicated
 // 1200x630 card would crop cleaner in some social previews - swap the path here
