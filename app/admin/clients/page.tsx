@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import db from "@/lib/db";
 import { requireAuth } from "@/lib/auth";
-import { LIVE_STATUSES, PLANS, isPlanKey, foundingSpotsLeft } from "@/lib/billing";
+import { LIVE_STATUSES, PLANS, isPlanKey, foundingSpotsLeft, getWebhookId } from "@/lib/billing";
 import { ClientCard, AddClient, RefreshBilling } from "./ClientsClient";
 
 // /admin/clients - Ben's side of the client platform: every paying restaurant,
@@ -22,6 +22,7 @@ export default async function ClientsAdmin() {
     },
   });
   const spots = await foundingSpotsLeft();
+  const webhookId = await getWebhookId();
 
   const live = accounts.flatMap((a) => a.subscriptions.filter((s) => LIVE_STATUSES.includes(s.status)));
   const mrr = live.reduce((s, x) => s + x.monthlyCents, 0) / 100;
@@ -91,9 +92,9 @@ export default async function ClientsAdmin() {
         {troubled > 0 && (
           <p className="mt-3 rounded-xl bg-red-50 p-3 text-sm text-red-700">{troubled} client{troubled === 1 ? "" : "s"} with a failed payment. PayPal retries; check below.</p>
         )}
-        {!process.env.PAYPAL_WEBHOOK_ID && (
+        {!webhookId && (
           <p className="mt-3 rounded-xl bg-amber-50 p-3 text-sm text-amber-900">
-            PAYPAL_WEBHOOK_ID isn&apos;t set, so monthly receipts aren&apos;t recorded automatically yet. Add the webhook in PayPal (URL /api/billing/webhook) and put its id in Vercel.
+            PayPal receipts aren&apos;t connected yet. They connect by themselves on the next sign-up, or click &quot;Sync with PayPal&quot;.
           </p>
         )}
 

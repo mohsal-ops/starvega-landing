@@ -1,22 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import db from "@/lib/db";
-import { verifyWebhook, PLANS, isPlanKey } from "@/lib/billing";
+import { verifyWebhook, getWebhookId, PLANS, isPlanKey } from "@/lib/billing";
 import { sendMail, sendOwnerMail } from "@/lib/mail";
 import { SITE } from "@/lib/site";
 
 // POST /api/billing/webhook - PayPal tells us about monthly payments and
 // subscription changes. Set it up once in the PayPal developer dashboard
-// (Apps -> your app -> Webhooks -> Add): URL https://www.starvega.site/api/billing/webhook,
-// events: PAYMENT.SALE.COMPLETED, BILLING.SUBSCRIPTION.* , then put the webhook
-// id in PAYPAL_WEBHOOK_ID. Every event is signature-checked with PayPal first.
+// The site registers this webhook with PayPal by itself (lib/billing.ts
+// ensureWebhook, on the first sign-up or from /admin/clients). Every event is
+// signature-checked with PayPal first.
 export const runtime = "nodejs";
 
 type Evt = { event_type: string; resource: Record<string, unknown> };
 
 export async function POST(req: NextRequest) {
   const raw = await req.text();
-  if (!process.env.PAYPAL_WEBHOOK_ID) {
-    console.error("[billing/webhook] PAYPAL_WEBHOOK_ID is not set - event ignored");
+  if (!(await getWebhookId())) {
+    console.error("[billing/webhook] no webhook id yet - event ignored");
     return NextResponse.json({ error: "not configured" }, { status: 503 });
   }
   if (!(await verifyWebhook(req.headers, raw))) return NextResponse.json({ error: "bad signature" }, { status: 400 });

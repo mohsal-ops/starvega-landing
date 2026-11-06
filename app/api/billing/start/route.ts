@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import db from "@/lib/db";
-import { ensurePlan, foundingSpotsLeft, isPlanKey } from "@/lib/billing";
+import { ensurePlan, ensureWebhook, foundingSpotsLeft, isPlanKey } from "@/lib/billing";
 import { clientIp, rateLimit } from "@/lib/rateLimit";
 
 // POST /api/billing/start  { plan, email, ownerName, restaurantName, phone, city }
@@ -27,6 +27,8 @@ export async function POST(req: NextRequest) {
 
   try {
     const planId = await ensurePlan(b.plan);
+    // Make sure PayPal knows where to send receipts (once; never blocks sign-up).
+    await ensureWebhook().catch((e) => console.error("[billing/start] webhook setup failed", e));
     const signup = await db.pendingSignup.create({
       data: {
         plan: b.plan,

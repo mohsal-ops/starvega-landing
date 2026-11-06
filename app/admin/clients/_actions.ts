@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import db from "@/lib/db";
 import { requireAuth } from "@/lib/auth";
-import { syncSubscription } from "@/lib/billing";
+import { syncSubscription, ensureWebhook } from "@/lib/billing";
 import { sendMail } from "@/lib/mail";
 import { SITE } from "@/lib/site";
 
@@ -95,6 +95,7 @@ export async function addClientByHand(input: { email: string; restaurantName: st
 /** Pull the latest from PayPal for every open subscription. */
 export async function refreshBilling() {
   await requireAuth();
+  await ensureWebhook().catch(() => null);
   const subs = await db.subscription.findMany({ where: { status: { notIn: ["cancelled", "expired"] } } });
   await Promise.all(subs.map((s) => syncSubscription(s).catch(() => null)));
   done();

@@ -163,9 +163,49 @@ export async function syncSubscription(sub: { id: string; providerSubId: string 
   });
 }
 
-/** True when PayPal signed this webhook (needs PAYPAL_WEBHOOK_ID). */
+// The webhook is registered with PayPal by the site itself (ensureWebhook), using
+// the live keys already on Vercel, and its id is kept in the BillingPlan table.
+// PAYPAL_WEBHOOK_ID in the environment still wins if it's set.
+const WEBHOOK_URL = "https://www.starvega.site/api/billing/webhook";
+const WEBHOOK_EVENTS = [
+  "PAYMENT.SALE.COMPLETED",
+  "BILLING.SUBSCRIPTION.ACTIVATED",
+  "BILLING.SUBSCRIPTION.RE-ACTIVATED",
+  "BILLING.SUBSCRIPTION.UPDATED",
+  "BILLING.SUBSCRIPTION.SUSPENDED",
+  "BILLING.SUBSCRIPTION.CANCELLED",
+  "BILLING.SUBSCRIPTION.EXPIRED",
+  "BILLING.SUBSCRIPTION.PAYMENT.FAILED",
+];
+
+export async function getWebhookId(): Promise<string | null> {
+  if (process.env.PAYPAL_WEBHOOK_ID) return process.env.PAYPAL_WEBHOOK_ID;
+  const row = await db.billingPlan.findUnique({ where: { key: `${PAYPAL_ENV}:webhook` } }).catch(() => null);
+  return row?.paypalPlanId ?? null;
+}
+
+/** Register (or find) our webhook in PayPal once; cached. Safe to call often. */
+export async function ensureWebhook(): Promise<string | null> {
+  const known = await getWebhookId();
+  if (known) return known;
+  if (PAYPAL_ENV !== "live") return null; // localhost can't receive webhooks
+  const list = await pp<{ webhooks?: { id: string; url: string }[] }>("/v1/notifications/webhooks");
+  let id = list.webhooks?.find((w) => w.url === WEBHOOK_URL)?.id;
+  if (!id) {
+    const created = await pp<{ id: string }>("/v1/notifications/webhooks", {
+      method: "POST",
+      body: JSON.stringify({ url: WEBHOOK_URL, event_types: WEBHOOK_EVENTS.map((name) => ({ name })) }),
+    });
+    id = created.id;
+  }
+  const key = `${PAYPAL_ENV}:webhook`;
+  await db.billingPlan.upsert({ where: { key }, create: { key, paypalPlanId: id }, update: { paypalPlanId: id } });
+  return id;
+}
+
+/** True when PayPal signed this webhook. */
 export async function verifyWebhook(headers: Headers, rawBody: string): Promise<boolean> {
-  const webhookId = process.env.PAYPAL_WEBHOOK_ID;
+  const webhookId = await getWebhookId();
   if (!webhookId) return false;
   const h = (k: string) => headers.get(k) || "";
   const out = await pp<{ verification_status?: string }>("/v1/notifications/verify-webhook-signature", {
