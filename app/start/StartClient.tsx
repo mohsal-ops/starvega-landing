@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import { PayPalScriptProvider, PayPalButtons, FUNDING } from "@paypal/react-paypal-js";
 
 type Plan = "founding" | "regulars";
 
@@ -112,8 +112,41 @@ export function StartClient({
           {!paypalClientId ? (
             <p className="rounded-xl border border-ash bg-stone-50 p-4 text-sm text-ink-soft">Payment isn&apos;t available right now. Please message us and we&apos;ll set it up.</p>
           ) : (
-            <PayPalScriptProvider options={{ clientId: paypalClientId, vault: true, intent: "subscription", currency: "USD" }}>
+            <PayPalScriptProvider options={{ clientId: paypalClientId, vault: true, intent: "subscription", currency: "USD", enableFunding: "card" }}>
+              <p className="mb-2 text-center text-sm font-medium text-ink">Pay with your card</p>
               <PayPalButtons
+                fundingSource={FUNDING.CARD}
+                style={{ layout: "vertical", shape: "pill" }}
+                createSubscription={(_data, actions) =>
+                  actions.subscription.create({
+                    plan_id: ids!.planId,
+                    custom_id: ids!.signupId,
+                    subscriber: { email_address: form.email, name: { given_name: form.ownerName.split(" ")[0] || form.ownerName, surname: form.ownerName.split(" ").slice(1).join(" ") || undefined } },
+                    application_context: { brand_name: "Starvega", shipping_preference: "NO_SHIPPING", user_action: "SUBSCRIBE_NOW" },
+                  } as Parameters<typeof actions.subscription.create>[0])
+                }
+                onApprove={async (data) => {
+                  setBusy(true);
+                  setError("");
+                  try {
+                    const res = await fetch("/api/billing/activate", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ subscriptionId: data.subscriptionID, signupId: ids!.signupId }),
+                    });
+                    const out = await res.json().catch(() => ({}));
+                    if (!res.ok || !out.ok) throw new Error(out.error || "We couldn't confirm your plan. Please message us.");
+                    window.location.href = out.redirect || "/account";
+                  } catch (err) {
+                    setError((err as Error).message);
+                    setBusy(false);
+                  }
+                }}
+                onError={() => setError("Something went wrong with PayPal. Please try again.")}
+              />
+              <p className="my-3 text-center text-xs text-ink-soft">or</p>
+              <PayPalButtons
+                fundingSource={FUNDING.PAYPAL}
                 style={{ layout: "vertical", shape: "pill", label: "subscribe" }}
                 createSubscription={(_data, actions) =>
                   actions.subscription.create({

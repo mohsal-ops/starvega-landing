@@ -138,6 +138,7 @@ export default async function Offer() {
               ))}
             </ul>
             <p className="mt-3 text-center text-[10px] text-ink-soft">What your account looks like. The numbers are an example.</p>
+            <a href="/account/demo" className="mt-2 block text-center text-sm font-semibold text-ink underline underline-offset-4">Open a full sample account →</a>
           </div>
         </div>
 
