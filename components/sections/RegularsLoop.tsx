@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useInView, useReducedMotion } from "motion/react";
+import { DEMO_QR } from "@/components/demoQr";
 
 // SECTION - THE LOOP (offer v3). An animated, self-playing story of how one
 // delivery-app customer becomes a regular who orders straight from you:
@@ -32,6 +33,72 @@ function Phone({ children, tint = "#fff" }: { children: React.ReactNode; tint?: 
   );
 }
 
+/** A real, scannable QR (components/demoQr.ts), drawn as SVG. */
+function QR({ size }: { size: number }) {
+  const n = DEMO_QR.length;
+  return (
+    <svg width={size} height={size} viewBox={`-2 -2 ${n + 4} ${n + 4}`} shapeRendering="crispEdges" aria-hidden className="shrink-0">
+      <rect x={-2} y={-2} width={n + 4} height={n + 4} fill="#fff" />
+      {DEMO_QR.flatMap((row, y) => [...row].map((v, x) => (v === "1" ? <rect key={`${x}-${y}`} x={x} y={y} width={1.02} height={1.02} fill="#141414" /> : null)))}
+    </svg>
+  );
+}
+
+/** The bag card, same layout as the printed 4x6 card from Mockup Studio. */
+function BagCard({ compact = false }: { compact?: boolean }) {
+  const f = compact ? 0.76 : 1;
+  const px = (n: number) => `${Math.round(n * f * 10) / 10}px`;
+  return (
+    <div className="overflow-hidden rounded-[10px] bg-[#fffdf9] shadow-[0_16px_30px_-10px_rgba(0,0,0,0.55)] ring-1 ring-black/5" style={{ width: px(156) }}>
+      <div className="relative bg-[url('/demo/bowl-chicken.jpg')] bg-cover bg-center" style={{ height: px(62) }}>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/45" />
+        <span className="absolute left-1/2 grid -translate-x-1/2 place-items-center rounded-full bg-white p-[3px] shadow" style={{ width: px(30), height: px(30), bottom: px(-14) }}>
+          <span className="grid h-full w-full place-items-center rounded-full bg-[#b5462e] font-black text-white" style={{ fontSize: px(8) }}>YR</span>
+        </span>
+      </div>
+      <div className="text-center" style={{ padding: `${px(18)} ${px(9)} ${px(9)}` }}>
+        <p className="font-semibold uppercase tracking-[0.18em] text-[#8a3a26]" style={{ fontSize: px(6) }}>Your Restaurant</p>
+        <p className="mt-0.5 font-extrabold leading-tight text-stone-900" style={{ fontSize: px(11.5) }}>Loved it? Next time, order straight from us.</p>
+        <p className="mx-auto mt-1.5 w-fit rounded-full bg-[#b5462e] font-bold text-white" style={{ fontSize: px(7.5), padding: `${px(2)} ${px(8)}` }}>Free drink on your next order</p>
+        <div className="mt-2 flex items-center rounded-md border border-[#ead2c8] text-left" style={{ gap: px(6), padding: px(4) }}>
+          <QR size={Math.round(54 * f)} />
+          <div className="leading-tight">
+            <p className="font-extrabold text-stone-900" style={{ fontSize: px(9.5) }}>Scan to order</p>
+            <p className="text-stone-500" style={{ fontSize: px(6.5) }}>and join our text club</p>
+            <p className="mt-0.5 font-mono font-bold text-[#8a3a26]" style={{ fontSize: px(7) }}>Code DIRECT</p>
+          </div>
+        </div>
+      </div>
+      <div className="bg-[#2a1712] text-center text-white/90" style={{ fontSize: px(6), padding: `${px(4)} 0` }}>Pickup &amp; delivery · yourrestaurant.com</div>
+    </div>
+  );
+}
+
+/** A kraft paper takeout bag: back panel, the card slot, a front panel with side gussets and a cut top. */
+function KraftBag({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="absolute bottom-4 left-1/2 h-[270px] w-[230px] -translate-x-1/2">
+      {/* back panel */}
+      <div className="absolute inset-x-[6px] top-0 h-full rounded-[4px] bg-[linear-gradient(180deg,#b88a5a,#a77a4c)]" />
+      {children}
+      {/* front panel */}
+      <div
+        className="absolute inset-x-0 bottom-0 top-[26px] rounded-b-[6px] bg-[linear-gradient(90deg,#b58553_0%,#d3a774_9%,#dcb382_50%,#d0a26e_91%,#a97847_100%)] shadow-[inset_0_-18px_30px_rgba(80,45,10,0.25)]"
+        style={{ clipPath: "polygon(0 6px,4% 0,8% 6px,12% 0,16% 6px,20% 0,24% 6px,28% 0,32% 6px,36% 0,40% 6px,44% 0,48% 6px,52% 0,56% 6px,60% 0,64% 6px,68% 0,72% 6px,76% 0,80% 6px,84% 0,88% 6px,92% 0,96% 6px,100% 0,100% 100%,0 100%)" }}
+      >
+        <div className="absolute inset-0 opacity-25 [background:repeating-linear-gradient(0deg,transparent_0_3px,rgba(90,55,20,0.18)_3px_4px)]" />
+        <div className="absolute inset-y-0 left-[9%] w-px bg-black/10" />
+        <div className="absolute inset-y-0 right-[9%] w-px bg-black/10" />
+        <div className="absolute inset-x-0 bottom-[22%] h-px bg-black/10" />
+        <div className="absolute left-1/2 top-[48%] -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-[#6b3f1d]/45 px-4 py-2 text-center text-[#6b3f1d]/55">
+          <p className="text-[9px] font-bold uppercase tracking-[0.3em]">Your</p>
+          <p className="text-[13px] font-black uppercase tracking-[0.15em]">Restaurant</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const pop = { initial: { opacity: 0, y: 18, scale: 0.96 }, animate: { opacity: 1, y: 0, scale: 1 }, exit: { opacity: 0, y: -12, scale: 0.98 } };
 
 function Scene({ k }: { k: (typeof BEATS)[number]["k"] }) {
@@ -57,54 +124,61 @@ function Scene({ k }: { k: (typeof BEATS)[number]["k"] }) {
     );
   if (k === "bag")
     return (
-      <div className="relative mx-auto h-[400px] w-[280px]">
-        {/* paper bag */}
-        <div className="absolute bottom-0 left-1/2 h-[300px] w-[230px] -translate-x-1/2 rounded-b-xl rounded-t-sm bg-gradient-to-b from-[#d9b98f] to-[#b98f60] shadow-[0_30px_60px_-25px_rgba(60,30,0,0.6)]">
-          <div className="absolute inset-x-0 top-0 h-6 bg-[repeating-linear-gradient(90deg,#c9a274_0_10px,#d9b98f_10px_20px)]" />
-        </div>
-        {/* the card dropping in */}
-        <motion.div
-          initial={{ y: -160, rotate: -14, opacity: 0 }}
-          animate={{ y: 0, rotate: -6, opacity: 1 }}
-          transition={{ type: "spring", stiffness: 90, damping: 13, delay: 0.2 }}
-          className="absolute left-1/2 top-[40px] w-[170px] -translate-x-1/2 rounded-xl bg-white p-3 shadow-xl"
+      <div className="relative mx-auto h-[420px] w-[300px]">
+        {/* soft table shadow */}
+        <div className="absolute bottom-1 left-1/2 h-6 w-[250px] -translate-x-1/2 rounded-[50%] bg-black/25 blur-md" />
+        <KraftBag>
+          {/* the card slides into the bag: its lower half hides behind the front panel */}
+          <motion.div
+            initial={{ y: -150, rotate: -16, opacity: 0 }}
+            animate={{ y: 0, rotate: -5, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 80, damping: 14, delay: 0.25 }}
+            className="absolute left-1/2 top-[-168px] -ml-[78px]"
+          >
+            <BagCard />
+          </motion.div>
+        </KraftBag>
+        <motion.span
+          initial={{ opacity: 0, x: 10 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 1.3 }}
+          className="absolute -right-3 bottom-24 rounded-full bg-white px-3 py-1.5 text-[11px] font-semibold text-stone-700 shadow-md"
         >
-          <div className="mx-auto grid h-9 w-9 place-items-center rounded-full bg-ink text-xs font-bold text-white">YR</div>
-          <p className="mt-2 text-center text-[13px] font-bold leading-tight text-stone-900">Loved it? Next time, order straight from us.</p>
-          <p className="mx-auto mt-2 w-fit rounded-full bg-amber px-2.5 py-1 text-[10px] font-bold text-ink">Free drink next order</p>
-          <div className="mx-auto mt-2 grid h-14 w-14 grid-cols-5 gap-[2px] rounded bg-white p-1">
-            {Array.from({ length: 25 }).map((_, i) => (
-              <span key={i} className={[0, 1, 3, 5, 6, 8, 12, 14, 16, 18, 19, 21, 23, 24].includes(i) ? "bg-stone-900" : "bg-transparent"} />
-            ))}
-          </div>
-        </motion.div>
+          In every delivery bag
+        </motion.span>
       </div>
     );
   if (k === "scan")
     return (
-      <Phone tint="#0d0d0f">
+      <Phone tint="#000">
         <div className="relative h-full w-full">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,#3a3a3a,#0d0d0f_70%)]" />
-          <div className="absolute left-1/2 top-[38%] h-28 w-28 -translate-x-1/2 -translate-y-1/2">
-            <div className="grid h-full w-full grid-cols-5 gap-[3px] rounded-md bg-white p-2">
-              {Array.from({ length: 25 }).map((_, i) => (
-                <span key={i} className={[0, 1, 3, 5, 6, 8, 12, 14, 16, 18, 19, 21, 23, 24].includes(i) ? "bg-stone-900" : ""} />
-              ))}
-            </div>
-            <motion.div
-              className="absolute inset-x-0 h-0.5 bg-gain-bright shadow-[0_0_12px_#3ddc84]"
-              initial={{ top: "0%" }}
-              animate={{ top: ["0%", "100%", "0%"] }}
-              transition={{ duration: 1.6, repeat: Infinity }}
-            />
-            {["left-0 top-0 border-l-4 border-t-4", "right-0 top-0 border-r-4 border-t-4", "left-0 bottom-0 border-b-4 border-l-4", "right-0 bottom-0 border-b-4 border-r-4"].map((c) => (
-              <span key={c} className={`absolute h-6 w-6 rounded-sm border-white ${c}`} />
-            ))}
-          </div>
-          <motion.div initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1.2 }} className="absolute inset-x-3 bottom-8 rounded-2xl bg-white/95 p-3 text-center">
-            <p className="text-[11px] text-stone-500">Open in Safari</p>
-            <p className="text-sm font-semibold text-stone-900">yourrestaurant.com</p>
+          {/* camera view: the card lying on a wooden table */}
+          <div className="absolute inset-0 bg-[linear-gradient(115deg,#6b4a2f_0%,#8a6240_35%,#5e3f27_60%,#7a5636_100%)]" />
+          <div className="absolute inset-0 opacity-30 [background:repeating-linear-gradient(100deg,transparent_0_9px,rgba(0,0,0,0.18)_9px_10px,transparent_10px_23px)]" />
+          <motion.div
+            initial={{ scale: 1.3, rotate: -14 }}
+            animate={{ scale: 1.08, rotate: -8 }}
+            transition={{ duration: 1.6, ease: "easeOut" }}
+            className="absolute left-1/2 top-[42%] -ml-[59px] -mt-[90px]"
+          >
+            <BagCard compact />
           </motion.div>
+          {/* iPhone camera chrome */}
+          <div className="absolute inset-x-0 top-0 flex justify-center pt-9">
+            <span className="rounded-full bg-black/45 px-2.5 py-0.5 text-[10px] font-semibold tracking-wide text-[#ffd60a]">QR CODE</span>
+          </div>
+          <motion.div
+            initial={{ y: 30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 1.3, type: "spring", stiffness: 160, damping: 16 }}
+            className="absolute inset-x-3 bottom-[72px] flex items-center justify-center gap-1.5 whitespace-nowrap rounded-full bg-[#ffd60a] px-2.5 py-1.5 text-[11px] font-semibold text-black shadow-lg"
+          >
+            <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-black text-[10px] text-[#ffd60a]">↗</span>
+            yourrestaurant.com
+          </motion.div>
+          <div className="absolute bottom-3 left-1/2 h-11 w-11 -translate-x-1/2 rounded-full border-[3px] border-white/90 p-0.5">
+            <div className="h-full w-full rounded-full bg-white" />
+          </div>
         </div>
       </Phone>
     );

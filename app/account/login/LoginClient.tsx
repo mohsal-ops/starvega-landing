@@ -50,7 +50,10 @@ export function LoginClient() {
           }}
           className="space-y-3"
         >
-          <p className="text-sm text-ink-soft">If {email} has an account, a code is on its way. Check spam too.</p>
+          <p className="text-sm text-ink-soft">
+            If {email} has a Starvega account, a code is on its way. Check spam too. Not a client yet?{" "}
+            <a href="/start" className="underline underline-offset-4">Start here</a>.
+          </p>
           <input
             inputMode="numeric"
             autoComplete="one-time-code"
